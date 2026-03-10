@@ -1,0 +1,99 @@
+using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using AutoWizard.Core.Models;
+
+namespace AutoWizard.Core.Actions.Input
+{
+    /// <summary>
+    /// 螢幕截圖指令
+    /// </summary>
+    public class ScreenshotAction : BaseAction
+    {
+        /// <summary>儲存路徑（支援變數表達式）</summary>
+        public string SavePath { get; set; } = string.Empty;
+        /// <summary>區域截圖 — 左上角 X</summary>
+        public int? RegionX { get; set; }
+        /// <summary>區域截圖 — 左上角 Y</summary>
+        public int? RegionY { get; set; }
+        /// <summary>區域截圖 — 寬度</summary>
+        public int? RegionWidth { get; set; }
+        /// <summary>區域截圖 — 高度</summary>
+        public int? RegionHeight { get; set; }
+        /// <summary>結果儲存到變數（base64 格式）</summary>
+        public string SaveToVariable { get; set; } = string.Empty;
+
+        public override ActionResult Execute(ExecutionContext context)
+        {
+            try
+            {
+                // 決定截圖區域
+                Rectangle bounds;
+                if (RegionX.HasValue && RegionY.HasValue && RegionWidth.HasValue && RegionHeight.HasValue)
+                {
+                    bounds = new Rectangle(RegionX.Value, RegionY.Value, RegionWidth.Value, RegionHeight.Value);
+                }
+                else
+                {
+                    // 全螢幕
+                    bounds = System.Windows.Forms.Screen.PrimaryScreen?.Bounds
+                        ?? new Rectangle(0, 0, 1920, 1080);
+                }
+
+                using var bitmap = new Bitmap(bounds.Width, bounds.Height, PixelFormat.Format32bppArgb);
+                using (var g = Graphics.FromImage(bitmap))
+                {
+                    g.CopyFromScreen(bounds.X, bounds.Y, 0, 0, bounds.Size, CopyPixelOperation.SourceCopy);
+                }
+
+                // 儲存到檔案
+                string resolvedPath = context.ResolveExpression(SavePath);
+                if (!string.IsNullOrEmpty(resolvedPath))
+                {
+                    var dir = Path.GetDirectoryName(resolvedPath);
+                    if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+                    {
+                        Directory.CreateDirectory(dir);
+                    }
+                    bitmap.Save(resolvedPath, ImageFormat.Png);
+                    context.Log($"Screenshot saved to: {resolvedPath}");
+                }
+
+                // 儲存到變數（base64）
+                if (!string.IsNullOrEmpty(SaveToVariable))
+                {
+                    using var ms = new MemoryStream();
+                    bitmap.Save(ms, ImageFormat.Png);
+                    byte[] bytes = ms.ToArray();
+                    context.Variables[SaveToVariable] = Convert.ToBase64String(bytes);
+                    context.Variables[$"{SaveToVariable}_Width"] = bounds.Width;
+                    context.Variables[$"{SaveToVariable}_Height"] = bounds.Height;
+                }
+
+                // 透過事件通知截圖
+                if (context.ScreenshotAction != null)
+                {
+                    using var ms = new MemoryStream();
+                    bitmap.Save(ms, ImageFormat.Png);
+                    context.ScreenshotAction(ms.ToArray());
+                }
+
+                return new ActionResult
+                {
+                    Success = true,
+                    Message = $"Screenshot captured ({bounds.Width}x{bounds.Height})"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ActionResult
+                {
+                    Success = false,
+                    Message = $"Screenshot failed: {ex.Message}",
+                    Exception = ex
+                };
+            }
+        }
+    }
+}

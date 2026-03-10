@@ -1,0 +1,32 @@
+{
+    "phase": "bootstrap",
+    "phase_started": "2026-02-11T20:52:51+08:00",
+    "project_name": "AutoWizard Desktop",
+    "prd_path": "D:\\01-Project\\01-Screen Automate\\PRD-AutoWizard Desktop.md",
+    "metrics": {
+        "tasks_completed": 0,
+        "tasks_in_progress": 1,
+        "tasks_pending": 0,
+        "tasks_failed": 0,
+        "agents_spawned": 0,
+        "total_wall_time_seconds": 0
+    },
+    "circuit_breakers": {
+        "rate_limit_active": false,
+        "last_rate_limit": null,
+        "retry_count": 0
+    },
+    "completion_promise": {
+        "goal": "從 PRD 到完整可部署的 AutoWizard Desktop 應用程式",
+        "success_criteria": [
+            "完整的 WPF 視覺化編輯器",
+            "OpenCV 圖像辨識引擎",
+            "JSON 指令直譯器",
+            "Windows API 整合",
+            ".aws 腳本封裝格式",
+            "智慧錄製器",
+            "完整測試覆蓋",
+            "部署套件"
+        ]
+    }
+}

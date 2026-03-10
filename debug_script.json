@@ -1,0 +1,268 @@
+﻿[
+  {
+    "Id": "69408879-11b6-465b-9df0-17e95fcd2613",
+    "Name": "\u9EDE\u64CA (3114, 546)",
+    "Description": "\u5DE6\u9375\u9EDE\u64CA\u5EA7\u6A19 (3114, 546)",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "c571407a-e1a4-4275-9a71-014687497398",
+    "Name": "\u6309\u9375 Numpad4",
+    "Description": "\u6309\u4E0B Numpad4 \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "176fe2ce-cd42-4c14-b4fa-60b6b3ad414d",
+    "Name": "\u6309\u9375 Numpad5",
+    "Description": "\u6309\u4E0B Numpad5 \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "5c9ed76c-f3c6-4bdf-a75c-9b99a7d7ee48",
+    "Name": "\u6309\u9375 Numpad6",
+    "Description": "\u6309\u4E0B Numpad6 \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "9a254234-0b9c-48d7-9b84-3592ce696ecc",
+    "Name": "\u6309\u9375 Numpad7",
+    "Description": "\u6309\u4E0B Numpad7 \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "55ca8823-1d9c-40cc-b686-5eaea14cc34a",
+    "Name": "\u6309\u9375 Numpad1",
+    "Description": "\u6309\u4E0B Numpad1 \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "6b3b9037-c02e-4fba-bd83-5951ab43d95a",
+    "Name": "\u6309\u9375 Numpad2",
+    "Description": "\u6309\u4E0B Numpad2 \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "a5f99147-ad4e-4411-ad45-2c8d9766d10d",
+    "Name": "\u6309\u9375 Numpad3",
+    "Description": "\u6309\u4E0B Numpad3 \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "8921ba98-0d44-4fcd-9183-d9eca77adc4a",
+    "Name": "\u6309\u9375 Numpad8",
+    "Description": "\u6309\u4E0B Numpad8 \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "03cd913e-7d99-4e5e-be8e-d9148b5cdbd8",
+    "Name": "\u6309\u9375 Numpad9",
+    "Description": "\u6309\u4E0B Numpad9 \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "b2e9b894-7b97-4faf-8486-0b839729c335",
+    "Name": "\u6309\u9375 Enter",
+    "Description": "\u6309\u4E0B Enter \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "865806bf-e3f2-47c1-8817-6e9f97b318b8",
+    "Name": "\u6309\u9375 Numpad*",
+    "Description": "\u6309\u4E0B Numpad* \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "94ff28be-1b82-4f50-99af-b5df61030ec0",
+    "Name": "\u6309\u9375 Numpad-",
+    "Description": "\u6309\u4E0B Numpad- \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "c9b4e2b7-7d2c-46fe-ac4e-c75984bdb845",
+    "Name": "\u6309\u9375 Numpad/",
+    "Description": "\u6309\u4E0B Numpad/ \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "4cf724f0-5414-43c7-aff5-83acaa8788e0",
+    "Name": "\u6309\u9375 NumLock",
+    "Description": "\u6309\u4E0B NumLock \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "7b376bc7-f0f5-46bb-ad34-085552a5f923",
+    "Name": "\u6309\u9375 Numpad/",
+    "Description": "\u6309\u4E0B Numpad/ \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "bcad802e-fd99-4d05-bccf-35add1912c76",
+    "Name": "\u6309\u9375 Numpad*",
+    "Description": "\u6309\u4E0B Numpad* \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "454c4377-d9af-4041-a228-f4cf82f4bf81",
+    "Name": "\u6309\u9375 Numpad-",
+    "Description": "\u6309\u4E0B Numpad- \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  },
+  {
+    "Id": "1cf6b441-1b84-4bb4-8e9d-754720abdfa0",
+    "Name": "\u6309\u9375 Numpad*",
+    "Description": "\u6309\u4E0B Numpad* \u9375",
+    "IsEnabled": true,
+    "ErrorPolicy": {
+      "RetryCount": 0,
+      "RetryIntervalMs": 1000,
+      "JumpToLabel": null,
+      "ContinueOnError": false
+    },
+    "DelayBeforeMs": 0,
+    "DelayAfterMs": 0
+  }
+]

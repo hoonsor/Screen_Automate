@@ -1,0 +1,20 @@
+﻿  甇??斗閬???撠?...
+  ???獢?冽??啁????舫脰?????
+  AutoWizard.CV -> d:\01-Project\01-Screen Automate\AutoWizard.CV\bin\Debug\net8.0\AutoWizard.CV.dll
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Actions\Input\ClickAction.cs(76,55): error CS0103: ?迂 'XExpression' 銝??冽?桀??摰嫣葉 [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Actions\Input\ClickAction.cs(77,42): error CS0103: ?迂 'XExpression' 銝??冽?桀??摰嫣葉 [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Actions\Input\ScreenshotAction.cs(30,30): warning CS8602: ?航 null ????(dereference)??[d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Actions\Input\ScreenshotAction.cs(49,38): warning CS8600: 甇?撠?Null 撣詨潭??航??Null ?潸??銝??Null ???乓?[d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Engine\ScriptParser.cs(101,79): error CS1061: 'ClickAction' ?芸???'XExpression' ??蝢抬?銋銝?舀????'ClickAction' 蝚砌????貊??臬???瘜?'XExpression' (?臬?箸? using ?內閰?蝯辣??) [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+
+撱箇蔭憭望???
+
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Actions\Input\ScreenshotAction.cs(30,30): warning CS8602: ?航 null ????(dereference)??[d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Actions\Input\ScreenshotAction.cs(49,38): warning CS8600: 甇?撠?Null 撣詨潭??航??Null ?潸??銝??Null ???乓?[d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Actions\Input\ClickAction.cs(76,55): error CS0103: ?迂 'XExpression' 銝??冽?桀??摰嫣葉 [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Actions\Input\ClickAction.cs(77,42): error CS0103: ?迂 'XExpression' 銝??冽?桀??摰嫣葉 [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Engine\ScriptParser.cs(101,79): error CS1061: 'ClickAction' ?芸???'XExpression' ??蝢抬?銋銝?舀????'ClickAction' 蝚砌????貊??臬???瘜?'XExpression' (?臬?箸? using ?內閰?蝯辣??) [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+    2 ?郎??
+    3 ?隤?
+
+蝬??? 00:00:01.55

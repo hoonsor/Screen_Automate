@@ -1,0 +1,23 @@
+using System;
+using AutoWizard.Core.Engine;
+using AutoWizard.Core.Models;
+
+namespace AutoWizard.Core.Actions.Control
+{
+    /// <summary>
+    /// 設定變數值指令
+    /// 支援直接賦值和表達式運算
+    /// </summary>
+    public class SetVariableAction : BaseAction
+    {
+        /// <summary>目標變數名稱</summary>
+        public string VariableName { get; set; } = string.Empty;
+        /// <summary>值表達式（支援 {var} 替換和算術運算）</summary>
+        public string ValueExpression { get; set; } = string.Empty;
+
+        public override ActionResult Execute(ExecutionContext context)
+        {
+            return new ActionResult { Success = true };
+        }
+    }
+}

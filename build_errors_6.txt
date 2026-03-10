@@ -1,0 +1,12 @@
+﻿  甇??斗閬???撠?...
+  ???獢?冽??啁????舫脰?????
+  AutoWizard.CV -> D:\01-Project\01-Screen Automate\AutoWizard.CV\bin\Debug\net8.0\AutoWizard.CV.dll
+D:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(93,17): error CS0246: ?曆??圈????賢?蝛粹??迂 'POINT' (?臬?箸?鈭?using ?內閰?蝯辣??) [D:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+
+撱箇蔭憭望???
+
+D:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(93,17): error CS0246: ?曆??圈????賢?蝛粹??迂 'POINT' (?臬?箸?鈭?using ?內閰?蝯辣??) [D:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+    0 ?郎??
+    1 ?隤?
+
+蝬??? 00:00:01.49

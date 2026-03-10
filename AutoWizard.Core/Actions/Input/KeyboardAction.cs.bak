@@ -1,0 +1,64 @@
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Threading;
+using AutoWizard.Core.Models;
+
+namespace AutoWizard.Core.Actions.Input
+{
+    /// <summary>
+    /// 修飾鍵
+    /// </summary>
+    [Flags]
+    public enum KeyModifiers
+    {
+        None  = 0,
+        Ctrl  = 1,
+        Alt   = 2,
+        Shift = 4,
+        Win   = 8
+    }
+
+    /// <summary>
+    /// 鍵盤快捷鍵指令
+    /// </summary>
+    public class KeyboardAction : BaseAction
+    {
+        /// <summary>按鍵名稱（如 "A", "Enter", "F5", "Tab"）</summary>
+        public string Key { get; set; } = string.Empty;
+        public KeyModifiers Modifiers { get; set; } = KeyModifiers.None;
+        public int HoldDurationMs { get; set; } = 50;
+
+        [DllImport("user32.dll")]
+        private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+
+        private const uint KEYEVENTF_KEYUP = 0x0002;
+
+        // ... existing Dictionary code ...
+
+        public override ActionResult Execute(ExecutionContext context)
+        {
+            return new ActionResult { Success = true };
+            /*
+            try
+            {
+                // ... (commented out code)
+            }
+            catch (Exception ex)
+            {
+                return new ActionResult
+                {
+                    Success = false,
+                    Message = $"Keyboard action failed: {ex.Message}",
+                    Exception = ex
+                };
+            }
+            */
+        }
+
+        /// <summary>
+        /// 取得所有支援的按鍵名稱
+        /// </summary>
+        public static IEnumerable<string> GetSupportedKeys() => VirtualKeys.Keys;
+    }
+}

@@ -1,0 +1,33 @@
+﻿  Determining projects to restore...
+D:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj : warning NU1603: AutoWizard.CV depends on OpenCvSharp4 (>= 4.10.0.20241115) but OpenCvSharp4 4.10.0.20241115 was not found. An approximate best match of OpenCvSharp4 4.11.0.20250506 was resolved. [D:\01-Project\01-Screen Automate\AutoWizard.Tests\AutoWizard.Tests.csproj]
+D:\01-Project\01-Screen Automate\AutoWizard.CV\AutoWizard.CV.csproj : warning NU1603: AutoWizard.CV 相依於 OpenCvSharp4 (>= 4.10.0.20241115)，但找不到 OpenCvSharp4 4.10.0.20241115。已解析了約略的最佳相符 OpenCvSharp4 4.11.0.20250506。 [D:\01-Project\01-Screen Automate\AutoWizard.Tests\AutoWizard.Tests.csproj]
+D:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj : warning NU1603: AutoWizard.CV depends on OpenCvSharp4.runtime.win (>= 4.10.0.20241115) but OpenCvSharp4.runtime.win 4.10.0.20241115 was not found. An approximate best match of OpenCvSharp4.runtime.win 4.11.0.20250506 was resolved. [D:\01-Project\01-Screen Automate\AutoWizard.Tests\AutoWizard.Tests.csproj]
+D:\01-Project\01-Screen Automate\AutoWizard.CV\AutoWizard.CV.csproj : warning NU1603: AutoWizard.CV 相依於 OpenCvSharp4.runtime.win (>= 4.10.0.20241115)，但找不到 OpenCvSharp4.runtime.win 4.10.0.20241115。已解析了約略的最佳相符 OpenCvSharp4.runtime.win 4.11.0.20250506。 [D:\01-Project\01-Screen Automate\AutoWizard.Tests\AutoWizard.Tests.csproj]
+D:\01-Project\01-Screen Automate\AutoWizard.Tests\AutoWizard.Tests.csproj : warning NU1603: AutoWizard.CV depends on OpenCvSharp4 (>= 4.10.0.20241115) but OpenCvSharp4 4.10.0.20241115 was not found. An approximate best match of OpenCvSharp4 4.11.0.20250506 was resolved.
+D:\01-Project\01-Screen Automate\AutoWizard.Tests\AutoWizard.Tests.csproj : warning NU1603: AutoWizard.CV depends on OpenCvSharp4.runtime.win (>= 4.10.0.20241115) but OpenCvSharp4.runtime.win 4.10.0.20241115 was not found. An approximate best match of OpenCvSharp4.runtime.win 4.11.0.20250506 was resolved.
+  All projects are up-to-date for restore.
+D:\01-Project\01-Screen Automate\AutoWizard.Tests\AutoWizard.Tests.csproj : warning NU1603: AutoWizard.CV depends on OpenCvSharp4 (>= 4.10.0.20241115) but OpenCvSharp4 4.10.0.20241115 was not found. An approximate best match of OpenCvSharp4 4.11.0.20250506 was resolved.
+D:\01-Project\01-Screen Automate\AutoWizard.Tests\AutoWizard.Tests.csproj : warning NU1603: AutoWizard.CV depends on OpenCvSharp4.runtime.win (>= 4.10.0.20241115) but OpenCvSharp4.runtime.win 4.10.0.20241115 was not found. An approximate best match of OpenCvSharp4.runtime.win 4.11.0.20250506 was resolved.
+D:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj : warning NU1603: AutoWizard.CV depends on OpenCvSharp4 (>= 4.10.0.20241115) but OpenCvSharp4 4.10.0.20241115 was not found. An approximate best match of OpenCvSharp4 4.11.0.20250506 was resolved.
+D:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj : warning NU1603: AutoWizard.CV depends on OpenCvSharp4.runtime.win (>= 4.10.0.20241115) but OpenCvSharp4.runtime.win 4.10.0.20241115 was not found. An approximate best match of OpenCvSharp4.runtime.win 4.11.0.20250506 was resolved.
+D:\01-Project\01-Screen Automate\AutoWizard.CV\AutoWizard.CV.csproj : warning NU1603: AutoWizard.CV 相依於 OpenCvSharp4 (>= 4.10.0.20241115)，但找不到 OpenCvSharp4 4.10.0.20241115。已解析了約略的最佳相符 OpenCvSharp4 4.11.0.20250506。
+D:\01-Project\01-Screen Automate\AutoWizard.CV\AutoWizard.CV.csproj : warning NU1603: AutoWizard.CV 相依於 OpenCvSharp4.runtime.win (>= 4.10.0.20241115)，但找不到 OpenCvSharp4.runtime.win 4.10.0.20241115。已解析了約略的最佳相符 OpenCvSharp4.runtime.win 4.11.0.20250506。
+  AutoWizard.CV -> D:\01-Project\01-Screen Automate\AutoWizard.CV\bin\Debug\net8.0\AutoWizard.CV.dll
+  AutoWizard.Core -> D:\01-Project\01-Screen Automate\AutoWizard.Core\bin\Debug\net8.0-windows\AutoWizard.Core.dll
+  AutoWizard.Tests -> D:\01-Project\01-Screen Automate\AutoWizard.Tests\bin\Debug\net8.0-windows\AutoWizard.Tests.dll
+Test run for D:\01-Project\01-Screen Automate\AutoWizard.Tests\bin\Debug\net8.0-windows\AutoWizard.Tests.dll (.NETCoreApp,Version=v8.0)
+VSTest version 17.11.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+  Failed AutoWizard.Tests.Actions.NewActionsTests.WaitAction_FixedDelay_ShouldSucceed [1 s]
+  Error Message:
+   Assert.Contains() Failure: Sub-string not found
+String:    "Waited 1000ms"
+Not found: "50"
+  Stack Trace:
+     at AutoWizard.Tests.Actions.NewActionsTests.WaitAction_FixedDelay_ShouldSucceed() in D:\01-Project\01-Screen Automate\AutoWizard.Tests\Actions\NewActionsTests.cs:line 28
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:   100, Skipped:     0, Total:   101, Duration: 1 s - AutoWizard.Tests.dll (net8.0)

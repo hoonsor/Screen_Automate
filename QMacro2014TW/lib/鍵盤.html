@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<title>按鍵精靈插件幫助</title>
+<style>
+body{font-size:12px; font-family:Verdana,"細明體"}
+.ts{ background:#fff; margin:0 0 40px 0;}
+.ts th{ color:#7B797B; background:#DEDFDE; line-height:24px;}
+.ts td {padding:6px 0;}
+.name { font-size:16px; font-weight:bold; border-top:1px dashed #9C9A9C; border-bottom:1px dashed #9C9A9C; color:#006939;}
+.canshu { background:#E7E7EF;}
+.red{ color:#d60000;}
+.green{ color:#006939;}
+.fanhui{ border-bottom:1px dashed #9C9A9C;}
+.lizi{ border-bottom:1px dashed #9C9A9C;}
+</style></head><body>
+
+
+<table width="100%" border="0" cellpadding="0" cellspacing="1" class="ts">
+<tr><th width="100px">命令名稱：</th><td class="name">
+<a name="鍵盤組合鍵"></a>鍵盤組合鍵
+</td></tr><tr><th>命令功能：</th><td>
+鍵盤組合鍵
+</td></tr><tr><th>命令參數：</th><td class="canshu"><pre>
+參數1 字符串型，鍵盤碼
+參數2 整數型，模擬方式
+</td></tr><tr><th>返回值：</th><td class="fanhui">
+無
+</td></tr><tr><th>腳本例子：<br /><span class="red">按鍵精靈8及<br />以上語法</span>
+</th><td class="lizi"><pre>
+Call lib.鍵盤.鍵盤組合鍵("Ctrl + Alt + A",0)
+<span class="green">//模擬方式：【0普通模擬，1硬件模擬，2超級模擬】</span>
+</td></tr></table>
+
+
+<table width="100%" border="0" cellpadding="0" cellspacing="1" class="ts">
+<tr><th width="100px">命令名稱：</th><td class="name">
+<a name="鍵盤按鍵組"></a>鍵盤按鍵組
+</td></tr><tr><th>命令功能：</th><td>
+鍵盤按鍵組
+</td></tr><tr><th>命令參數：</th><td class="canshu"><pre>
+參數1 字符串型，鍵碼組
+參數2 整數型，模擬方式
+參數3 整數型，毫秒延時
+</td></tr><tr><th>返回值：</th><td class="fanhui">
+無
+</td></tr><tr><th>腳本例子：<br /><span class="red">按鍵精靈8及<br />以上語法</span>
+</th><td class="lizi"><pre>
+Call lib.鍵盤.鍵盤按鍵組("A,B,C,SPACE,D,E,F,G",0,50)
+<span class="green">//模擬方式：【0普通模擬，1硬件模擬，2超級模擬】</span>
+</td></tr></table>
+
+
+<table width="100%" border="0" cellpadding="0" cellspacing="1" class="ts">
+<tr><th width="100px">命令名稱：</th><td class="name">
+<a name="KeyList"></a>KeyList
+</td></tr><tr><th>命令功能：</th><td>
+輸入一串按鍵內容
+</td></tr><tr><th>命令參數：</th><td class="canshu"><pre>
+參數1 字符串型，鍵碼組
+參數2 整數型，模擬方式
+參數3 整數型，毫秒延時
+</td></tr><tr><th>返回值：</th><td class="fanhui">
+無
+</td></tr><tr><th>腳本例子：<br /><span class="red">按鍵精靈8及<br />以上語法</span>
+</th><td class="lizi"><pre>
+Call lib.鍵盤.KeyList("aA@2?"">.',/|\=-+_)(*&^QAsD",0,50)
+<span class="green">//需要注意的是：當輸入一個引號時（"）必須輸入一對（""）</span>
+<span class="green">//模擬方式：【0普通模擬，1硬件模擬，2超級模擬】</span>
+</td></tr></table>
+
+
+</body>
+</html>

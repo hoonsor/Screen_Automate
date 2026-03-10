@@ -1,0 +1,29 @@
+﻿  甇??斗閬???撠?...
+  ???獢?冽??啁????舫脰?????
+  AutoWizard.CV -> d:\01-Project\01-Screen Automate\AutoWizard.CV\bin\Debug\net8.0\AutoWizard.CV.dll
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Actions\Input\ScreenshotAction.cs(30,30): warning CS8602: ?航 null ????(dereference)??[d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Actions\Input\ScreenshotAction.cs(49,38): warning CS8600: 甇?撠?Null 撣詨潭??航??Null ?潸??銝??Null ???乓?[d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+  AutoWizard.Core -> d:\01-Project\01-Screen Automate\AutoWizard.Core\bin\Debug\net8.0-windows\AutoWizard.Core.dll
+  AutoWizard.Tests -> d:\01-Project\01-Screen Automate\AutoWizard.Tests\bin\Debug\net8.0-windows\AutoWizard.Tests.dll
+d:\01-Project\01-Screen Automate\AutoWizard.UI\Controls\EditorCanvas.cs(13,51): warning CS0108: 'EditorCanvas.AllowDropProperty' ??匱?輻?? 'UIElement.AllowDropProperty'??祆??喟閬??隢蝙??new ?摮?[d:\01-Project\01-Screen Automate\AutoWizard.UI\AutoWizard.UI_bxqk3wmz_wpftmp.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.UI\ViewModels\MainWindowViewModel.cs(89,16): warning CS8618: ??箏遣瑽撘?嚗??舐 Null ??甈? '_smartCaptureCommand' 敹????Null ?潦???啣? 'required' 靽桅ˇ???? 甈? 摰???箏隞亦 Null??[d:\01-Project\01-Screen Automate\AutoWizard.UI\AutoWizard.UI_bxqk3wmz_wpftmp.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.UI\ViewModels\MainWindowViewModel.cs(89,16): warning CS8618: ??箏遣瑽撘?嚗??舐 Null ??甈? '_pickColorCommand' 敹????Null ?潦???啣? 'required' 靽桅ˇ???? 甈? 摰???箏隞亦 Null??[d:\01-Project\01-Screen Automate\AutoWizard.UI\AutoWizard.UI_bxqk3wmz_wpftmp.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.UI\Controls\EditorCanvas.cs(13,51): warning CS0108: 'EditorCanvas.AllowDropProperty' ??匱?輻?? 'UIElement.AllowDropProperty'??祆??喟閬??隢蝙??new ?摮?[d:\01-Project\01-Screen Automate\AutoWizard.UI\AutoWizard.UI.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.UI\ViewModels\MainWindowViewModel.cs(89,16): warning CS8618: ??箏遣瑽撘?嚗??舐 Null ??甈? '_smartCaptureCommand' 敹????Null ?潦???啣? 'required' 靽桅ˇ???? 甈? 摰???箏隞亦 Null??[d:\01-Project\01-Screen Automate\AutoWizard.UI\AutoWizard.UI.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.UI\ViewModels\MainWindowViewModel.cs(89,16): warning CS8618: ??箏遣瑽撘?嚗??舐 Null ??甈? '_pickColorCommand' 敹????Null ?潦???啣? 'required' 靽桅ˇ???? 甈? 摰???箏隞亦 Null??[d:\01-Project\01-Screen Automate\AutoWizard.UI\AutoWizard.UI.csproj]
+  AutoWizard.UI -> d:\01-Project\01-Screen Automate\AutoWizard.UI\bin\Debug\net8.0-windows\AutoWizard.UI.dll
+
+撱箇蔭????
+
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Actions\Input\ScreenshotAction.cs(30,30): warning CS8602: ?航 null ????(dereference)??[d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Actions\Input\ScreenshotAction.cs(49,38): warning CS8600: 甇?撠?Null 撣詨潭??航??Null ?潸??銝??Null ???乓?[d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.UI\Controls\EditorCanvas.cs(13,51): warning CS0108: 'EditorCanvas.AllowDropProperty' ??匱?輻?? 'UIElement.AllowDropProperty'??祆??喟閬??隢蝙??new ?摮?[d:\01-Project\01-Screen Automate\AutoWizard.UI\AutoWizard.UI_bxqk3wmz_wpftmp.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.UI\ViewModels\MainWindowViewModel.cs(89,16): warning CS8618: ??箏遣瑽撘?嚗??舐 Null ??甈? '_smartCaptureCommand' 敹????Null ?潦???啣? 'required' 靽桅ˇ???? 甈? 摰???箏隞亦 Null??[d:\01-Project\01-Screen Automate\AutoWizard.UI\AutoWizard.UI_bxqk3wmz_wpftmp.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.UI\ViewModels\MainWindowViewModel.cs(89,16): warning CS8618: ??箏遣瑽撘?嚗??舐 Null ??甈? '_pickColorCommand' 敹????Null ?潦???啣? 'required' 靽桅ˇ???? 甈? 摰???箏隞亦 Null??[d:\01-Project\01-Screen Automate\AutoWizard.UI\AutoWizard.UI_bxqk3wmz_wpftmp.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.UI\Controls\EditorCanvas.cs(13,51): warning CS0108: 'EditorCanvas.AllowDropProperty' ??匱?輻?? 'UIElement.AllowDropProperty'??祆??喟閬??隢蝙??new ?摮?[d:\01-Project\01-Screen Automate\AutoWizard.UI\AutoWizard.UI.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.UI\ViewModels\MainWindowViewModel.cs(89,16): warning CS8618: ??箏遣瑽撘?嚗??舐 Null ??甈? '_smartCaptureCommand' 敹????Null ?潦???啣? 'required' 靽桅ˇ???? 甈? 摰???箏隞亦 Null??[d:\01-Project\01-Screen Automate\AutoWizard.UI\AutoWizard.UI.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.UI\ViewModels\MainWindowViewModel.cs(89,16): warning CS8618: ??箏遣瑽撘?嚗??舐 Null ??甈? '_pickColorCommand' 敹????Null ?潦???啣? 'required' 靽桅ˇ???? 甈? 摰???箏隞亦 Null??[d:\01-Project\01-Screen Automate\AutoWizard.UI\AutoWizard.UI.csproj]
+    8 ?郎??
+    0 ?隤?
+
+蝬??? 00:00:04.28

@@ -1,0 +1,44 @@
+﻿  甇??斗閬???撠?...
+  ???獢?冽??啁????舫脰?????
+  AutoWizard.CV -> d:\01-Project\01-Screen Automate\AutoWizard.CV\bin\Debug\net8.0\AutoWizard.CV.dll
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(229,13): error CS1519: 憿????瑽?隞?摰??銝剔?隤??箏? 'if' ?⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(229,28): error CS8124: ??敹???喳??拙??柴?[d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(230,13): error CS1519: 憿????瑽?隞?摰??銝剔?隤??箏? '{' ?⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(232,17): error CS1519: 憿????瑽?隞?摰??銝剔?隤??箏? 'return' ?⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(233,17): error CS1519: 憿????瑽?隞?摰??銝剔?隤??箏? '{' ?⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(234,26): error CS1519: 憿????瑽?隞?摰??銝剔?隤??箏? '=' ?⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(235,33): error CS1519: 憿????瑽?隞?摰??銝剔?隤??箏? '=' ?⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(236,26): error CS1519: 憿????瑽?隞?摰??銝剔?隤??箏? '=' ?⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(237,17): error CS1519: 憿????瑽?隞?摰??銝剔?隤??箏? '}' ?⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(241,13): error CS8803: ?銝惜?唾膩撘???賢?蝛粹????亙恐????[d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(242,9): error CS1022: 敹??舫????賢?蝛粹?摰儔嚗?瑼?蝯偏 [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(247,9): error CS0106: 靽桅ˇ??'private' 撠迨??⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(276,9): error CS0106: 靽桅ˇ??'private' 撠迨??⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(292,9): error CS0106: 靽桅ˇ??'private' 撠迨??⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(356,9): error CS0106: 靽桅ˇ??'public' 撠迨??⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(362,5): error CS1022: 敹??舫????賢?蝛粹?摰儔嚗?瑼?蝯偏 [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(368,1): error CS1022: 敹??舫????賢?蝛粹?摰儔嚗?瑼?蝯偏 [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+
+撱箇蔭憭望???
+
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(229,13): error CS1519: 憿????瑽?隞?摰??銝剔?隤??箏? 'if' ?⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(229,28): error CS8124: ??敹???喳??拙??柴?[d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(230,13): error CS1519: 憿????瑽?隞?摰??銝剔?隤??箏? '{' ?⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(232,17): error CS1519: 憿????瑽?隞?摰??銝剔?隤??箏? 'return' ?⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(233,17): error CS1519: 憿????瑽?隞?摰??銝剔?隤??箏? '{' ?⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(234,26): error CS1519: 憿????瑽?隞?摰??銝剔?隤??箏? '=' ?⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(235,33): error CS1519: 憿????瑽?隞?摰??銝剔?隤??箏? '=' ?⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(236,26): error CS1519: 憿????瑽?隞?摰??銝剔?隤??箏? '=' ?⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(237,17): error CS1519: 憿????瑽?隞?摰??銝剔?隤??箏? '}' ?⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(241,13): error CS8803: ?銝惜?唾膩撘???賢?蝛粹????亙恐????[d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(242,9): error CS1022: 敹??舫????賢?蝛粹?摰儔嚗?瑼?蝯偏 [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(247,9): error CS0106: 靽桅ˇ??'private' 撠迨??⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(276,9): error CS0106: 靽桅ˇ??'private' 撠迨??⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(292,9): error CS0106: 靽桅ˇ??'private' 撠迨??⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(356,9): error CS0106: 靽桅ˇ??'public' 撠迨??⊥? [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(362,5): error CS1022: 敹??舫????賢?蝛粹?摰儔嚗?瑼?蝯偏 [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(368,1): error CS1022: 敹??舫????賢?蝛粹?摰儔嚗?瑼?蝯偏 [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+    0 ?郎??
+    17 ?隤?
+
+蝬??? 00:00:01.22

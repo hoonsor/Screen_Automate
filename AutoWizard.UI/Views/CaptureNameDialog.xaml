@@ -1,0 +1,38 @@
+<Window x:Class="AutoWizard.UI.Views.CaptureNameDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="命名截圖檔案"
+        Width="420" SizeToContent="Height"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="NoResize"
+        Topmost="True"
+        ShowInTaskbar="False">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="截圖檔案名稱" FontWeight="Bold" FontSize="13" Margin="0,0,0,4"/>
+        <TextBlock Grid.Row="1" Text="（可直接修改或保留自動命名）" Foreground="#777" FontSize="11" Margin="0,0,0,12"/>
+
+        <TextBox Grid.Row="2" x:Name="FileNameBox"
+                 FontSize="13" Padding="6,5"
+                 BorderBrush="#BBB" BorderThickness="1"
+                 Margin="0,0,0,16"
+                 KeyDown="FileNameBox_KeyDown"/>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="SaveButton" Content="✅ 儲存" Width="90" Height="34" Margin="0,0,10,0"
+                    Click="OnSave"
+                    Background="#1976D2" Foreground="White"
+                    BorderThickness="0" FontSize="13"/>
+            <Button x:Name="CancelButton" Content="取消" Width="70" Height="34"
+                    Click="OnCancel"
+                    FontSize="13"/>
+        </StackPanel>
+    </Grid>
+</Window>

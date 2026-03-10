@@ -1,0 +1,12 @@
+﻿  甇??斗閬???撠?...
+  ???獢?冽??啁????舫脰?????
+  AutoWizard.CV -> d:\01-Project\01-Screen Automate\AutoWizard.CV\bin\Debug\net8.0\AutoWizard.CV.dll
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(372,1): error CS1022: 敹??舫????賢?蝛粹?摰儔嚗?瑼?蝯偏 [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+
+撱箇蔭憭望???
+
+d:\01-Project\01-Screen Automate\AutoWizard.Core\Recording\Recorder.cs(372,1): error CS1022: 敹??舫????賢?蝛粹?摰儔嚗?瑼?蝯偏 [d:\01-Project\01-Screen Automate\AutoWizard.Core\AutoWizard.Core.csproj]
+    0 ?郎??
+    1 ?隤?
+
+蝬??? 00:00:01.31

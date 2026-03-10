@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="a001ef00-289f-48fd-91d6-4dd8d8bbbe3d" name="hoonsor@DESKTOP-5DM4EDT 2026-02-13 20:41:48" runUser="DESKTOP-5DM4EDT\hoonsor" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-02-13T20:41:48.3764338+08:00" queuing="2026-02-13T20:41:48.3764341+08:00" start="2026-02-13T20:41:46.4242076+08:00" finish="2026-02-13T20:41:53.4496260+08:00" />
+  <TestSettings name="default" id="356e451a-34d4-4b8a-a78c-b92f867c2d35">
+    <Deployment runDeploymentRoot="hoonsor_DESKTOP-5DM4EDT_2026-02-13_20_41_48" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="d6f275c7-3f8f-42ed-8ac4-d47ec77d2c5b" testId="062b680e-0173-a6f1-5ab3-ff7395faaf51" testName="AutoWizard.Tests.Recording.RecorderTests.StartRecording_ShouldSetIsRecordingToTrue" computerName="DESKTOP-5DM4EDT" duration="00:00:00.0017077" startTime="2026-02-13T20:41:47.0210246+08:00" endTime="2026-02-13T20:41:47.0210247+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d6f275c7-3f8f-42ed-8ac4-d47ec77d2c5b" />
+    <UnitTestResult executionId="16198187-269b-40f7-b485-cf51c1b22410" testId="56a9621b-914d-7507-7e56-bc1b96c89ea4" testName="AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_WithEmptyActions_ShouldReturnCompleted" computerName="DESKTOP-5DM4EDT" duration="00:00:00.0009587" startTime="2026-02-13T20:41:53.3625543+08:00" endTime="2026-02-13T20:41:53.3625545+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="16198187-269b-40f7-b485-cf51c1b22410">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: Completed&#xD;
+Actual:   Idle</Message>
+          <StackTrace>   at AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_WithEmptyActions_ShouldReturnCompleted() in D:\01-Project\01-Screen Automate\AutoWizard.Tests\Engine\ScriptExecutorTests.cs:line 80&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="bafd555b-977c-4566-a434-ff18e4ae2040" testId="666b6497-8e1d-e5b1-18a3-72f09fba33f1" testName="AutoWizard.Tests.Actions.ClickActionTests.Execute_ShouldSetCorrectCoordinates" computerName="DESKTOP-5DM4EDT" duration="00:00:00.0075941" startTime="2026-02-13T20:41:47.0210698+08:00" endTime="2026-02-13T20:41:47.0210699+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bafd555b-977c-4566-a434-ff18e4ae2040" />
+    <UnitTestResult executionId="41788ab0-3d27-4167-8d03-146c819674a7" testId="37386ddb-8da8-3c32-65fd-6c2c153b7a29" testName="AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_ShouldFireStatusChangedEvents" computerName="DESKTOP-5DM4EDT" duration="00:00:00.0171107" startTime="2026-02-13T20:41:47.1228696+08:00" endTime="2026-02-13T20:41:47.1228698+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="41788ab0-3d27-4167-8d03-146c819674a7">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Contains() Failure: Item not found in collection&#xD;
+Collection: [Running, Idle]&#xD;
+Not found:  Completed</Message>
+          <StackTrace>   at AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_ShouldFireStatusChangedEvents() in D:\01-Project\01-Screen Automate\AutoWizard.Tests\Engine\ScriptExecutorTests.cs:line 183&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="8189540c-a8c0-4a13-87b0-9f5b61905253" testId="11b84d69-6603-78e8-fd4a-08e31ae1bdc0" testName="AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_ShouldFireLogReceivedEvents" computerName="DESKTOP-5DM4EDT" duration="00:00:00.0128077" startTime="2026-02-13T20:41:47.1047597+08:00" endTime="2026-02-13T20:41:47.1047599+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8189540c-a8c0-4a13-87b0-9f5b61905253" />
+    <UnitTestResult executionId="3b8c9689-a1f1-4be8-9522-b09ac83e8da1" testId="464e793d-14f0-359e-e242-0919229cbe96" testName="AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_WithVariables_ShouldPassVariablesToContext" computerName="DESKTOP-5DM4EDT" duration="00:00:00.0128082" startTime="2026-02-13T20:41:53.3616186+08:00" endTime="2026-02-13T20:41:53.3616190+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3b8c9689-a1f1-4be8-9522-b09ac83e8da1">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: Completed&#xD;
+Actual:   Idle</Message>
+          <StackTrace>   at AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_WithVariables_ShouldPassVariablesToContext() in D:\01-Project\01-Screen Automate\AutoWizard.Tests\Engine\ScriptExecutorTests.cs:line 204&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="51be000a-7e11-405c-b00c-0ee5edb1335e" testId="d1493d53-2b96-8bc2-50a6-2d6d17bb1a23" testName="AutoWizard.Tests.UnitTest1.Test1" computerName="DESKTOP-5DM4EDT" duration="00:00:00.0018169" startTime="2026-02-13T20:41:47.0174851+08:00" endTime="2026-02-13T20:41:47.0175037+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="51be000a-7e11-405c-b00c-0ee5edb1335e" />
+    <UnitTestResult executionId="cf97a3d3-6190-42db-974a-45942d5cf3ac" testId="6ec85ded-293e-4e07-34d6-edc8b6ee18b5" testName="AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_WithActions_ShouldExecuteAll" computerName="DESKTOP-5DM4EDT" duration="00:00:00.0642322" startTime="2026-02-13T20:41:47.0972799+08:00" endTime="2026-02-13T20:41:47.0972801+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cf97a3d3-6190-42db-974a-45942d5cf3ac">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: Completed&#xD;
+Actual:   Idle</Message>
+          <StackTrace>   at AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_WithActions_ShouldExecuteAll() in D:\01-Project\01-Screen Automate\AutoWizard.Tests\Engine\ScriptExecutorTests.cs:line 99&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="bbf8a7ed-bb54-4640-b327-c3b52eaa9ed1" testId="f5807d2e-f29a-080a-65f8-d4e4bf77cdd4" testName="AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_WithFailingAction_ShouldReturnFailed" computerName="DESKTOP-5DM4EDT" duration="00:00:00.0289291" startTime="2026-02-13T20:41:53.3910358+08:00" endTime="2026-02-13T20:41:53.3910362+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bbf8a7ed-bb54-4640-b327-c3b52eaa9ed1" />
+    <UnitTestResult executionId="a54d717a-512c-482d-a2e5-efdb5c2c987d" testId="25437fd8-ca43-b12d-e88a-607c466d4476" testName="AutoWizard.Tests.Recording.RecorderTests.StopRecording_ShouldSetIsRecordingToFalse" computerName="DESKTOP-5DM4EDT" duration="00:00:00.0005702" startTime="2026-02-13T20:41:47.0210542+08:00" endTime="2026-02-13T20:41:47.0210543+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a54d717a-512c-482d-a2e5-efdb5c2c987d" />
+    <UnitTestResult executionId="9ee6561c-f8ed-4880-8800-0249056964ee" testId="b47133f8-7d17-2a2c-0d8c-e75e309da844" testName="AutoWizard.Tests.Recording.RecorderTests.GetRecordedActions_ShouldReturnEmptyListInitially" computerName="DESKTOP-5DM4EDT" duration="00:00:00.0044604" startTime="2026-02-13T20:41:47.0207478+08:00" endTime="2026-02-13T20:41:47.0207479+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9ee6561c-f8ed-4880-8800-0249056964ee" />
+    <UnitTestResult executionId="9810588f-e89e-459a-a0cf-a2f7a56f96a5" testId="fdd33d3d-e29c-b9b2-67ba-f7dee059f36d" testName="AutoWizard.Tests.Engine.ScriptExecutorTests.Stop_DuringExecution_ShouldCancel" computerName="DESKTOP-5DM4EDT" duration="00:00:06.2241880" startTime="2026-02-13T20:41:53.3478659+08:00" endTime="2026-02-13T20:41:53.3478660+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9810588f-e89e-459a-a0cf-a2f7a56f96a5">
+      <Output>
+        <ErrorInfo>
+          <Message>Expected Cancelled or Failed, but got Idle</Message>
+          <StackTrace>   at AutoWizard.Tests.Engine.ScriptExecutorTests.Stop_DuringExecution_ShouldCancel() in D:\01-Project\01-Screen Automate\AutoWizard.Tests\Engine\ScriptExecutorTests.cs:line 142&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_WithVariables_ShouldPassVariablesToContext" storage="d:\01-project\01-screen automate\autowizard.tests\bin\debug\net8.0\autowizard.tests.dll" id="464e793d-14f0-359e-e242-0919229cbe96">
+      <Execution id="3b8c9689-a1f1-4be8-9522-b09ac83e8da1" />
+      <TestMethod codeBase="D:\01-Project\01-Screen Automate\AutoWizard.Tests\bin\Debug\net8.0\AutoWizard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="AutoWizard.Tests.Engine.ScriptExecutorTests" name="ExecuteAsync_WithVariables_ShouldPassVariablesToContext" />
+    </UnitTest>
+    <UnitTest name="AutoWizard.Tests.Recording.RecorderTests.GetRecordedActions_ShouldReturnEmptyListInitially" storage="d:\01-project\01-screen automate\autowizard.tests\bin\debug\net8.0\autowizard.tests.dll" id="b47133f8-7d17-2a2c-0d8c-e75e309da844">
+      <Execution id="9ee6561c-f8ed-4880-8800-0249056964ee" />
+      <TestMethod codeBase="D:\01-Project\01-Screen Automate\AutoWizard.Tests\bin\Debug\net8.0\AutoWizard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="AutoWizard.Tests.Recording.RecorderTests" name="GetRecordedActions_ShouldReturnEmptyListInitially" />
+    </UnitTest>
+    <UnitTest name="AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_WithFailingAction_ShouldReturnFailed" storage="d:\01-project\01-screen automate\autowizard.tests\bin\debug\net8.0\autowizard.tests.dll" id="f5807d2e-f29a-080a-65f8-d4e4bf77cdd4">
+      <Execution id="bbf8a7ed-bb54-4640-b327-c3b52eaa9ed1" />
+      <TestMethod codeBase="D:\01-Project\01-Screen Automate\AutoWizard.Tests\bin\Debug\net8.0\AutoWizard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="AutoWizard.Tests.Engine.ScriptExecutorTests" name="ExecuteAsync_WithFailingAction_ShouldReturnFailed" />
+    </UnitTest>
+    <UnitTest name="AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_ShouldFireLogReceivedEvents" storage="d:\01-project\01-screen automate\autowizard.tests\bin\debug\net8.0\autowizard.tests.dll" id="11b84d69-6603-78e8-fd4a-08e31ae1bdc0">
+      <Execution id="8189540c-a8c0-4a13-87b0-9f5b61905253" />
+      <TestMethod codeBase="D:\01-Project\01-Screen Automate\AutoWizard.Tests\bin\Debug\net8.0\AutoWizard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="AutoWizard.Tests.Engine.ScriptExecutorTests" name="ExecuteAsync_ShouldFireLogReceivedEvents" />
+    </UnitTest>
+    <UnitTest name="AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_WithActions_ShouldExecuteAll" storage="d:\01-project\01-screen automate\autowizard.tests\bin\debug\net8.0\autowizard.tests.dll" id="6ec85ded-293e-4e07-34d6-edc8b6ee18b5">
+      <Execution id="cf97a3d3-6190-42db-974a-45942d5cf3ac" />
+      <TestMethod codeBase="D:\01-Project\01-Screen Automate\AutoWizard.Tests\bin\Debug\net8.0\AutoWizard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="AutoWizard.Tests.Engine.ScriptExecutorTests" name="ExecuteAsync_WithActions_ShouldExecuteAll" />
+    </UnitTest>
+    <UnitTest name="AutoWizard.Tests.Engine.ScriptExecutorTests.Stop_DuringExecution_ShouldCancel" storage="d:\01-project\01-screen automate\autowizard.tests\bin\debug\net8.0\autowizard.tests.dll" id="fdd33d3d-e29c-b9b2-67ba-f7dee059f36d">
+      <Execution id="9810588f-e89e-459a-a0cf-a2f7a56f96a5" />
+      <TestMethod codeBase="D:\01-Project\01-Screen Automate\AutoWizard.Tests\bin\Debug\net8.0\AutoWizard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="AutoWizard.Tests.Engine.ScriptExecutorTests" name="Stop_DuringExecution_ShouldCancel" />
+    </UnitTest>
+    <UnitTest name="AutoWizard.Tests.Actions.ClickActionTests.Execute_ShouldSetCorrectCoordinates" storage="d:\01-project\01-screen automate\autowizard.tests\bin\debug\net8.0\autowizard.tests.dll" id="666b6497-8e1d-e5b1-18a3-72f09fba33f1">
+      <Execution id="bafd555b-977c-4566-a434-ff18e4ae2040" />
+      <TestMethod codeBase="D:\01-Project\01-Screen Automate\AutoWizard.Tests\bin\Debug\net8.0\AutoWizard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="AutoWizard.Tests.Actions.ClickActionTests" name="Execute_ShouldSetCorrectCoordinates" />
+    </UnitTest>
+    <UnitTest name="AutoWizard.Tests.Recording.RecorderTests.StopRecording_ShouldSetIsRecordingToFalse" storage="d:\01-project\01-screen automate\autowizard.tests\bin\debug\net8.0\autowizard.tests.dll" id="25437fd8-ca43-b12d-e88a-607c466d4476">
+      <Execution id="a54d717a-512c-482d-a2e5-efdb5c2c987d" />
+      <TestMethod codeBase="D:\01-Project\01-Screen Automate\AutoWizard.Tests\bin\Debug\net8.0\AutoWizard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="AutoWizard.Tests.Recording.RecorderTests" name="StopRecording_ShouldSetIsRecordingToFalse" />
+    </UnitTest>
+    <UnitTest name="AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_WithEmptyActions_ShouldReturnCompleted" storage="d:\01-project\01-screen automate\autowizard.tests\bin\debug\net8.0\autowizard.tests.dll" id="56a9621b-914d-7507-7e56-bc1b96c89ea4">
+      <Execution id="16198187-269b-40f7-b485-cf51c1b22410" />
+      <TestMethod codeBase="D:\01-Project\01-Screen Automate\AutoWizard.Tests\bin\Debug\net8.0\AutoWizard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="AutoWizard.Tests.Engine.ScriptExecutorTests" name="ExecuteAsync_WithEmptyActions_ShouldReturnCompleted" />
+    </UnitTest>
+    <UnitTest name="AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_ShouldFireStatusChangedEvents" storage="d:\01-project\01-screen automate\autowizard.tests\bin\debug\net8.0\autowizard.tests.dll" id="37386ddb-8da8-3c32-65fd-6c2c153b7a29">
+      <Execution id="41788ab0-3d27-4167-8d03-146c819674a7" />
+      <TestMethod codeBase="D:\01-Project\01-Screen Automate\AutoWizard.Tests\bin\Debug\net8.0\AutoWizard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="AutoWizard.Tests.Engine.ScriptExecutorTests" name="ExecuteAsync_ShouldFireStatusChangedEvents" />
+    </UnitTest>
+    <UnitTest name="AutoWizard.Tests.UnitTest1.Test1" storage="d:\01-project\01-screen automate\autowizard.tests\bin\debug\net8.0\autowizard.tests.dll" id="d1493d53-2b96-8bc2-50a6-2d6d17bb1a23">
+      <Execution id="51be000a-7e11-405c-b00c-0ee5edb1335e" />
+      <TestMethod codeBase="D:\01-Project\01-Screen Automate\AutoWizard.Tests\bin\Debug\net8.0\AutoWizard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="AutoWizard.Tests.UnitTest1" name="Test1" />
+    </UnitTest>
+    <UnitTest name="AutoWizard.Tests.Recording.RecorderTests.StartRecording_ShouldSetIsRecordingToTrue" storage="d:\01-project\01-screen automate\autowizard.tests\bin\debug\net8.0\autowizard.tests.dll" id="062b680e-0173-a6f1-5ab3-ff7395faaf51">
+      <Execution id="d6f275c7-3f8f-42ed-8ac4-d47ec77d2c5b" />
+      <TestMethod codeBase="D:\01-Project\01-Screen Automate\AutoWizard.Tests\bin\Debug\net8.0\AutoWizard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="AutoWizard.Tests.Recording.RecorderTests" name="StartRecording_ShouldSetIsRecordingToTrue" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="062b680e-0173-a6f1-5ab3-ff7395faaf51" executionId="d6f275c7-3f8f-42ed-8ac4-d47ec77d2c5b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="56a9621b-914d-7507-7e56-bc1b96c89ea4" executionId="16198187-269b-40f7-b485-cf51c1b22410" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="666b6497-8e1d-e5b1-18a3-72f09fba33f1" executionId="bafd555b-977c-4566-a434-ff18e4ae2040" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="37386ddb-8da8-3c32-65fd-6c2c153b7a29" executionId="41788ab0-3d27-4167-8d03-146c819674a7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="11b84d69-6603-78e8-fd4a-08e31ae1bdc0" executionId="8189540c-a8c0-4a13-87b0-9f5b61905253" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="464e793d-14f0-359e-e242-0919229cbe96" executionId="3b8c9689-a1f1-4be8-9522-b09ac83e8da1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d1493d53-2b96-8bc2-50a6-2d6d17bb1a23" executionId="51be000a-7e11-405c-b00c-0ee5edb1335e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6ec85ded-293e-4e07-34d6-edc8b6ee18b5" executionId="cf97a3d3-6190-42db-974a-45942d5cf3ac" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f5807d2e-f29a-080a-65f8-d4e4bf77cdd4" executionId="bbf8a7ed-bb54-4640-b327-c3b52eaa9ed1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="25437fd8-ca43-b12d-e88a-607c466d4476" executionId="a54d717a-512c-482d-a2e5-efdb5c2c987d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b47133f8-7d17-2a2c-0d8c-e75e309da844" executionId="9ee6561c-f8ed-4880-8800-0249056964ee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fdd33d3d-e29c-b9b2-67ba-f7dee059f36d" executionId="9810588f-e89e-459a-a0cf-a2f7a56f96a5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="不在清單中的結果" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="所有載入的結果" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="12" executed="12" passed="7" failed="5" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 8.0.24)&#xD;
+[xUnit.net 00:00:00.07]   Discovering: AutoWizard.Tests&#xD;
+[xUnit.net 00:00:00.11]   Discovered:  AutoWizard.Tests&#xD;
+[xUnit.net 00:00:00.11]   Starting:    AutoWizard.Tests&#xD;
+[xUnit.net 00:00:00.23]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.23]       Expected: Completed&#xD;
+[xUnit.net 00:00:00.23]       Actual:   Idle&#xD;
+[xUnit.net 00:00:00.23]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.23]         D:\01-Project\01-Screen Automate\AutoWizard.Tests\Engine\ScriptExecutorTests.cs(99,0): at AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_WithActions_ShouldExecuteAll()&#xD;
+[xUnit.net 00:00:00.23]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:00.26]       Assert.Contains() Failure: Item not found in collection&#xD;
+[xUnit.net 00:00:00.26]       Collection: [Running, Idle]&#xD;
+[xUnit.net 00:00:00.26]       Not found:  Completed&#xD;
+[xUnit.net 00:00:00.26]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.26]         D:\01-Project\01-Screen Automate\AutoWizard.Tests\Engine\ScriptExecutorTests.cs(183,0): at AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_ShouldFireStatusChangedEvents()&#xD;
+[xUnit.net 00:00:00.26]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:06.48]       Expected Cancelled or Failed, but got Idle&#xD;
+[xUnit.net 00:00:06.48]       Stack Trace:&#xD;
+[xUnit.net 00:00:06.48]         D:\01-Project\01-Screen Automate\AutoWizard.Tests\Engine\ScriptExecutorTests.cs(142,0): at AutoWizard.Tests.Engine.ScriptExecutorTests.Stop_DuringExecution_ShouldCancel()&#xD;
+[xUnit.net 00:00:06.49]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:06.50]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:06.50]       Expected: Completed&#xD;
+[xUnit.net 00:00:06.50]       Actual:   Idle&#xD;
+[xUnit.net 00:00:06.50]       Stack Trace:&#xD;
+[xUnit.net 00:00:06.50]         D:\01-Project\01-Screen Automate\AutoWizard.Tests\Engine\ScriptExecutorTests.cs(204,0): at AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_WithVariables_ShouldPassVariablesToContext()&#xD;
+[xUnit.net 00:00:06.50]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:06.50]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:06.50]       Expected: Completed&#xD;
+[xUnit.net 00:00:06.50]       Actual:   Idle&#xD;
+[xUnit.net 00:00:06.50]       Stack Trace:&#xD;
+[xUnit.net 00:00:06.50]         D:\01-Project\01-Screen Automate\AutoWizard.Tests\Engine\ScriptExecutorTests.cs(80,0): at AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_WithEmptyActions_ShouldReturnCompleted()&#xD;
+[xUnit.net 00:00:06.50]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:06.53]   Finished:    AutoWizard.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="DESKTOP-5DM4EDT" outcome="Error" timestamp="2026-02-13T20:41:47.0953447+08:00">
+        <Text>[xUnit.net 00:00:00.23]     AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_WithActions_ShouldExecuteAll [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-5DM4EDT" outcome="Error" timestamp="2026-02-13T20:41:47.1226264+08:00">
+        <Text>[xUnit.net 00:00:00.26]     AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_ShouldFireStatusChangedEvents [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-5DM4EDT" outcome="Error" timestamp="2026-02-13T20:41:53.3476689+08:00">
+        <Text>[xUnit.net 00:00:06.48]     AutoWizard.Tests.Engine.ScriptExecutorTests.Stop_DuringExecution_ShouldCancel [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-5DM4EDT" outcome="Error" timestamp="2026-02-13T20:41:53.3608529+08:00">
+        <Text>[xUnit.net 00:00:06.50]     AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_WithVariables_ShouldPassVariablesToContext [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-5DM4EDT" outcome="Error" timestamp="2026-02-13T20:41:53.3621633+08:00">
+        <Text>[xUnit.net 00:00:06.50]     AutoWizard.Tests.Engine.ScriptExecutorTests.ExecuteAsync_WithEmptyActions_ShouldReturnCompleted [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

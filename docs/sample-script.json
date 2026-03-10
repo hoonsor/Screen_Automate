@@ -1,0 +1,946 @@
+[
+    {
+        "$type": "SetVariable",
+        "Id": "00000001-0001-0001-0001-000000000001",
+        "Name": "初始化：設定計數器",
+        "Description": "使用 SetVariable 設定一個整數變數 counter = 0",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "VariableName": "counter",
+        "ValueExpression": "0"
+    },
+    {
+        "$type": "SetVariable",
+        "Id": "00000001-0001-0001-0001-000000000002",
+        "Name": "初始化：設定使用者名稱",
+        "Description": "使用 SetVariable 設定一個字串變數 username = admin",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "VariableName": "username",
+        "ValueExpression": "admin"
+    },
+    {
+        "$type": "SetVariable",
+        "Id": "00000001-0001-0001-0001-000000000003",
+        "Name": "初始化：設定最大次數",
+        "Description": "使用 SetVariable 設定 maxCount = 3，用於迴圈控制",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "VariableName": "maxCount",
+        "ValueExpression": "3"
+    },
+    {
+        "$type": "Wait",
+        "Id": "00000002-0002-0002-0002-000000000001",
+        "Name": "固定等待 1 秒",
+        "Description": "Wait 指令 - Fixed 模式：固定等待 1000 毫秒。WaitType=Fixed, DurationMs=1000",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "WaitType": "Fixed",
+        "DurationExpression": "",
+        "DurationMs": 1000,
+        "RandomMinMs": 500,
+        "RandomMaxMs": 2000
+    },
+    {
+        "$type": "Wait",
+        "Id": "00000002-0002-0002-0002-000000000002",
+        "Name": "隨機等待",
+        "Description": "Wait 指令 - Random 模式：在 500~2000 毫秒之間隨機等待，模擬人類行為",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "WaitType": "Random",
+        "DurationExpression": "",
+        "DurationMs": 1000,
+        "RandomMinMs": 500,
+        "RandomMaxMs": 2000
+    },
+    {
+        "$type": "Click",
+        "Id": "00000003-0003-0003-0003-000000000001",
+        "Name": "左鍵單擊 (500, 300)",
+        "Description": "Click 指令 - 左鍵單擊：在座標 (500, 300) 處進行左鍵單擊。Button=Left, ClickType=Single",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 200,
+        "X": 500,
+        "Y": 300,
+        "XExpression": "",
+        "YExpression": "",
+        "Button": "Left",
+        "ClickType": "Single"
+    },
+    {
+        "$type": "Click",
+        "Id": "00000003-0003-0003-0003-000000000002",
+        "Name": "右鍵單擊 (800, 400)",
+        "Description": "Click 指令 - 右鍵單擊：在座標 (800, 400) 處進行右鍵單擊。Button=Right",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "X": 800,
+        "Y": 400,
+        "XExpression": "",
+        "YExpression": "",
+        "Button": "Right",
+        "ClickType": "Single"
+    },
+    {
+        "$type": "Click",
+        "Id": "00000003-0003-0003-0003-000000000003",
+        "Name": "左鍵雙擊 (600, 200)",
+        "Description": "Click 指令 - 雙擊：在座標 (600, 200) 處進行左鍵雙擊。ClickType=Double",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "X": 600,
+        "Y": 200,
+        "XExpression": "",
+        "YExpression": "",
+        "Button": "Left",
+        "ClickType": "Double"
+    },
+    {
+        "$type": "Click",
+        "Id": "00000003-0003-0003-0003-000000000004",
+        "Name": "拖曳起點 - 按住滑鼠",
+        "Description": "Click 指令 - 按住：ClickType=Down，模擬拖曳操作的起點（按住不放）",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "X": 100,
+        "Y": 200,
+        "XExpression": "",
+        "YExpression": "",
+        "Button": "Left",
+        "ClickType": "Down"
+    },
+    {
+        "$type": "Wait",
+        "Id": "00000003-0003-0003-0003-000000000005",
+        "Name": "拖曳移動時間",
+        "Description": "拖曳操作中間的等待時間（讓滑鼠有時間移動）",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "WaitType": "Fixed",
+        "DurationMs": 300,
+        "DurationExpression": "",
+        "RandomMinMs": 500,
+        "RandomMaxMs": 2000
+    },
+    {
+        "$type": "Click",
+        "Id": "00000003-0003-0003-0003-000000000006",
+        "Name": "拖曳終點 - 放開滑鼠",
+        "Description": "Click 指令 - 放開：ClickType=Up，模擬拖曳操作的終點（放開滑鼠鍵）",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "X": 400,
+        "Y": 500,
+        "XExpression": "",
+        "YExpression": "",
+        "Button": "Left",
+        "ClickType": "Up"
+    },
+    {
+        "$type": "Type",
+        "Id": "00000004-0004-0004-0004-000000000001",
+        "Name": "輸入使用者名稱",
+        "Description": "Type 指令：使用 {username} 變數表達式輸入文字。IntervalMinMs/MaxMs 控制打字速度",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "Text": "{username}",
+        "Mode": "Simulate",
+        "IntervalMinMs": 30,
+        "IntervalMaxMs": 80
+    },
+    {
+        "$type": "Type",
+        "Id": "00000004-0004-0004-0004-000000000002",
+        "Name": "輸入固定文字",
+        "Description": "Type 指令：輸入固定中文文字（支援 Unicode）。較慢的打字速度模擬人類輸入",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "Text": "你好，歡迎使用 AutoWizard！",
+        "Mode": "Simulate",
+        "IntervalMinMs": 50,
+        "IntervalMaxMs": 150
+    },
+    {
+        "$type": "Keyboard",
+        "Id": "00000005-0005-0005-0005-000000000001",
+        "Name": "按下 Tab 跳到下一欄",
+        "Description": "Keyboard 指令 - 單鍵：按下 Tab 鍵。Key=TAB, Modifiers=None",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "Key": "TAB",
+        "Modifiers": "None",
+        "HoldDurationMs": 0
+    },
+    {
+        "$type": "Keyboard",
+        "Id": "00000005-0005-0005-0005-000000000002",
+        "Name": "Ctrl+A 全選",
+        "Description": "Keyboard 指令 - 組合鍵：Ctrl+A 全選。Key=A, Modifiers=Ctrl",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "Key": "A",
+        "Modifiers": "Ctrl",
+        "HoldDurationMs": 0
+    },
+    {
+        "$type": "Keyboard",
+        "Id": "00000005-0005-0005-0005-000000000003",
+        "Name": "Ctrl+C 複製",
+        "Description": "Keyboard 指令 - 組合鍵：Ctrl+C 複製到剪貼簿",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "Key": "C",
+        "Modifiers": "Ctrl",
+        "HoldDurationMs": 0
+    },
+    {
+        "$type": "Keyboard",
+        "Id": "00000005-0005-0005-0005-000000000004",
+        "Name": "Ctrl+Shift+S 另存新檔",
+        "Description": "Keyboard 指令 - 三鍵組合：Ctrl+Shift+S。Modifiers 可用逗號分隔組合多個修飾鍵",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "Key": "S",
+        "Modifiers": "Ctrl, Shift",
+        "HoldDurationMs": 0
+    },
+    {
+        "$type": "Keyboard",
+        "Id": "00000005-0005-0005-0005-000000000005",
+        "Name": "按下 Enter",
+        "Description": "Keyboard 指令 - 按下 Enter 鍵確認",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "Key": "ENTER",
+        "Modifiers": "None",
+        "HoldDurationMs": 0
+    },
+    {
+        "$type": "Keyboard",
+        "Id": "00000005-0005-0005-0005-000000000006",
+        "Name": "長按空白鍵 2 秒",
+        "Description": "Keyboard 指令 - 長按：HoldDurationMs=2000，按住空白鍵 2 秒後才放開",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "Key": "SPACE",
+        "Modifiers": "None",
+        "HoldDurationMs": 2000
+    },
+    {
+        "$type": "Keyboard",
+        "Id": "00000005-0005-0005-0005-000000000007",
+        "Name": "按下 Numpad5",
+        "Description": "Keyboard 指令 - 數字鍵盤：按下 Numpad5 鍵。Key 值對照表見使用手冊",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "Key": "NUMPAD5",
+        "Modifiers": "None",
+        "HoldDurationMs": 0
+    },
+    {
+        "$type": "Screenshot",
+        "Id": "00000006-0006-0006-0006-000000000001",
+        "Name": "全螢幕截圖（存檔）",
+        "Description": "Screenshot 指令 - 全螢幕：CaptureFull=true，儲存到 SavePath。路徑支援 {變數} 表達式",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": true
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "SavePath": "C:\\AutoWizard_Screenshots\\fullscreen_{counter}.png",
+        "SaveToVariable": "",
+        "RegionX": 0,
+        "RegionY": 0,
+        "RegionWidth": 0,
+        "RegionHeight": 0,
+        "CaptureFull": true
+    },
+    {
+        "$type": "Screenshot",
+        "Id": "00000006-0006-0006-0006-000000000002",
+        "Name": "區域截圖（存入變數）",
+        "Description": "Screenshot 指令 - 區域擷取：CaptureFull=false，指定 RegionX/Y/Width/Height 擷取特定區域，結果存入變數 (Base64)",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": true
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "SavePath": "",
+        "SaveToVariable": "regionCapture",
+        "RegionX": 100,
+        "RegionY": 200,
+        "RegionWidth": 400,
+        "RegionHeight": 100,
+        "CaptureFull": false
+    },
+    {
+        "$type": "FindImage",
+        "Id": "00000007-0007-0007-0007-000000000001",
+        "Name": "尋找確認按鈕圖片",
+        "Description": "FindImage 指令：搜尋螢幕上的範本影像。Threshold 調整匹配敏感度 (0~1)，TimeoutMs 設定逾時，ClickWhenFound 找到後自動點擊。SaveToVariable 儲存座標到變數 (加後綴 _X, _Y, _Confidence)",
+        "IsEnabled": false,
+        "ErrorPolicy": {
+            "RetryCount": 2,
+            "RetryIntervalMs": 3000,
+            "ContinueOnError": true
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "TemplateImagePath": "images/confirm_button.png",
+        "Threshold": 0.85,
+        "TimeoutMs": 10000,
+        "IntervalMs": 500,
+        "ClickWhenFound": true,
+        "SaveToVariable": "confirmBtn"
+    },
+    {
+        "$type": "OCR",
+        "Id": "00000008-0008-0008-0008-000000000001",
+        "Name": "辨識螢幕上的文字",
+        "Description": "OCR 指令：使用光學字元辨識讀取螢幕文字。設定 RegionX/Y/Width/Height 指定區域，Language 設定語言。結果存入 SaveToVariable (加後綴 _Confidence)",
+        "IsEnabled": false,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": true
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "RegionX": 200,
+        "RegionY": 150,
+        "RegionWidth": 300,
+        "RegionHeight": 50,
+        "SearchText": null,
+        "UseRegex": false,
+        "SaveToVariable": "ocrText",
+        "Language": "chi_tra"
+    },
+    {
+        "$type": "Loop",
+        "Id": "00000009-0009-0009-0009-000000000001",
+        "Name": "固定次數迴圈 (3 次)",
+        "Description": "Loop 指令 - Count 模式：重複執行 Children 中的子指令 3 次。迴圈自動建立 _loopIndex 變數 (從 0 開始)",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "LoopType": "Count",
+        "Count": 3,
+        "WhileCondition": "",
+        "ForeachVariable": "",
+        "ForeachList": [],
+        "Children": [
+            {
+                "$type": "SetVariable",
+                "Id": "00000009-0009-0009-0009-000000000011",
+                "Name": "計數器遞增",
+                "Description": "在迴圈中使用算術運算 {counter} + 1 來遞增計數器",
+                "IsEnabled": true,
+                "ErrorPolicy": {
+                    "RetryCount": 0,
+                    "RetryIntervalMs": 1000,
+                    "ContinueOnError": false
+                },
+                "DelayBeforeMs": 0,
+                "DelayAfterMs": 0,
+                "VariableName": "counter",
+                "ValueExpression": "{counter} + 1"
+            },
+            {
+                "$type": "Click",
+                "Id": "00000009-0009-0009-0009-000000000012",
+                "Name": "迴圈中的點擊",
+                "Description": "在迴圈中對固定座標進行點擊",
+                "IsEnabled": true,
+                "ErrorPolicy": {
+                    "RetryCount": 0,
+                    "RetryIntervalMs": 1000,
+                    "ContinueOnError": false
+                },
+                "DelayBeforeMs": 0,
+                "DelayAfterMs": 0,
+                "X": 960,
+                "Y": 540,
+                "XExpression": "",
+                "YExpression": "",
+                "Button": "Left",
+                "ClickType": "Single"
+            },
+            {
+                "$type": "Wait",
+                "Id": "00000009-0009-0009-0009-000000000013",
+                "Name": "迴圈間隔",
+                "Description": "每次迴圈之間的隨機等待",
+                "IsEnabled": true,
+                "ErrorPolicy": {
+                    "RetryCount": 0,
+                    "RetryIntervalMs": 1000,
+                    "ContinueOnError": false
+                },
+                "DelayBeforeMs": 0,
+                "DelayAfterMs": 0,
+                "WaitType": "Random",
+                "DurationExpression": "",
+                "DurationMs": 1000,
+                "RandomMinMs": 500,
+                "RandomMaxMs": 1500
+            }
+        ]
+    },
+    {
+        "$type": "Loop",
+        "Id": "00000009-0009-0009-0009-000000000002",
+        "Name": "條件迴圈 (While)",
+        "Description": "Loop 指令 - While 模式：當 WhileCondition 條件為 true 時持續執行。此例為 {counter} < 10 時持續迴圈",
+        "IsEnabled": false,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "LoopType": "While",
+        "Count": 1,
+        "WhileCondition": "{counter} < 10",
+        "ForeachVariable": "",
+        "ForeachList": [],
+        "Children": [
+            {
+                "$type": "SetVariable",
+                "Id": "00000009-0009-0009-0009-000000000021",
+                "Name": "計數器 +1",
+                "Description": "條件迴圈中，每次遞增 counter",
+                "IsEnabled": true,
+                "ErrorPolicy": {
+                    "RetryCount": 0,
+                    "RetryIntervalMs": 1000,
+                    "ContinueOnError": false
+                },
+                "DelayBeforeMs": 0,
+                "DelayAfterMs": 0,
+                "VariableName": "counter",
+                "ValueExpression": "{counter} + 1"
+            },
+            {
+                "$type": "Wait",
+                "Id": "00000009-0009-0009-0009-000000000022",
+                "Name": "等待 500ms",
+                "Description": "每次迭代間隔",
+                "IsEnabled": true,
+                "ErrorPolicy": {
+                    "RetryCount": 0,
+                    "RetryIntervalMs": 1000,
+                    "ContinueOnError": false
+                },
+                "DelayBeforeMs": 0,
+                "DelayAfterMs": 0,
+                "WaitType": "Fixed",
+                "DurationMs": 500,
+                "DurationExpression": "",
+                "RandomMinMs": 500,
+                "RandomMaxMs": 2000
+            }
+        ]
+    },
+    {
+        "$type": "Loop",
+        "Id": "00000009-0009-0009-0009-000000000003",
+        "Name": "列表疊代迴圈 (Foreach)",
+        "Description": "Loop 指令 - Foreach 模式：依序取出 ForeachList 中的每個元素，存入 ForeachVariable 指定的變數名中",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "LoopType": "Foreach",
+        "Count": 1,
+        "WhileCondition": "",
+        "ForeachVariable": "fileName",
+        "ForeachList": [
+            "文件A.xlsx",
+            "資料B.csv",
+            "報表C.docx"
+        ],
+        "Children": [
+            {
+                "$type": "Type",
+                "Id": "00000009-0009-0009-0009-000000000031",
+                "Name": "輸入當前檔名",
+                "Description": "使用 {fileName} 取得 Foreach 迭代的當前元素值",
+                "IsEnabled": true,
+                "ErrorPolicy": {
+                    "RetryCount": 0,
+                    "RetryIntervalMs": 1000,
+                    "ContinueOnError": false
+                },
+                "DelayBeforeMs": 0,
+                "DelayAfterMs": 0,
+                "Text": "{fileName}",
+                "Mode": "Simulate",
+                "IntervalMinMs": 30,
+                "IntervalMaxMs": 80
+            },
+            {
+                "$type": "Keyboard",
+                "Id": "00000009-0009-0009-0009-000000000032",
+                "Name": "按 Enter 確認",
+                "Description": "輸入檔名後按 Enter",
+                "IsEnabled": true,
+                "ErrorPolicy": {
+                    "RetryCount": 0,
+                    "RetryIntervalMs": 1000,
+                    "ContinueOnError": false
+                },
+                "DelayBeforeMs": 0,
+                "DelayAfterMs": 0,
+                "Key": "ENTER",
+                "Modifiers": "None",
+                "HoldDurationMs": 0
+            },
+            {
+                "$type": "Wait",
+                "Id": "00000009-0009-0009-0009-000000000033",
+                "Name": "等待處理",
+                "Description": "等待檔案處理完成",
+                "IsEnabled": true,
+                "ErrorPolicy": {
+                    "RetryCount": 0,
+                    "RetryIntervalMs": 1000,
+                    "ContinueOnError": false
+                },
+                "DelayBeforeMs": 0,
+                "DelayAfterMs": 0,
+                "WaitType": "Fixed",
+                "DurationMs": 1000,
+                "DurationExpression": "",
+                "RandomMinMs": 500,
+                "RandomMaxMs": 2000
+            }
+        ]
+    },
+    {
+        "$type": "If",
+        "Id": "00000010-0010-0010-0010-000000000001",
+        "Name": "判斷計數器是否大於 5（傳統模式）",
+        "Description": "If 指令 - 傳統模式：使用 ConditionType + LeftOperand/RightOperand 進行比較。ConditionType=VariableGreaterThan 表示左邊 > 右邊",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "ConditionType": "VariableGreaterThan",
+        "LeftOperand": "{counter}",
+        "RightOperand": "5",
+        "ConditionExpression": "",
+        "ThenActions": [
+            {
+                "$type": "Type",
+                "Id": "00000010-0010-0010-0010-000000000011",
+                "Name": "Then：計數已超過 5",
+                "Description": "條件成立 (true) 時執行的指令",
+                "IsEnabled": true,
+                "ErrorPolicy": {
+                    "RetryCount": 0,
+                    "RetryIntervalMs": 1000,
+                    "ContinueOnError": false
+                },
+                "DelayBeforeMs": 0,
+                "DelayAfterMs": 0,
+                "Text": "計數器超過 5！目前值：{counter}",
+                "Mode": "Simulate",
+                "IntervalMinMs": 30,
+                "IntervalMaxMs": 80
+            }
+        ],
+        "ElseActions": [
+            {
+                "$type": "Type",
+                "Id": "00000010-0010-0010-0010-000000000012",
+                "Name": "Else：計數未超過 5",
+                "Description": "條件不成立 (false) 時執行的指令",
+                "IsEnabled": true,
+                "ErrorPolicy": {
+                    "RetryCount": 0,
+                    "RetryIntervalMs": 1000,
+                    "ContinueOnError": false
+                },
+                "DelayBeforeMs": 0,
+                "DelayAfterMs": 0,
+                "Text": "計數器未超過 5，目前值：{counter}",
+                "Mode": "Simulate",
+                "IntervalMinMs": 30,
+                "IntervalMaxMs": 80
+            }
+        ],
+        "Children": []
+    },
+    {
+        "$type": "If",
+        "Id": "00000010-0010-0010-0010-000000000002",
+        "Name": "Expression 模式條件判斷",
+        "Description": "If 指令 - Expression 模式（推薦）：使用 ConditionExpression 直接寫自由格式條件。支援 ==, !=, >, <, >=, <=, contains",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "ConditionType": "Expression",
+        "LeftOperand": "",
+        "RightOperand": "",
+        "ConditionExpression": "{counter} >= 3",
+        "ThenActions": [
+            {
+                "$type": "Keyboard",
+                "Id": "00000010-0010-0010-0010-000000000021",
+                "Name": "條件成立：按 ESC",
+                "Description": "Expression 條件成立時執行",
+                "IsEnabled": true,
+                "ErrorPolicy": {
+                    "RetryCount": 0,
+                    "RetryIntervalMs": 1000,
+                    "ContinueOnError": false
+                },
+                "DelayBeforeMs": 0,
+                "DelayAfterMs": 0,
+                "Key": "ESC",
+                "Modifiers": "None",
+                "HoldDurationMs": 0
+            }
+        ],
+        "ElseActions": [],
+        "Children": []
+    },
+    {
+        "$type": "If",
+        "Id": "00000010-0010-0010-0010-000000000003",
+        "Name": "檢查檔案是否存在",
+        "Description": "If 指令 - FileExists 模式：檢查 LeftOperand 指定路徑的檔案是否存在",
+        "IsEnabled": false,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": true
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "ConditionType": "FileExists",
+        "LeftOperand": "C:\\Data\\output.csv",
+        "RightOperand": "",
+        "ConditionExpression": "",
+        "ThenActions": [
+            {
+                "$type": "Type",
+                "Id": "00000010-0010-0010-0010-000000000031",
+                "Name": "檔案存在提示",
+                "IsEnabled": true,
+                "ErrorPolicy": {
+                    "RetryCount": 0,
+                    "RetryIntervalMs": 1000,
+                    "ContinueOnError": false
+                },
+                "DelayBeforeMs": 0,
+                "DelayAfterMs": 0,
+                "Text": "檔案已找到！",
+                "Mode": "Simulate",
+                "IntervalMinMs": 30,
+                "IntervalMaxMs": 80
+            }
+        ],
+        "ElseActions": [
+            {
+                "$type": "Type",
+                "Id": "00000010-0010-0010-0010-000000000032",
+                "Name": "檔案不存在提示",
+                "IsEnabled": true,
+                "ErrorPolicy": {
+                    "RetryCount": 0,
+                    "RetryIntervalMs": 1000,
+                    "ContinueOnError": false
+                },
+                "DelayBeforeMs": 0,
+                "DelayAfterMs": 0,
+                "Text": "找不到檔案！",
+                "Mode": "Simulate",
+                "IntervalMinMs": 30,
+                "IntervalMaxMs": 80
+            }
+        ],
+        "Children": []
+    },
+    {
+        "$type": "If",
+        "Id": "00000010-0010-0010-0010-000000000004",
+        "Name": "字串包含判斷",
+        "Description": "If 指令 - VariableContains 模式：檢查 LeftOperand 是否包含 RightOperand 的文字",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "ConditionType": "VariableContains",
+        "LeftOperand": "{username}",
+        "RightOperand": "admin",
+        "ConditionExpression": "",
+        "ThenActions": [
+            {
+                "$type": "Type",
+                "Id": "00000010-0010-0010-0010-000000000041",
+                "Name": "管理員歡迎訊息",
+                "IsEnabled": true,
+                "ErrorPolicy": {
+                    "RetryCount": 0,
+                    "RetryIntervalMs": 1000,
+                    "ContinueOnError": false
+                },
+                "DelayBeforeMs": 0,
+                "DelayAfterMs": 0,
+                "Text": "歡迎管理員 {username}！",
+                "Mode": "Simulate",
+                "IntervalMinMs": 30,
+                "IntervalMaxMs": 80
+            }
+        ],
+        "ElseActions": [],
+        "Children": []
+    },
+    {
+        "$type": "Wait",
+        "Id": "00000011-0011-0011-0011-000000000001",
+        "Name": "使用變數表達式的等待",
+        "Description": "Wait 指令 - DurationExpression 範例：使用 {waitTime} 變數動態決定等待時間。若變數不存在則使用 DurationMs 的預設值",
+        "IsEnabled": false,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "WaitType": "Fixed",
+        "DurationExpression": "{waitTime}",
+        "DurationMs": 2000,
+        "RandomMinMs": 500,
+        "RandomMaxMs": 2000
+    },
+    {
+        "$type": "Click",
+        "Id": "00000012-0012-0012-0012-000000000001",
+        "Name": "使用變數座標的點擊",
+        "Description": "Click 指令 - XExpression/YExpression 範例：使用 FindImage 儲存的座標變數來點擊。當 Expression 有值且解析成功時優先使用",
+        "IsEnabled": false,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "X": 0,
+        "Y": 0,
+        "XExpression": "{confirmBtn_X}",
+        "YExpression": "{confirmBtn_Y}",
+        "Button": "Left",
+        "ClickType": "Single"
+    },
+    {
+        "$type": "SetVariable",
+        "Id": "00000013-0013-0013-0013-000000000001",
+        "Name": "算術運算範例",
+        "Description": "SetVariable - 算術範例：ValueExpression 支援 +, -, *, /, % 運算。例如 {counter} * 2 會將 counter 值乘以 2",
+        "IsEnabled": true,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "VariableName": "doubleCounter",
+        "ValueExpression": "{counter} * 2"
+    },
+    {
+        "$type": "Click",
+        "Id": "00000014-0014-0014-0014-000000000001",
+        "Name": "帶有重試機制的點擊",
+        "Description": "ErrorPolicy 範例：RetryCount=3 表示失敗後重試 3 次，RetryIntervalMs=2000 表示每次重試間隔 2 秒，ContinueOnError=true 表示即使最終失敗也繼續執行下一個指令",
+        "IsEnabled": false,
+        "ErrorPolicy": {
+            "RetryCount": 3,
+            "RetryIntervalMs": 2000,
+            "ContinueOnError": true
+        },
+        "DelayBeforeMs": 500,
+        "DelayAfterMs": 300,
+        "X": 1200,
+        "Y": 700,
+        "XExpression": "",
+        "YExpression": "",
+        "Button": "Left",
+        "ClickType": "Single"
+    },
+    {
+        "$type": "Click",
+        "Id": "00000014-0014-0014-0014-000000000002",
+        "Name": "被停用的指令（不會執行）",
+        "Description": "IsEnabled=false 範例：設為 false 的指令在執行時會被跳過，相當於暫時禁用",
+        "IsEnabled": false,
+        "ErrorPolicy": {
+            "RetryCount": 0,
+            "RetryIntervalMs": 1000,
+            "ContinueOnError": false
+        },
+        "DelayBeforeMs": 0,
+        "DelayAfterMs": 0,
+        "X": 999,
+        "Y": 999,
+        "XExpression": "",
+        "YExpression": "",
+        "Button": "Left",
+        "ClickType": "Single"
+    }
+]

@@ -1,0 +1,12 @@
+{
+    "total_tasks": 0,
+    "avg_wall_time_seconds": 0,
+    "avg_agent_count": 0,
+    "avg_retry_count": 0,
+    "model_usage": {
+        "opus": 0,
+        "sonnet": 0,
+        "haiku": 0
+    },
+    "last_updated": "2026-02-11T20:52:51+08:00"
+}

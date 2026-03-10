@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<title>按鍵精靈插件幫助</title>
+<style>
+body{font-size:12px; font-family:Verdana,"細明體"}
+.ts{ background:#fff; margin:0 0 40px 0;}
+.ts th{ color:#7B797B; background:#DEDFDE; line-height:24px;}
+.ts td {padding:6px 0;}
+.name { font-size:16px; font-weight:bold; border-top:1px dashed #9C9A9C; border-bottom:1px dashed #9C9A9C; color:#006939;}
+.canshu { background:#E7E7EF;}
+.red{ color:#d60000;}
+.green{ color:#006939;}
+.fanhui{ border-bottom:1px dashed #9C9A9C;}
+.lizi{ border-bottom:1px dashed #9C9A9C;}
+</style></head><body>
+
+
+<table width="100%" border="0" cellpadding="0" cellspacing="1" class="ts">
+<tr><th width="100px">命令名稱：</th><td class="name">
+<a name="前台喊話"></a>前台喊話
+</td></tr><tr><th>命令功能：</th><td>
+前台喊話
+</td></tr><tr><th>命令參數：</th><td class="canshu"><pre>
+參數1 字符串型，數組內容()
+參數2 整數型，每句間隔秒
+參數3 整數型，循環時間秒
+</td></tr><tr><th>返回值：</th><td class="fanhui">
+無
+</td></tr><tr><th>腳本例子：<br /><span class="red">按鍵精靈8及<br />以上語法</span>
+</th><td class="lizi"><pre>
+文字="既然你誠心誠意的發問了|那我就大發慈悲的告訴你|為了防止世界被破壞" &  _
+"|為了守護世界的和平|貫徹愛與真實的邪惡|可愛又迷人的反派角色|武藏|小次郎" &  _
+"|我們是穿梭在銀河中的火箭隊.白洞..喵"
+數組內容=Split(文字,"|")
+Call lib.網游.前台喊話(數組內容,1,5)
+</td></tr></table>
+
+
+<table width="100%" border="0" cellpadding="0" cellspacing="1" class="ts">
+<tr><th width="100px">命令名稱：</th><td class="name">
+<a name="方形漸開線"></a>方形漸開線
+</td></tr><tr><th>命令功能：</th><td>
+方形漸開線
+</td></tr><tr><th>命令參數：</th><td class="canshu"><pre>
+參數1 整數型，中心點x坐標
+參數2 整數型，中心點y坐標
+參數3 整數型，兩點間距離
+參數4 整數型，圈數
+</td></tr><tr><th>返回值：</th><td class="fanhui">
+無
+</td></tr><tr><th>腳本例子：<br /><span class="red">按鍵精靈8及<br />以上語法</span>
+</th><td class="lizi"><pre>
+Call lib.網游.方形漸開線(400,300,20,20)
+</td></tr></table>
+
+
+<table width="100%" border="0" cellpadding="0" cellspacing="1" class="ts">
+<tr><th width="100px">命令名稱：</th><td class="name">
+<a name="圓形漸開線"></a>圓形漸開線
+</td></tr><tr><th>命令功能：</th><td>
+圓形漸開線
+</td></tr><tr><th>命令參數：</th><td class="canshu"><pre>
+參數1 整數型，中心點x坐標
+參數2 整數型，中心點y坐標
+參數3 整數型，兩點間距離
+參數4 整數型，遞增半徑
+參數5 整數型，圈數
+</td></tr><tr><th>返回值：</th><td class="fanhui">
+無
+</td></tr><tr><th>腳本例子：<br /><span class="red">按鍵精靈8及<br />以上語法</span>
+</th><td class="lizi"><pre>
+Call lib.網游.圓形漸開線(400,300,20,20,20)
+</td></tr></table>
+
+
+<table width="100%" border="0" cellpadding="0" cellspacing="1" class="ts">
+<tr><th width="100px">命令名稱：</th><td class="name">
+<a name="橢圓漸開線"></a>橢圓漸開線
+</td></tr><tr><th>命令功能：</th><td>
+橢圓漸開線
+</td></tr><tr><th>命令參數：</th><td class="canshu"><pre>
+參數1 整數型，中心點x坐標
+參數2 整數型，中心點y坐標
+參數3 整數型，兩點間距離
+參數4 整數型，橫坐標範圍
+</td></tr><tr><th>返回值：</th><td class="fanhui">
+無
+</td></tr><tr><th>腳本例子：<br /><span class="red">按鍵精靈8及<br />以上語法</span>
+</th><td class="lizi"><pre>
+Call lib.網游.橢圓漸開線(400,300,20,300)
+</td></tr></table>
+
+
+
+</body>
+</html>

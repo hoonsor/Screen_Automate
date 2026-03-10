@@ -1,0 +1,7 @@
+﻿D:\01-Project\01-Screen Automate\AutoWizard.Tests\Actions\NewActionsTests.cs(11,17): error CS0104: 'ExecutionContext' is an ambiguous reference between 'AutoWizard.Core.Models.ExecutionContext' and 'System.Threading.ExecutionContext' [D:\01-Project\01-Screen Automate\AutoWizard.Tests\AutoWizard.Tests.csproj]
+
+Build FAILED.
+    12 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:01.44

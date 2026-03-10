@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<title>按鍵精靈插件幫助</title>
+<style>
+body{font-size:12px; font-family:Verdana,"細明體"}
+.ts{ background:#fff; margin:0 0 40px 0;}
+.ts th{ color:#7B797B; background:#DEDFDE; line-height:24px;}
+.ts td {padding:6px 0;}
+.name { font-size:16px; font-weight:bold; border-top:1px dashed #9C9A9C; border-bottom:1px dashed #9C9A9C; color:#006939;}
+.canshu { background:#E7E7EF;}
+.red{ color:#d60000;}
+.green{ color:#006939;}
+.fanhui{ border-bottom:1px dashed #9C9A9C;}
+.lizi{ border-bottom:1px dashed #9C9A9C;}
+</style></head><body>
+
+
+<table width="100%" border="0" cellpadding="0" cellspacing="1" class="ts">
+<tr><th width="100px">命令名稱：</th><td class="name">
+<a name="查找屏幕圖片數量"></a>查找屏幕圖片數量
+</td></tr><tr><th>命令功能：</th><td>
+查找屏幕圖片數量
+</td></tr><tr><th>命令參數：</th><td class="canshu"><pre>
+參數1 整數型，左坐標
+參數2 整數型，上坐標
+參數3 整數型，右坐標
+參數4 整數型，下坐標
+參數5 字符串型，圖片路徑
+參數6 整數型，相似度
+</td></tr><tr><th>返回值：</th><td class="fanhui">
+整數型，圖片數量
+</td></tr><tr><th>腳本例子：<br /><span class="red">按鍵精靈8及<br />以上語法</span>
+</th><td class="lizi"><pre>
+MsgBox lib.圖像.查找屏幕圖片數量(0,0,800,300,"C:\圖標.bmp",0.9)
+</td></tr></table>
+
+
+<table width="100%" border="0" cellpadding="0" cellspacing="1" class="ts">
+<tr><th width="100px">命令名稱：</th><td class="name">
+<a name="無限屏幕截圖"></a>無限屏幕截圖
+</td></tr><tr><th>命令功能：</th><td>
+無限屏幕截圖
+</td></tr><tr><th>命令參數：</th><td class="canshu"><pre>
+參數1 整數型，左坐標
+參數2 整數型，上坐標
+參數3 整數型，右坐標
+參數4 整數型，下坐標
+參數5 字符串型，保存圖片路徑
+參數6 字符串型，文件格式
+</td></tr><tr><th>返回值：</th><td class="fanhui">
+無
+</td></tr><tr><th>腳本例子：<br /><span class="red">按鍵精靈8及<br />以上語法</span>
+</th><td class="lizi"><pre>
+Call lib.圖像.無限屏幕截圖(0,0,100,100,"C:\","bmp")
+</td></tr></table>
+
+
+</body>
+</html>
