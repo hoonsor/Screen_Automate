@@ -24,69 +24,103 @@
             <ItemsControl ItemsSource="{Binding Properties}" Padding="4">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Padding="8,5" BorderBrush="#F0F0F0" BorderThickness="0,0,0,1">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="90"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
+                        <!-- 使用 ContentControl 根據 IsButton/IsSeparator 切換樣式 -->
+                        <ContentControl Content="{Binding}">
+                            <ContentControl.Resources>
+                                <!-- 預設模板：Key-Value 屬性列 -->
+                                <DataTemplate x:Key="PropertyTemplate">
+                                    <Border Padding="8,5" BorderBrush="#F0F0F0" BorderThickness="0,0,0,1">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="90"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
 
-                                <!-- Property Name -->
-                                <TextBlock Grid.Column="0" Text="{Binding Key}" 
-                                           FontSize="11" Foreground="#616161" 
-                                           VerticalAlignment="Center"
-                                           TextTrimming="CharacterEllipsis"
-                                           ToolTip="{Binding Key}"/>
+                                            <TextBlock Grid.Column="0" Text="{Binding Key}" 
+                                                       FontSize="11" Foreground="#616161" 
+                                                       VerticalAlignment="Center"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       ToolTip="{Binding Key}"/>
 
-                                <!-- Property Value -->
-                                <!-- Property Value (Dynamic Control) -->
-                                <ContentControl Grid.Column="1" Content="{Binding}">
-                                    <ContentControl.Resources>
-                                        <!-- Default Template: TextBox -->
-                                        <DataTemplate x:Key="TextTemplate">
-                                            <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                     Padding="4,3" BorderBrush="#E0E0E0" BorderThickness="1"
-                                                     FontSize="11" VerticalAlignment="Center"/>
-                                        </DataTemplate>
+                                            <ContentControl Grid.Column="1" Content="{Binding}">
+                                                <ContentControl.Resources>
+                                                    <DataTemplate x:Key="TextTemplate">
+                                                        <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                 Padding="4,3" BorderBrush="#E0E0E0" BorderThickness="1"
+                                                                 FontSize="11" VerticalAlignment="Center"/>
+                                                    </DataTemplate>
+                                                    <DataTemplate x:Key="BoolTemplate">
+                                                        <ComboBox SelectedValue="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                  SelectedValuePath="Content"
+                                                                  Padding="4,3" BorderBrush="#E0E0E0" BorderThickness="1"
+                                                                  FontSize="11" VerticalAlignment="Center">
+                                                            <ComboBoxItem Content="True"/>
+                                                            <ComboBoxItem Content="False"/>
+                                                        </ComboBox>
+                                                    </DataTemplate>
+                                                    <DataTemplate x:Key="EnumTemplate">
+                                                        <ComboBox ItemsSource="{Binding EnumValues}"
+                                                                  SelectedValue="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                  Padding="4,3" BorderBrush="#E0E0E0" BorderThickness="1"
+                                                                  FontSize="11" VerticalAlignment="Center" />
+                                                    </DataTemplate>
+                                                </ContentControl.Resources>
+                                                <ContentControl.Style>
+                                                    <Style TargetType="ContentControl">
+                                                        <Setter Property="ContentTemplate" Value="{StaticResource TextTemplate}"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding PropertyType.Name}" Value="Boolean">
+                                                                <Setter Property="ContentTemplate" Value="{StaticResource BoolTemplate}"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IsEnum}" Value="True">
+                                                                <Setter Property="ContentTemplate" Value="{StaticResource EnumTemplate}"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ContentControl.Style>
+                                            </ContentControl>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
 
-                                        <!-- Boolean Template: ComboBox -->
-                                        <DataTemplate x:Key="BoolTemplate">
-                                            <ComboBox SelectedValue="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                      SelectedValuePath="Content"
-                                                      Padding="4,3" BorderBrush="#E0E0E0" BorderThickness="1"
-                                                      FontSize="11" VerticalAlignment="Center">
-                                                <ComboBoxItem Content="True"/>
-                                                <ComboBoxItem Content="False"/>
-                                            </ComboBox>
-                                        </DataTemplate>
+                                <!-- 按鈕模板 -->
+                                <DataTemplate x:Key="ButtonTemplate">
+                                    <Border Padding="4,3" Margin="4,2">
+                                        <Button Content="{Binding Key}" 
+                                                Command="{Binding ButtonCommand}"
+                                                Padding="8,4" FontSize="11"
+                                                Background="#F5F5F5" BorderBrush="#E0E0E0"
+                                                Cursor="Hand"
+                                                HorizontalAlignment="Stretch"/>
+                                    </Border>
+                                </DataTemplate>
 
-                                        <!-- Enum Template: ComboBox -->
-                                        <DataTemplate x:Key="EnumTemplate">
-                                            <ComboBox ItemsSource="{Binding EnumValues}"
-                                                      SelectedValue="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                      Padding="4,3" BorderBrush="#E0E0E0" BorderThickness="1"
-                                                      FontSize="11" VerticalAlignment="Center" />
-                                        </DataTemplate>
-                                    </ContentControl.Resources>
-                                    
-                                    <ContentControl.Style>
-                                        <Style TargetType="ContentControl">
-                                            <Setter Property="ContentTemplate" Value="{StaticResource TextTemplate}"/>
-                                            <Style.Triggers>
-                                                <!-- Check for Boolean Type -->
-                                                <DataTrigger Binding="{Binding PropertyType.Name}" Value="Boolean">
-                                                    <Setter Property="ContentTemplate" Value="{StaticResource BoolTemplate}"/>
-                                                </DataTrigger>
-                                                <!-- Check for Enum Type -->
-                                                <DataTrigger Binding="{Binding IsEnum}" Value="True">
-                                                    <Setter Property="ContentTemplate" Value="{StaticResource EnumTemplate}"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ContentControl.Style>
-                                </ContentControl>
-                            </Grid>
-                        </Border>
+                                <!-- 分隔線模板 -->
+                                <DataTemplate x:Key="SeparatorTemplate">
+                                    <Border Padding="4,6" Background="#FAFAFA" Margin="0,4,0,0"
+                                            BorderBrush="#E0E0E0" BorderThickness="0,1,0,0">
+                                        <TextBlock Text="{Binding Key}" 
+                                                   FontSize="11" FontWeight="SemiBold"
+                                                   Foreground="#FF9800" 
+                                                   HorizontalAlignment="Center"/>
+                                    </Border>
+                                </DataTemplate>
+                            </ContentControl.Resources>
+
+                            <ContentControl.Style>
+                                <Style TargetType="ContentControl">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource PropertyTemplate}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsButton}" Value="True">
+                                            <Setter Property="ContentTemplate" Value="{StaticResource ButtonTemplate}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsSeparator}" Value="True">
+                                            <Setter Property="ContentTemplate" Value="{StaticResource SeparatorTemplate}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ContentControl.Style>
+                        </ContentControl>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

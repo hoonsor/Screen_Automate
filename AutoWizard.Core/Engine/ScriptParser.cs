@@ -118,10 +118,51 @@ namespace AutoWizard.Core.Engine
         {
             if (def.Parameters == null) return null;
             var action = new IfAction();
-            if (def.Parameters.TryGetValue("ConditionType", out var condType)) action.ConditionType = Enum.Parse<ConditionType>(GetStringValue(condType));
-            if (def.Parameters.TryGetValue("LeftOperand", out var left)) action.LeftOperand = GetStringValue(left);
-            if (def.Parameters.TryGetValue("RightOperand", out var right)) action.RightOperand = GetStringValue(right);
-            if (def.Parameters.TryGetValue("ConditionExpression", out var ce)) action.ConditionExpression = GetStringValue(ce);
+
+            // 新格式：Conditions 陣列 + ConditionRelation
+            if (def.Parameters.TryGetValue("ConditionRelation", out var cr))
+                action.ConditionRelation = GetStringValue(cr);
+
+            if (def.Parameters.TryGetValue("Conditions", out var conditionsObj) && conditionsObj is JsonElement conditionsArray && conditionsArray.ValueKind == JsonValueKind.Array)
+            {
+                action.Conditions = new List<ConditionItem>();
+                foreach (var condElem in conditionsArray.EnumerateArray())
+                {
+                    var condItem = new ConditionItem();
+                    if (condElem.TryGetProperty("ConditionType", out var ct))
+                        condItem.ConditionType = Enum.Parse<ConditionType>(ct.GetString() ?? "VariableEquals");
+                    if (condElem.TryGetProperty("LeftOperand", out var lo))
+                        condItem.LeftOperand = lo.GetString() ?? "";
+                    if (condElem.TryGetProperty("RightOperand", out var ro))
+                        condItem.RightOperand = ro.GetString() ?? "";
+                    if (condElem.TryGetProperty("ConditionExpression", out var ce))
+                        condItem.ConditionExpression = ce.GetString() ?? "";
+                    if (condElem.TryGetProperty("ColorXExpression", out var cx))
+                        condItem.ColorXExpression = cx.GetString() ?? "";
+                    if (condElem.TryGetProperty("ColorYExpression", out var cy))
+                        condItem.ColorYExpression = cy.GetString() ?? "";
+                    if (condElem.TryGetProperty("TargetColor", out var tc))
+                        condItem.TargetColor = tc.GetString() ?? "";
+                    if (condElem.TryGetProperty("Tolerance", out var tol))
+                        condItem.Tolerance = tol.GetInt32();
+                    action.Conditions.Add(condItem);
+                }
+            }
+            else
+            {
+                // 向下相容：舊格式單條件
+                var condItem = new ConditionItem();
+                if (def.Parameters.TryGetValue("ConditionType", out var condType))
+                    condItem.ConditionType = Enum.Parse<ConditionType>(GetStringValue(condType));
+                if (def.Parameters.TryGetValue("LeftOperand", out var left))
+                    condItem.LeftOperand = GetStringValue(left);
+                if (def.Parameters.TryGetValue("RightOperand", out var right))
+                    condItem.RightOperand = GetStringValue(right);
+                if (def.Parameters.TryGetValue("ConditionExpression", out var ceOld))
+                    condItem.ConditionExpression = GetStringValue(ceOld);
+                action.Conditions = new List<ConditionItem> { condItem };
+                action.ConditionRelation = "C1";
+            }
 
             if (def.ThenActions != null)
             {

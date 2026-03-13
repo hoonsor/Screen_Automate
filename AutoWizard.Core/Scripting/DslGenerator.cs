@@ -37,6 +37,7 @@ namespace AutoWizard.Core.Scripting
             }
 
             // Generate function call
+            int contentStartPos = sb.Length; // 記錄生成前的位置
             switch (action)
             {
                 case ClickAction click:
@@ -73,6 +74,11 @@ namespace AutoWizard.Core.Scripting
                     sb.AppendLine($"{indent}// Unsupported action: {action.GetType().Name}");
                     break;
             }
+
+            // 如果 ErrorPolicy 非預設值，附加 .ErrorPolicy(...) 語法
+            // 只在本指令新增的首行搜尋分號，避免影響子指令
+            AppendErrorPolicyIfNeeded(sb, action, contentStartPos);
+
             sb.AppendLine(); // Empty line between actions
         }
 
@@ -234,15 +240,28 @@ namespace AutoWizard.Core.Scripting
 
         private void GenerateIf(StringBuilder sb, IfAction action, string indent)
         {
-            // If(ConditionType, LeftOperand, RightOperand, ConditionExpression)
-            var args = new List<string>
+            // If("ConditionRelation")
+            //   .Cond("CondType", "Left", "Right", "Expr", "ColorX", "ColorY", "TargetColor", Tolerance)
+            //   .Cond(...)
+            // { ... }
+            sb.AppendLine($"{indent}If(\"{EscapeString(action.ConditionRelation)}\")");
+
+            foreach (var cond in action.Conditions)
             {
-                $"\"{action.ConditionType}\"",
-                $"\"{EscapeString(action.LeftOperand)}\"",
-                $"\"{EscapeString(action.RightOperand)}\"",
-                $"\"{EscapeString(action.ConditionExpression)}\""
-            };
-            sb.AppendLine($"{indent}If({string.Join(", ", args)})");
+                var condArgs = new List<string>
+                {
+                    $"\"{cond.ConditionType}\"",
+                    $"\"{EscapeString(cond.LeftOperand)}\"",
+                    $"\"{EscapeString(cond.RightOperand)}\"",
+                    $"\"{EscapeString(cond.ConditionExpression)}\"",
+                    $"\"{EscapeString(cond.ColorXExpression)}\"",
+                    $"\"{EscapeString(cond.ColorYExpression)}\"",
+                    $"\"{EscapeString(cond.TargetColor)}\"",
+                    cond.Tolerance.ToString()
+                };
+                sb.AppendLine($"{indent}  .Cond({string.Join(", ", condArgs)})");
+            }
+
             sb.AppendLine($"{indent}{{");
             foreach (var child in action.ThenActions)
             {
@@ -266,6 +285,34 @@ namespace AutoWizard.Core.Scripting
         {
             if (input == null) return "";
             return input.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n");
+        }
+
+        /// <summary>
+        /// 檢查 ErrorPolicy 是否為非預設值，若是則在指令行後附加 .ErrorPolicy(...) 語法
+        /// contentStartPos 用來限定只搜尋本指令新增的首行，避免影響子指令
+        /// </summary>
+        private void AppendErrorPolicyIfNeeded(StringBuilder sb, BaseAction action, int contentStartPos)
+        {
+            var ep = action.ErrorPolicy;
+            bool isDefault = (ep.RetryCount == 0 && ep.RetryIntervalMs == 1000 && !ep.ContinueOnError);
+
+            if (!isDefault)
+            {
+                string content = sb.ToString();
+                // 只在本指令新增的內容中搜尋首行的分號
+                int searchEnd = content.IndexOf('\n', contentStartPos);
+                if (searchEnd < 0) searchEnd = content.Length;
+
+                int semiPos = content.IndexOf(';', contentStartPos);
+                if (semiPos >= 0 && semiPos < searchEnd)
+                {
+                    string errorPolicyCall = $".ErrorPolicy({ep.RetryCount}, {ep.RetryIntervalMs}, {ep.ContinueOnError.ToString().ToLower()})";
+                    sb.Clear();
+                    sb.Append(content.Substring(0, semiPos));
+                    sb.Append(errorPolicyCall);
+                    sb.Append(content.Substring(semiPos));
+                }
+            }
         }
     }
 }

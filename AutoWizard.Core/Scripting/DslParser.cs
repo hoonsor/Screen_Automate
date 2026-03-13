@@ -19,6 +19,7 @@ namespace AutoWizard.Core.Scripting
             hierarchyStack.Push(actions);
 
             string lastComment = string.Empty;
+            IfAction? pendingIfAction = null; // 用於收集 .Cond() 鏈式呼叫
 
             foreach (var line in lines)
             {
@@ -27,41 +28,114 @@ namespace AutoWizard.Core.Scripting
 
                 if (trimmed.StartsWith("//"))
                 {
-                    // Store comment (remove "//" and trim)
                     lastComment = trimmed.Substring(2).Trim();
                     continue;
                 }
 
-                if (trimmed == "{") continue;
+                // 處理 .Cond(...) 鏈式呼叫行
+                if (pendingIfAction != null && trimmed.StartsWith(".Cond("))
+                {
+                    var condMatch = Regex.Match(trimmed, @"^\.Cond\((.*)\)\s*$");
+                    if (condMatch.Success)
+                    {
+                        var condArgs = ParseArguments(condMatch.Groups[1].Value);
+                        var condItem = new ConditionItem
+                        {
+                            ConditionType = ParseEnum(condArgs, 0, ConditionType.VariableEquals),
+                            LeftOperand = ParseString(condArgs, 1),
+                            RightOperand = ParseString(condArgs, 2),
+                            ConditionExpression = ParseString(condArgs, 3),
+                            ColorXExpression = ParseString(condArgs, 4),
+                            ColorYExpression = ParseString(condArgs, 5),
+                            TargetColor = ParseString(condArgs, 6),
+                            Tolerance = ParseInt(condArgs, 7)
+                        };
+                        pendingIfAction.Conditions.Add(condItem);
+                        continue;
+                    }
+                }
+
+                // 遇到 { 時，如果有 pendingIfAction，將其推入 hierarchy
+                if (trimmed == "{")
+                {
+                    if (pendingIfAction != null)
+                    {
+                        hierarchyStack.Peek().Add(pendingIfAction);
+                        hierarchyStack.Push((List<BaseAction>)pendingIfAction.ThenActions);
+                        pendingIfAction = null;
+                    }
+                    continue;
+                }
+
                 if (trimmed == "}") 
                 {
                     if (hierarchyStack.Count > 1) hierarchyStack.Pop();
                     continue;
                 }
                 
-                // Parse function call: Name(Args)
-                var match = Regex.Match(trimmed, @"^(\w+)\((.*)\);?$");
+                // Parse function call: Name(Args) or Name(Args).ErrorPolicy(...)
+                string mainCall = trimmed;
+                string errorPolicyStr = string.Empty;
+
+                var epMatch = Regex.Match(trimmed, @"\.ErrorPolicy\(([^)]*)\)\s*;?\s*$");
+                if (epMatch.Success)
+                {
+                    errorPolicyStr = epMatch.Groups[1].Value;
+                    mainCall = trimmed.Substring(0, epMatch.Index);
+                    mainCall = mainCall.TrimEnd(';').TrimEnd();
+                }
+
+                var match = Regex.Match(mainCall, @"^(\w+)\((.*)?)\)\s*;?\s*$");
                 if (match.Success)
                 {
                     string funcName = match.Groups[1].Value;
                     string argsStr = match.Groups[2].Value;
                     var args = ParseArguments(argsStr);
 
+                    // 新格式 If("ConditionRelation") → 開始收集 .Cond() 行
+                    if (funcName == "If" && args.Count == 1 && !Enum.TryParse<ConditionType>(StripQuotes(args[0]), out _))
+                    {
+                        pendingIfAction = new IfAction
+                        {
+                            ConditionRelation = ParseString(args, 0),
+                            Conditions = new List<ConditionItem>()
+                        };
+                        if (!string.IsNullOrEmpty(lastComment))
+                        {
+                            pendingIfAction.Description = lastComment;
+                            pendingIfAction.Name = lastComment;
+                            lastComment = string.Empty;
+                        }
+                        if (!string.IsNullOrEmpty(errorPolicyStr))
+                        {
+                            var epArgs = ParseArguments(errorPolicyStr);
+                            pendingIfAction.ErrorPolicy = new ErrorHandlingPolicy
+                            {
+                                RetryCount = epArgs.Count > 0 && int.TryParse(epArgs[0], out int rc) ? rc : 0,
+                                RetryIntervalMs = epArgs.Count > 1 && int.TryParse(epArgs[1], out int ri) ? ri : 1000,
+                                ContinueOnError = epArgs.Count > 2 && bool.TryParse(epArgs[2], out bool ce) && ce
+                            };
+                        }
+                        continue;
+                    }
+
                     BaseAction? action = CreateAction(funcName, args);
                     if (action != null)
                     {
-                        // Restore description from comment
+                        if (!string.IsNullOrEmpty(errorPolicyStr))
+                        {
+                            var epArgs = ParseArguments(errorPolicyStr);
+                            action.ErrorPolicy = new ErrorHandlingPolicy
+                            {
+                                RetryCount = epArgs.Count > 0 && int.TryParse(epArgs[0], out int rc) ? rc : 0,
+                                RetryIntervalMs = epArgs.Count > 1 && int.TryParse(epArgs[1], out int ri) ? ri : 1000,
+                                ContinueOnError = epArgs.Count > 2 && bool.TryParse(epArgs[2], out bool ce) && ce
+                            };
+                        }
+
                         if (!string.IsNullOrEmpty(lastComment))
                         {
                             action.Description = lastComment;
-                            // Also set Name to Description for better visibility if needed, 
-                            // or keep default Name. Let's set Name = Description for consistency with Visual Editor behavior?
-                            // Usually Name is "Click" or "Type". The User sets "Description" in the UI often as the "Name" they see?
-                            // Let's stick to Description. 
-                            // If the UI binds to Name and Name is empty, that's bad. 
-                            // BaseAction typically defaults Name to class name.
-                            // But if the user wants custom text in the list, they usually edit Description.
-                            // Let's set Name = Description so the list isn't empty if the DataTemplate uses Name.
                             action.Name = lastComment; 
                         }
                         
@@ -76,7 +150,6 @@ namespace AutoWizard.Core.Scripting
                             hierarchyStack.Push((List<BaseAction>)ifAction.ThenActions);
                         }
                     }
-                    // Reset comment after using it
                     lastComment = string.Empty;
                 }
                 else if (trimmed == "Else")
@@ -86,8 +159,6 @@ namespace AutoWizard.Core.Scripting
                     {
                         hierarchyStack.Push((List<BaseAction>)ifAction.ElseActions);
                     }
-                    // Else doesn't consume comment usually, but if there was one, clear it or attach?
-                    // Usually Else doesn't have a specific description attached to the line.
                     lastComment = string.Empty; 
                 }
             }
@@ -127,7 +198,7 @@ namespace AutoWizard.Core.Scripting
                     currentArg.Append(c);
                 }
             }
-            if (currentArg.Length > 0 || argsStr.Length == 0) // Handle empty args case or last arg
+            if (currentArg.Length > 0 || argsStr.Length == 0)
             {
                 string last = currentArg.ToString().Trim();
                 if (!string.IsNullOrEmpty(last)) args.Add(last);
@@ -139,9 +210,6 @@ namespace AutoWizard.Core.Scripting
         {
             if (input.StartsWith("\"") && input.EndsWith("\""))
             {
-                // Simple stripping, real unescaping happens logic might be needed if I escaped heavily in generator
-                // Generator used simple Replace.
-                // Here we just remove wrapper.
                 return input.Substring(1, input.Length - 2);
             }
             return input;
@@ -168,7 +236,6 @@ namespace AutoWizard.Core.Scripting
             }
             catch
             {
-                // Identify parsing errors?
                 return null;
             }
         }
@@ -316,7 +383,6 @@ namespace AutoWizard.Core.Scripting
 
         private LoopAction ParseLoop(List<string> args)
         {
-            // Loop(LoopType, Count, WhileCondition, ForeachVariable)
             return new LoopAction
             {
                 LoopType = ParseEnum(args, 0, LoopType.Count),
@@ -326,15 +392,23 @@ namespace AutoWizard.Core.Scripting
             };
         }
 
+        /// <summary>
+        /// 向下相容：舊格式 If(ConditionType, Left, Right, Expr)
+        /// 自動轉換為單條件 + ConditionRelation = "C1"
+        /// </summary>
         private IfAction ParseIf(List<string> args)
         {
-            // If(ConditionType, Left, Right, Expr)
-            return new IfAction
+            var condItem = new ConditionItem
             {
                 ConditionType = ParseEnum(args, 0, ConditionType.VariableEquals),
                 LeftOperand = ParseString(args, 1),
                 RightOperand = ParseString(args, 2),
                 ConditionExpression = ParseString(args, 3)
+            };
+            return new IfAction
+            {
+                Conditions = new List<ConditionItem> { condItem },
+                ConditionRelation = "C1"
             };
         }
     }

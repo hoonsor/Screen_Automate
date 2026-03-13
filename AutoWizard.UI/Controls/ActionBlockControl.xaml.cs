@@ -148,7 +148,9 @@ namespace AutoWizard.UI.Controls
                 ClickAction c => $"X:{c.X} Y:{c.Y} {c.Button} {c.ClickType}",
                 TypeAction t => t.Text.Length > 30 ? t.Text[..30] + "..." : t.Text,
                 KeyboardAction k => $"{k.Modifiers} + {k.Key}",
-                IfAction i => $"{i.ConditionType}: {i.LeftOperand} → {i.RightOperand}",
+                IfAction i => i.Conditions.Count > 1 
+                    ? $"[{i.Conditions.Count} 條件] {i.ConditionRelation}" 
+                    : $"{i.ConditionType}: {i.LeftOperand} → {i.RightOperand}",
                 LoopAction l => l.LoopType == LoopType.Count ? $"次數: {l.Count}" : $"{l.LoopType}",
                 SetVariableAction s => $"{s.VariableName} = {s.ValueExpression}",
                 FindImageAction f => System.IO.Path.GetFileName(f.TemplateImagePath),
