@@ -15,6 +15,7 @@
         <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenScriptCommand}"/>
         <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveScriptCommand}"/>
         <KeyBinding Gesture="Ctrl+Shift+S" Command="{Binding SaveScriptAsCommand}"/>
+        <KeyBinding Key="F12" Command="{Binding SaveScriptAsCommand}"/>
         
         <KeyBinding Gesture="Ctrl+F9" Command="{Binding RecordCommand}"/>
         <KeyBinding Gesture="Ctrl+F10" Command="{Binding ToggleRunCommand}"/>
@@ -108,7 +109,10 @@
             <MenuItem Header="檔案(_F)">
                 <MenuItem Header="新增腳本(_N)" Command="{Binding NewScriptCommand}"/>
                 <MenuItem Header="開啟腳本(_O)" Command="{Binding OpenScriptCommand}"/>
-                <MenuItem Header="儲存腳本(_S)" Command="{Binding SaveScriptCommand}"/>
+                <MenuItem Header="儲存腳本(_S)" Command="{Binding SaveScriptCommand}" InputGestureText="Ctrl+S"/>
+                <MenuItem Header="另存新檔(_A)" Command="{Binding SaveScriptAsCommand}" InputGestureText="F12"/>
+                <Separator/>
+                <MenuItem Header="匯出執行檔(_P)" Command="{Binding ExportExeCommand}"/>
                 <Separator/>
                 <MenuItem Header="結束(_X)" Click="OnExit"/>
             </MenuItem>
@@ -141,8 +145,11 @@
             <Button Command="{Binding OpenScriptCommand}" ToolTip="開啟腳本">
                 <TextBlock Text="📂" FontSize="16"/>
             </Button>
-            <Button Command="{Binding SaveScriptCommand}" ToolTip="儲存腳本">
+            <Button Command="{Binding SaveScriptCommand}" ToolTip="儲存腳本 (Ctrl+S)">
                 <TextBlock Text="💾" FontSize="16"/>
+            </Button>
+            <Button Command="{Binding SaveScriptAsCommand}" ToolTip="另存新檔 (F12)">
+                <TextBlock Text="💾+" FontSize="14" FontWeight="Bold"/>
             </Button>
             <Separator/>
             <Button Command="{Binding RunScriptCommand}" ToolTip="執行腳本">
@@ -158,6 +165,13 @@
             <Separator/>
             <Button Command="{Binding SmartCaptureCommand}" ToolTip="智慧截圖 (ScrollLock)">
                 <TextBlock Text="📸" FontSize="16"/>
+            </Button>
+            <Button Command="{Binding MeasureToolCommand}" ToolTip="量測距離">
+                <TextBlock Text="📏" FontSize="16"/>
+            </Button>
+            <Separator/>
+            <Button Command="{Binding ExportExeCommand}" ToolTip="匯出為獨立執行檔 (📦)">
+                <TextBlock Text="📦" FontSize="16"/>
             </Button>
             <Separator/>
             

@@ -268,13 +268,17 @@ namespace AutoWizard.Core.Actions.Control
                 if (!string.IsNullOrEmpty(condition.RightOperand))
                 {
                     string threshStr = context.ResolveExpression(condition.RightOperand);
-                    if (double.TryParse(threshStr, out double parsed))
+                    if (double.TryParse(threshStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double parsed))
                         threshold = parsed;
                 }
 
                 if (!System.IO.Path.IsPathRooted(imagePath))
                 {
-                    imagePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, imagePath);
+                    string baseDir = context.Variables.TryGetValue("ScriptDirectory", out var dirObj) && dirObj is string dir
+                        ? dir
+                        : AppDomain.CurrentDomain.BaseDirectory;
+
+                    imagePath = System.IO.Path.Combine(baseDir, imagePath);
                 }
 
                 if (!System.IO.File.Exists(imagePath))

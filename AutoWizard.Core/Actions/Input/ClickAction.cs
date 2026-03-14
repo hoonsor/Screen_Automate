@@ -155,8 +155,10 @@ namespace AutoWizard.Core.Actions.Input
                 int absoluteX = (resolvedX * 65536) / screenWidth;
                 int absoluteY = (resolvedY * 65536) / screenHeight;
 
+                bool useHumanLike = IsHumanLike || context.ForceHumanLikeBehavior;
+
                 // 移動滑鼠到目標位置
-                if (IsHumanLike)
+                if (useHumanLike)
                 {
                     var start = MouseMovementHelper.GetCursorPosition();
                     MouseMovementHelper.MoveMouseSmoothly(start.X, start.Y, resolvedX, resolvedY, HumanLikeDurationMs);

@@ -120,7 +120,9 @@ namespace AutoWizard.Core.Engine
         /// <summary>
         /// 計算布林條件表達式
         /// 支援: ==, !=, >, <, >=, <=, contains
-        /// 例: "{count} > 0", "{name} == admin", "{text} contains hello"
+        /// 支援複合邏輯: && (AND), || (OR), () 括號群組
+        /// 例: "{count} > 0", "{a} > 10 && {b} == 5"
+        ///     "{a} > 10 && ({b} == 1 || {c} == 2)"
         /// </summary>
         public static bool EvaluateCondition(string expression, Dictionary<string, object> variables)
         {
@@ -129,6 +131,106 @@ namespace AutoWizard.Core.Engine
 
             // 先替換變數
             string resolved = Resolve(expression, variables);
+
+            return EvaluateCompoundCondition(resolved);
+        }
+
+        /// <summary>
+        /// 遞迴解析複合條件表達式（支援 &&, ||, 括號）
+        /// 優先級: () > && > ||
+        /// </summary>
+        private static bool EvaluateCompoundCondition(string expr)
+        {
+            expr = expr.Trim();
+            if (string.IsNullOrWhiteSpace(expr))
+                return false;
+
+            // Step 1: 以 || 分割（最低優先級），注意跳過括號內的 ||
+            var orParts = SplitByLogicalOperator(expr, "||");
+            if (orParts.Count > 1)
+            {
+                // OR 邏輯：任一子句為 true 即為 true
+                foreach (var part in orParts)
+                {
+                    if (EvaluateCompoundCondition(part))
+                        return true;
+                }
+                return false;
+            }
+
+            // Step 2: 以 && 分割（較高優先級），注意跳過括號內的 &&
+            var andParts = SplitByLogicalOperator(expr, "&&");
+            if (andParts.Count > 1)
+            {
+                // AND 邏輯：所有子句都為 true 才為 true
+                foreach (var part in andParts)
+                {
+                    if (!EvaluateCompoundCondition(part))
+                        return false;
+                }
+                return true;
+            }
+
+            // Step 3: 處理括號 — 如果整個表達式被括號包裹
+            if (expr.StartsWith("(") && FindMatchingParen(expr, 0) == expr.Length - 1)
+            {
+                return EvaluateCompoundCondition(expr.Substring(1, expr.Length - 2));
+            }
+
+            // Step 4: 單一比較表達式（原有邏輯）
+            return EvaluateSingleCondition(expr);
+        }
+
+        /// <summary>
+        /// 將表達式以指定的邏輯運算子分割，但跳過括號內的部分
+        /// </summary>
+        private static List<string> SplitByLogicalOperator(string expr, string op)
+        {
+            var parts = new List<string>();
+            int depth = 0;
+            int lastSplit = 0;
+
+            for (int i = 0; i < expr.Length; i++)
+            {
+                if (expr[i] == '(') depth++;
+                else if (expr[i] == ')') depth--;
+                else if (depth == 0 && i + op.Length <= expr.Length &&
+                         expr.Substring(i, op.Length) == op)
+                {
+                    parts.Add(expr.Substring(lastSplit, i - lastSplit).Trim());
+                    i += op.Length - 1;
+                    lastSplit = i + 1;
+                }
+            }
+
+            parts.Add(expr.Substring(lastSplit).Trim());
+
+            // 過濾空字串
+            parts.RemoveAll(string.IsNullOrWhiteSpace);
+
+            return parts;
+        }
+
+        /// <summary>
+        /// 找到 index 位置括號的匹配閉合括號位置
+        /// </summary>
+        private static int FindMatchingParen(string expr, int openIndex)
+        {
+            int depth = 0;
+            for (int i = openIndex; i < expr.Length; i++)
+            {
+                if (expr[i] == '(') depth++;
+                else if (expr[i] == ')') { depth--; if (depth == 0) return i; }
+            }
+            return -1;
+        }
+
+        /// <summary>
+        /// 計算單一比較表達式（不含 && / ||）
+        /// </summary>
+        private static bool EvaluateSingleCondition(string resolved)
+        {
+            resolved = resolved.Trim();
 
             // 嘗試比較運算子 (有序 — >= 和 <= 必須在 > 和 < 之前)
             string[] operators = { ">=", "<=", "!=", "==", ">", "<", " contains " };

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoWizard.CV", "AutoWizard
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoWizard.Tests", "AutoWizard.Tests\AutoWizard.Tests.csproj", "{288F54F9-4478-4CEB-9031-9B57D6CB022E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoWizard.Runner", "AutoWizard.Runner\AutoWizard.Runner.csproj", "{BB1F9F3E-4E84-4187-AA10-1E79BBD81AB1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{288F54F9-4478-4CEB-9031-9B57D6CB022E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{288F54F9-4478-4CEB-9031-9B57D6CB022E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{288F54F9-4478-4CEB-9031-9B57D6CB022E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB1F9F3E-4E84-4187-AA10-1E79BBD81AB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB1F9F3E-4E84-4187-AA10-1E79BBD81AB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB1F9F3E-4E84-4187-AA10-1E79BBD81AB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB1F9F3E-4E84-4187-AA10-1E79BBD81AB1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

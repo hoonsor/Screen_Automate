@@ -23,9 +23,19 @@
                        Fill="Transparent"
                        Visibility="Collapsed"/>
 
+            <!-- Measure Line -->
+            <Line x:Name="MeasureLine"
+                  Stroke="#FF0000" StrokeThickness="2" StrokeDashArray="4 2"
+                  Visibility="Collapsed"/>
+            
+            <!-- Measure Text -->
+            <Border x:Name="MeasureTextBorder" Visibility="Collapsed" Background="#CC000000" CornerRadius="4" Padding="5">
+                <TextBlock x:Name="MeasureText" Foreground="#00FF00" FontSize="14" FontFamily="Consolas" FontWeight="Bold"/>
+            </Border>
+
             <!-- Color Picker Magnifier (only visible in color picker mode) -->
             <Border x:Name="MagnifierPanel" Visibility="Collapsed"
-                    Width="160" Height="160"
+                    Width="138" Height="170"
                     BorderBrush="#AAFFFFFF" BorderThickness="1"
                     CornerRadius="6"
                     IsHitTestVisible="False">
@@ -34,15 +44,18 @@
                 </Border.Effect>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="136"/>
                         <RowDefinition Height="32"/>
                     </Grid.RowDefinitions>
                     <!-- Pixel Grid with nearest-neighbor scaling for accurate magnification -->
-                    <Image x:Name="MagnifierImage" Grid.Row="0" Stretch="Fill" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                    <Image x:Name="MagnifierImage" Grid.Row="0" Width="136" Height="136" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
                     <!-- Center Crosshair -->
-                    <Canvas Grid.Row="0" IsHitTestVisible="False">
-                        <Line X1="64" Y1="0" X2="64" Y2="128" Stroke="#80FFFFFF" StrokeThickness="1"/>
-                        <Line X1="0" Y1="64" X2="128" Y2="64" Stroke="#80FFFFFF" StrokeThickness="1"/>
+                    <Canvas Grid.Row="0" Width="136" Height="136" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False">
+                        <!-- Crosshair crossing the exact center (68,68) of the middle 8x8 pixel block -->
+                        <Line X1="68" Y1="0" X2="68" Y2="136" Stroke="#A0FFFFFF" StrokeThickness="1"/>
+                        <Line X1="0" Y1="68" X2="136" Y2="68" Stroke="#A0FFFFFF" StrokeThickness="1"/>
+                        <!-- Highlight Box -->
+                        <Rectangle Canvas.Left="64" Canvas.Top="64" Width="9" Height="9" Stroke="Yellow" StrokeThickness="1"/>
                     </Canvas>
                     <!-- Color Info Bar -->
                     <Border Grid.Row="1" Background="#222222" Padding="6,4">

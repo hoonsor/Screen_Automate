@@ -41,6 +41,11 @@ namespace AutoWizard.Core.Models
         public Action<byte[]>? ScreenshotAction { get; set; }
         
         /// <summary>
+        /// 是否強制模擬人類行為
+        /// </summary>
+        public bool ForceHumanLikeBehavior { get; set; } = false;
+
+        /// <summary>
         /// 指令執行的目標視窗 Handle，若為 IntPtr.Zero 則代表全域桌面
         /// </summary>
         public IntPtr TargetWindowHandle { get; set; } = IntPtr.Zero;

@@ -26,7 +26,12 @@ namespace AutoWizard.Core.Actions.Vision
                 var imagePath = TemplateImagePath;
                 if (!System.IO.Path.IsPathRooted(imagePath))
                 {
-                    imagePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, imagePath);
+                    // 在 Runner 環境下, 變數 ScriptDirectory 會記錄當前腳本的目錄
+                    string baseDir = context.Variables.TryGetValue("ScriptDirectory", out var dirObj) && dirObj is string dir
+                        ? dir
+                        : AppDomain.CurrentDomain.BaseDirectory;
+                    
+                    imagePath = System.IO.Path.Combine(baseDir, imagePath);
                 }
 
                 // 載入範本影像

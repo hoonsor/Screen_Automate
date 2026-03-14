@@ -183,7 +183,7 @@ namespace AutoWizard.CV.Vision
         {
             var startTime = DateTime.Now;
 
-            while ((DateTime.Now - startTime).TotalMilliseconds < timeoutMs)
+            while (true)
             {
                 using (var screenshot = Capture.ScreenCapture.CaptureScreen())
                 {
@@ -193,6 +193,11 @@ namespace AutoWizard.CV.Vision
                     {
                         return result;
                     }
+                }
+
+                if ((DateTime.Now - startTime).TotalMilliseconds >= timeoutMs)
+                {
+                    break;
                 }
 
                 System.Threading.Thread.Sleep(intervalMs);

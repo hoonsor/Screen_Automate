@@ -34,7 +34,21 @@ namespace AutoWizard.Core.Resources
         /// </summary>
         public void Save(string filePath)
         {
-            using var archive = ZipFile.Open(filePath, ZipArchiveMode.Create);
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+
+            using var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write);
+            Save(fs);
+        }
+
+        /// <summary>
+        /// 儲存至 Stream (用於記憶體或附加資料)
+        /// </summary>
+        public void Save(Stream outStream)
+        {
+            using var archive = new ZipArchive(outStream, ZipArchiveMode.Create, leaveOpen: true);
 
             // 1. 儲存腳本 JSON
             var scriptEntry = archive.CreateEntry("script.json");
@@ -78,13 +92,22 @@ namespace AutoWizard.Core.Resources
         }
 
         /// <summary>
-        /// 從 .aws 檔案載入
+        /// 从 .aws 档案载入
         /// </summary>
         public static AwsPackage Load(string filePath)
         {
+            using var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            return Load(fs);
+        }
+
+        /// <summary>
+        /// 从 Stream 载入 (用於記憶體或附加資料)
+        /// </summary>
+        public static AwsPackage Load(Stream inStream)
+        {
             var package = new AwsPackage();
 
-            using var archive = ZipFile.OpenRead(filePath);
+            using var archive = new ZipArchive(inStream, ZipArchiveMode.Read, leaveOpen: true);
 
             // 1. 讀取腳本 JSON
             var scriptEntry = archive.GetEntry("script.json");

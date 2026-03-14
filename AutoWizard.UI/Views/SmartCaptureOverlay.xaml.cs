@@ -20,6 +20,12 @@ namespace AutoWizard.UI.Views
         public Point PickedPoint { get; private set; } = new Point(-1, -1);
         public bool IsConfirmed { get; private set; } = false;
         public bool IsColorPickerMode { get; set; } = false;
+        
+        // Measure Tool properties
+        public bool IsMeasureMode { get; set; } = false;
+        private int _measureClicks = 0;
+        public Point MeasureStartPoint { get; private set; }
+        public Point MeasureEndPoint { get; private set; }
 
         public SmartCaptureOverlay(System.Drawing.Bitmap bitmap)
         {
@@ -40,6 +46,11 @@ namespace AutoWizard.UI.Views
                     MagnifierPanel.Visibility = Visibility.Visible;
                     HintText.Text = "點擊滑鼠左鍵選取顏色 (按 Esc 取消)";
                     DimmingLayer.Fill = new SolidColorBrush(Color.FromArgb(0x60, 0, 0, 0));
+                }
+                else if (IsMeasureMode)
+                {
+                    HintText.Text = "點擊第一點開始量測，點擊第二點完成 (按 Esc 取消)";
+                    DimmingLayer.Fill = new SolidColorBrush(Color.FromArgb(0x40, 0, 0, 0));
                 }
             };
             
@@ -94,6 +105,33 @@ namespace AutoWizard.UI.Views
                     PickedPoint = new Point((int)(_startPoint.X * _dpiScaleX), (int)(_startPoint.Y * _dpiScaleY));
                     IsConfirmed = true;
                     Close();
+                    return;
+                }
+
+                if (IsMeasureMode)
+                {
+                    if (_measureClicks == 0)
+                    {
+                        MeasureStartPoint = _startPoint;
+                        _measureClicks++;
+                        
+                        MeasureLine.X1 = _startPoint.X;
+                        MeasureLine.Y1 = _startPoint.Y;
+                        MeasureLine.X2 = _startPoint.X;
+                        MeasureLine.Y2 = _startPoint.Y;
+                        MeasureLine.Visibility = Visibility.Visible;
+                        
+                        MeasureTextBorder.Visibility = Visibility.Visible;
+                        Canvas.SetLeft(MeasureTextBorder, _startPoint.X + 15);
+                        Canvas.SetTop(MeasureTextBorder, _startPoint.Y + 15);
+                        MeasureText.Text = "dX: 0, dY: 0\nDist: 0.0 px";
+                    }
+                    else if (_measureClicks == 1)
+                    {
+                        MeasureEndPoint = _startPoint;
+                        IsConfirmed = true;
+                        Close();
+                    }
                     return;
                 }
 
@@ -153,10 +191,33 @@ namespace AutoWizard.UI.Views
                 double panelX = pos.X + 20;
                 double panelY = pos.Y + 20;
                 // Clamp to screen
-                if (panelX + 160 > ActualWidth) panelX = pos.X - 180;
-                if (panelY + 160 > ActualHeight) panelY = pos.Y - 180;
+                if (panelX + 138 > ActualWidth) panelX = pos.X - 158;
+                if (panelY + 170 > ActualHeight) panelY = pos.Y - 190;
                 Canvas.SetLeft(MagnifierPanel, panelX);
                 Canvas.SetTop(MagnifierPanel, panelY);
+                return;
+            }
+
+            if (IsMeasureMode && _measureClicks == 1)
+            {
+                var pos = e.GetPosition(SelectionCanvas);
+                MeasureLine.X2 = pos.X;
+                MeasureLine.Y2 = pos.Y;
+                
+                // Calculate physical pixels
+                int startPx = (int)(MeasureStartPoint.X * _dpiScaleX);
+                int startPy = (int)(MeasureStartPoint.Y * _dpiScaleY);
+                int currentPx = (int)(pos.X * _dpiScaleX);
+                int currentPy = (int)(pos.Y * _dpiScaleY);
+                
+                int dx = currentPx - startPx;
+                int dy = currentPy - startPy;
+                double dist = Math.Sqrt(dx * dx + dy * dy);
+                
+                MeasureText.Text = $"dX: {Math.Abs(dx)} px\ndY: {Math.Abs(dy)} px\nDist: {dist:F1} px";
+                
+                Canvas.SetLeft(MeasureTextBorder, pos.X + 15);
+                Canvas.SetTop(MeasureTextBorder, pos.Y + 15);
                 return;
             }
 

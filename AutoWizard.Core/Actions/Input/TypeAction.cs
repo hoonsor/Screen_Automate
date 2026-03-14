@@ -82,8 +82,18 @@ namespace AutoWizard.Core.Actions.Input
                 {
                     SendUnicodeChar(c);
                     
+                    int minDelay = IntervalMinMs;
+                    int maxDelay = IntervalMaxMs;
+
+                    if (context.ForceHumanLikeBehavior)
+                    {
+                        // 若強制人類行為且設定的間隔太快，強制加上合理的人類打字延遲 (50-200ms)
+                        minDelay = Math.Max(minDelay, 50);
+                        maxDelay = Math.Max(maxDelay, 200);
+                    }
+
                     // 隨機間隔模擬人類輸入
-                    int delay = random.Next(IntervalMinMs, IntervalMaxMs);
+                    int delay = random.Next(minDelay, maxDelay);
                     Thread.Sleep(delay);
                 }
 

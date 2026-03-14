@@ -21,6 +21,11 @@ namespace AutoWizard.Core.Engine
         /// </summary>
         public int ActionIntervalMs { get; set; } = 200;
 
+        /// <summary>
+        /// 是否強制所有動作使用模擬人類行為 (適用於匯出的獨立執行檔)
+        /// </summary>
+        public bool ForceHumanLikeBehavior { get; set; } = false;
+
         public event Action<string>? LogReceived;
         public event Action<byte[]>? ScreenshotCaptured;
         public event Action<ExecutionStatus>? StatusChanged;
@@ -103,6 +108,7 @@ namespace AutoWizard.Core.Engine
             {
                 Variables = initialVariables ?? new Dictionary<string, object>(),
                 IsCancellationRequested = false,
+                ForceHumanLikeBehavior = this.ForceHumanLikeBehavior,
                 LogAction = OnLog,
                 ScreenshotAction = OnScreenshot
             };

@@ -1,0 +1,66 @@
+<Window x:Class="AutoWizard.Runner.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AutoWizard Script Runner" Height="400" Width="350"
+        WindowStartupLocation="CenterScreen"
+        Topmost="True"
+        Loaded="Window_Loaded">
+    
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Script Info -->
+        <Border Grid.Row="0" Background="#F0F0F0" Padding="10" CornerRadius="4" Margin="0,0,0,10">
+            <StackPanel>
+                <TextBlock x:Name="ScriptNameText" Text="Loading Script..." FontWeight="Bold" FontSize="16" Margin="0,0,0,5"/>
+                <TextBlock x:Name="ActionCountText" Text="0 Actions" Foreground="#666" FontSize="12"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Controls -->
+        <StackPanel Grid.Row="1" Margin="0,0,0,10">
+            <CheckBox x:Name="HumanLikeCheckbox" Content="模擬人類行為 (平滑移動、隨機等待)" Margin="0,0,0,10" IsChecked="True"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="RunButton" Grid.Column="0" Content="執行 (ScrollLock)" Height="35" Background="#4CAF50" Foreground="White" FontWeight="Bold" Click="RunButton_Click"/>
+                <Button x:Name="StopButton" Grid.Column="2" Content="停止 (ScrollLock)" Height="35" Background="#F44336" Foreground="White" FontWeight="Bold" IsEnabled="False" Click="StopButton_Click"/>
+            </Grid>
+            <TextBlock x:Name="StatusText" Text="就緒" Foreground="#1976D2" FontWeight="SemiBold" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- Variable Inputs (Dynamic) -->
+        <GroupBox Grid.Row="2" Header="變數設定" Margin="0,0,0,10">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="VariablesPanel" Margin="5"/>
+            </ScrollViewer>
+        </GroupBox>
+
+        <!-- Log Area -->
+        <GroupBox Grid.Row="3" Header="日誌" Height="100">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Content="匯出日誌" HorizontalAlignment="Right" Margin="0,2,5,2" Padding="8,2" Click="ExportLogButton_Click"/>
+                <ListBox Grid.Row="1" x:Name="LogListBox" Background="#1E1E1E" Foreground="LightGray" FontFamily="Consolas" FontSize="11" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="Margin" Value="0"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>

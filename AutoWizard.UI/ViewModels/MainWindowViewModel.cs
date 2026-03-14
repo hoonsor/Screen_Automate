@@ -12,6 +12,7 @@ using AutoWizard.Core.Actions.Input;
 using AutoWizard.Core.Actions.Control;
 using AutoWizard.Core.Actions.Vision;
 using System.Drawing;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace AutoWizard.UI.ViewModels
@@ -42,6 +43,7 @@ namespace AutoWizard.UI.ViewModels
                 {
                     // 通知按鈕重新評估 CanExecute
                     ((DelegateCommand)RunScriptCommand).RaiseCanExecuteChanged();
+                    ((DelegateCommand)ExportExeCommand).RaiseCanExecuteChanged();
                     ((DelegateCommand)StopScriptCommand).RaiseCanExecuteChanged();
                     ((DelegateCommand)RecordCommand).RaiseCanExecuteChanged();
                 }
@@ -74,6 +76,8 @@ namespace AutoWizard.UI.ViewModels
         public ICommand ToggleRunCommand { get; }
         public ICommand ClearLogsCommand { get; }
         public ICommand ExportLogsCommand { get; }
+        public ICommand ExportExeCommand { get; }
+        public ICommand MeasureToolCommand { get; }
         public DelegateCommand<string> AddActionCommand { get; }
         public DelegateCommand<string> AddChildActionCommand { get; }
 
@@ -109,6 +113,8 @@ namespace AutoWizard.UI.ViewModels
                 ((DelegateCommand)ExportLogsCommand).RaiseCanExecuteChanged();
             });
             ExportLogsCommand = new DelegateCommand(OnExportLogs, () => ExecutionLogs.Any());
+            ExportExeCommand = new DelegateCommand(OnExportExe, CanRunScript); // Reuse CanRunScript to denote if we have actions to export
+            MeasureToolCommand = new DelegateCommand(OnMeasureTool);
             AddActionCommand = new DelegateCommand<string>(OnAddAction);
             AddChildActionCommand = new DelegateCommand<string>(OnAddChildWithType);
             ToggleRunCommand = new DelegateCommand(OnToggleRun);
@@ -133,10 +139,11 @@ namespace AutoWizard.UI.ViewModels
                 OnAddChildToContainer(node);
             };
 
-            // 當 Actions 變更時，重新評估 RunScript 的 CanExecute
+            // 當 Actions 變更時，重新評估 Run/Export 的 CanExecute
             EditorViewModel.Actions.CollectionChanged += (_, _) =>
             {
                 ((DelegateCommand)RunScriptCommand).RaiseCanExecuteChanged();
+                ((DelegateCommand)ExportExeCommand).RaiseCanExecuteChanged();
             };
 
             // 確保啟動時就建立內置變數
@@ -266,6 +273,9 @@ namespace AutoWizard.UI.ViewModels
         {
             EditorViewModel.ClearActions();
             EditorViewModel.ScriptName = "未命名腳本";
+            EditorViewModel.JsonSource = string.Empty;
+            EditorViewModel.CodeLines.Clear();
+            EditorViewModel.IsCodeViewMode = false;
             _currentFilePath = null;
             // 重置為未儲存狀態 (IsDirty = false, 但因為是新腳本，視為未命名)
             // 這裡我們讓 IsDirty = false，標題顯示 "未命名腳本"
@@ -331,6 +341,53 @@ namespace AutoWizard.UI.ViewModels
             }
         }
 
+        private void OnMeasureTool()
+        {
+            try
+            {
+                // Minimize so we don't capture ourselves if we're covering the UI behind
+                var wnd = Application.Current.MainWindow;
+                if (wnd != null) wnd.WindowState = WindowState.Minimized;
+                Thread.Sleep(200); // 稍微等待縮小動畫
+
+                var screenshot = AutoWizard.CV.Capture.ScreenCapture.CaptureScreen();
+                
+                if (wnd != null) wnd.WindowState = WindowState.Normal;
+
+                var overlay = new Views.SmartCaptureOverlay(screenshot);
+                overlay.IsMeasureMode = true; // 開啟測量模式
+
+                if (overlay.ShowDialog() == true || overlay.IsConfirmed)
+                {
+                    // Scale defaults to 1.0 (assuming the Overlay handles physical pixels mapping)
+                    int startX = (int)(overlay.MeasureStartPoint.X * 1.0);
+                    int startY = (int)(overlay.MeasureStartPoint.Y * 1.0);
+                    int endX = (int)(overlay.MeasureEndPoint.X * 1.0);
+                    int endY = (int)(overlay.MeasureEndPoint.Y * 1.0);
+
+                    int dx = endX - startX;
+                    int dy = endY - startY;
+                    double dist = Math.Sqrt(dx * dx + dy * dy);
+
+                    var msg = $"測量結果:\n\n" +
+                              $"起點: ({startX}, {startY})\n" +
+                              $"終點: ({endX}, {endY})\n" +
+                              $"------------------------\n" +
+                              $"水平距離 (dX): {Math.Abs(dx)} px\n" +
+                              $"垂直距離 (dY): {Math.Abs(dy)} px\n" +
+                              $"兩點距離: {dist:F2} px";
+
+                    MessageBox.Show(msg, "距離測量工具", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                var wnd = Application.Current.MainWindow;
+                if (wnd != null) wnd.WindowState = WindowState.Normal;
+                MessageBox.Show($"量測工具發生錯誤: {ex.Message}", "錯誤", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void OnSaveScript()
         {
             if (string.IsNullOrEmpty(_currentFilePath))
@@ -385,6 +442,102 @@ namespace AutoWizard.UI.ViewModels
                 StatusMessage = $"儲存失敗: {ex.Message}";
             }
         }
+
+        #endregion
+
+        #region Script Export Operations
+
+        private void OnExportExe()
+        {
+            if (EditorViewModel.Actions.Count == 0) return;
+
+            var dialog = new Microsoft.Win32.SaveFileDialog
+            {
+                Filter = "Executable File (*.exe)|*.exe",
+                Title = "匯出獨立執行檔",
+                FileName = $"{EditorViewModel.ScriptName}_Runner.exe"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                StatusMessage = "匯出處理中...";
+                Task.Run(() => ExportExeInternal(dialog.FileName));
+            }
+        }
+
+        private void ExportExeInternal(string targetExePath)
+        {
+            try
+            {
+                var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                // Single File published Runner executable path
+                var templateDir = System.IO.Path.Combine(baseDir, "..", "..", "..", "..", "AutoWizard.Runner", "bin", "Release", "net8.0-windows", "win-x64", "publish");
+                var runnerExePath = System.IO.Path.Combine(templateDir, "AutoWizard.Runner.exe");
+
+                if (!System.IO.File.Exists(runnerExePath))
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        StatusMessage = $"匯出失敗: 找不到 Runner 單一執行檔範本。\n請確定已執行 dotnet publish 發行專案。";
+                        MessageBox.Show($"找不到 Runner 範本檔:\n{runnerExePath}", "錯誤", MessageBoxButton.OK, MessageBoxImage.Error);
+                    });
+                    return;
+                }
+
+                var package = new Core.Resources.AwsPackage
+                {
+                    ScriptName = EditorViewModel.ScriptName,
+                    Actions = EditorViewModel.Actions.ToList(),
+                    Variables = VariablesViewModel.Variables.ToList()
+                };
+                
+                // 將目前專案的 Images 目錄內所有圖片讀進 AwsPackage，以便封裝在單一執行檔中
+                var imageDir = System.IO.Path.Combine(baseDir, "Images");
+                if (System.IO.Directory.Exists(imageDir))
+                {
+                    foreach (var imgFile in System.IO.Directory.GetFiles(imageDir))
+                    {
+                        var imgBytes = System.IO.File.ReadAllBytes(imgFile);
+                        package.AddImageResource(System.IO.Path.GetFileName(imgFile), imgBytes);
+                    }
+                }
+
+                // 封裝成 MemoryStream
+                using var packageStream = new MemoryStream();
+                package.Save(packageStream);
+                var packageBytes = packageStream.ToArray();
+
+                // 讀取 Runner 單一執行檔
+                var exeBytes = System.IO.File.ReadAllBytes(runnerExePath);
+
+                // 計算 payload 長度並加入 magic 標籤
+                var lengthBytes = BitConverter.GetBytes((long)packageBytes.Length);
+                var magicBytes = System.Text.Encoding.ASCII.GetBytes("AWSPACKG");
+
+                // 組合: [Runner.exe] + [AwsPackage ZIP] + [Length(8)] + [Magic(8)]
+                using var outStream = new FileStream(targetExePath, FileMode.Create, FileAccess.Write);
+                outStream.Write(exeBytes, 0, exeBytes.Length);
+                outStream.Write(packageBytes, 0, packageBytes.Length);
+                outStream.Write(lengthBytes, 0, lengthBytes.Length);
+                outStream.Write(magicBytes, 0, magicBytes.Length);
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    StatusMessage = $"匯出成功: {targetExePath}";
+                    MessageBox.Show($"腳本已成功封裝為單一獨立執行檔:\n{targetExePath}", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
+                });
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    StatusMessage = $"匯出異常: {ex.Message}";
+                    MessageBox.Show($"匯出發生異常:\n{ex.Message}\n{ex.StackTrace}", "錯誤", MessageBoxButton.OK, MessageBoxImage.Error);
+                });
+            }
+        }
+
+        // CopyDirectoryResources removed as it is no longer used for single-file export
 
         #endregion
 
