@@ -1,9 +1,11 @@
 using System;
 using System.Drawing;
+using System.IO;
 using System.Text.RegularExpressions;
-using Tesseract;
-using OpenCvSharp;
-using OpenCvSharp.Extensions;
+using System.Threading.Tasks;
+using Windows.Graphics.Imaging;
+using Windows.Media.Ocr;
+using Windows.Storage.Streams;
 
 namespace AutoWizard.CV.OCR
 {
@@ -19,18 +21,23 @@ namespace AutoWizard.CV.OCR
     }
 
     /// <summary>
-    /// Tesseract OCR 引擎
+    /// Windows 內建 OCR 引擎 (Windows.Media.Ocr)
     /// </summary>
     public class OCREngine : IDisposable
     {
-        private TesseractEngine? _engine;
-        private readonly string _tessDataPath;
-        private readonly string _language;
+        private Windows.Media.Ocr.OcrEngine? _engine;
+        private readonly string _languageTag;
 
-        public OCREngine(string tessDataPath = "./tessdata", string language = "chi_tra")
+        public OCREngine(string? tessDataPath = null, string language = "chi_tra")
         {
-            _tessDataPath = tessDataPath;
-            _language = language;
+            // Map our legacy tesseract codes to BCP-47 language tags for Windows
+            _languageTag = language switch
+            {
+                "chi_sim" => "zh-Hans-CN",
+                "eng" => "en-US",
+                "chi_tra" => "zh-Hant-TW",
+                _ => "zh-Hant-TW"
+            };
         }
 
         /// <summary>
@@ -40,11 +47,21 @@ namespace AutoWizard.CV.OCR
         {
             try
             {
-                _engine = new TesseractEngine(_tessDataPath, _language, EngineMode.Default);
+                var lang = new Windows.Globalization.Language(_languageTag);
+                if (!Windows.Media.Ocr.OcrEngine.IsLanguageSupported(lang))
+                {
+                    throw new Exception($"您的 Windows 系統尚未安裝語系 '{_languageTag}' 的 OCR 支援。請至系統設定中新增該語言套件。");
+                }
+                
+                _engine = Windows.Media.Ocr.OcrEngine.TryCreateFromLanguage(lang);
+                if (_engine == null)
+                {
+                    throw new Exception($"Failed to create OcrEngine for language '{_languageTag}'.");
+                }
             }
             catch (Exception ex)
             {
-                throw new Exception($"Failed to initialize OCR engine: {ex.Message}", ex);
+                throw new Exception($"初始化 Windows OCR 引擎失敗 (語系: '{_languageTag}'): {ex.Message}", ex);
             }
         }
 
@@ -67,31 +84,8 @@ namespace AutoWizard.CV.OCR
                     targetImage = CropImage(screenshot, region.Value);
                 }
 
-                // 預處理影像以提高辨識率
-                using (var preprocessed = PreprocessImage(targetImage))
-                {
-                    // 將 Bitmap 轉換為 byte array
-                    using (var ms = new System.IO.MemoryStream())
-                    {
-                        preprocessed.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                        var imageBytes = ms.ToArray();
-                        
-                        using (var pix = Pix.LoadFromMemory(imageBytes))
-                        using (var page = _engine!.Process(pix))
-                        {
-                            var text = page.GetText();
-                            var confidence = page.GetMeanConfidence();
-
-                            return new OCRResult
-                            {
-                                Success = !string.IsNullOrWhiteSpace(text),
-                                Text = text.Trim(),
-                                Confidence = confidence,
-                                Region = region ?? new Rectangle(0, 0, screenshot.Width, screenshot.Height)
-                            };
-                        }
-                    }
-                }
+                // 避免 UI 執行緒死結，將 WinRT 非同步工作丟到 ThreadPool 執行
+                return Task.Run(async () => await RecognizeTextAsync(targetImage, region ?? new Rectangle(0, 0, screenshot.Width, screenshot.Height))).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
@@ -100,6 +94,41 @@ namespace AutoWizard.CV.OCR
                     Success = false,
                     Text = $"OCR failed: {ex.Message}"
                 };
+            }
+        }
+
+        private async Task<OCRResult> RecognizeTextAsync(Bitmap image, Rectangle region)
+        {
+            using (var ms = new MemoryStream())
+            {
+                // 先將 System.Drawing.Bitmap 存為 Bmp
+                image.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+                var imageBytes = ms.ToArray();
+                
+                // 轉換為 WinRT 支援的 InMemoryRandomAccessStream
+                using (var ras = new InMemoryRandomAccessStream())
+                {
+                    using (var writer = new DataWriter(ras.GetOutputStreamAt(0)))
+                    {
+                        writer.WriteBytes(imageBytes);
+                        await writer.StoreAsync();
+                    }
+                    
+                    // 解碼為 SoftwareBitmap
+                    var decoder = await BitmapDecoder.CreateAsync(ras);
+                    using (var softwareBitmap = await decoder.GetSoftwareBitmapAsync(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied))
+                    {
+                        var ocrResult = await _engine!.RecognizeAsync(softwareBitmap);
+                        
+                        return new OCRResult
+                        {
+                            Success = !string.IsNullOrWhiteSpace(ocrResult.Text),
+                            Text = ocrResult.Text.Trim(),
+                            Confidence = 1.0f, // Windows OCR 不提供直接的整體信心指數，若辨識成功視為 1.0
+                            Region = region
+                        };
+                    }
+                }
             }
         }
 
@@ -130,34 +159,6 @@ namespace AutoWizard.CV.OCR
         }
 
         /// <summary>
-        /// 預處理影像以提高 OCR 辨識率
-        /// </summary>
-        private Bitmap PreprocessImage(Bitmap original)
-        {
-            using (var mat = BitmapConverter.ToMat(original))
-            using (var gray = new Mat())
-            using (var binary = new Mat())
-            using (var denoised = new Mat())
-            {
-                // 1. 轉換為灰階
-                Cv2.CvtColor(mat, gray, ColorConversionCodes.BGR2GRAY);
-
-                // 2. 二值化 (Adaptive Threshold)
-                Cv2.AdaptiveThreshold(gray, binary, 255, 
-                    AdaptiveThresholdTypes.GaussianC, 
-                    ThresholdTypes.Binary, 11, 2);
-
-                // 3. 去雜訊
-                Cv2.FastNlMeansDenoising(binary, denoised, 10, 7, 21);
-
-                // 4. 可選:縮放 (提高小字辨識率)
-                // Cv2.Resize(denoised, denoised, new Size(), 2.0, 2.0, InterpolationFlags.Cubic);
-
-                return BitmapConverter.ToBitmap(denoised);
-            }
-        }
-
-        /// <summary>
         /// 裁切影像
         /// </summary>
         private Bitmap CropImage(Bitmap source, Rectangle cropArea)
@@ -175,7 +176,8 @@ namespace AutoWizard.CV.OCR
 
         public void Dispose()
         {
-            _engine?.Dispose();
+            // Windows OcrEngine doesn't need explicit disposal mapping
+            _engine = null;
         }
     }
 }

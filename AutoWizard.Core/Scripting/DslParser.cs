@@ -48,7 +48,12 @@ namespace AutoWizard.Core.Scripting
                             ColorXExpression = ParseString(condArgs, 4),
                             ColorYExpression = ParseString(condArgs, 5),
                             TargetColor = ParseString(condArgs, 6),
-                            Tolerance = ParseInt(condArgs, 7)
+                            Tolerance = ParseInt(condArgs, 7),
+                            OcrRegionX = ParseString(condArgs, 8),
+                            OcrRegionY = ParseString(condArgs, 9),
+                            OcrRegionWidth = ParseString(condArgs, 10),
+                            OcrRegionHeight = ParseString(condArgs, 11),
+                            Language = ParseString(condArgs, 12)
                         };
                         pendingIfAction.Conditions.Add(condItem);
                         continue;
@@ -85,7 +90,7 @@ namespace AutoWizard.Core.Scripting
                     mainCall = mainCall.TrimEnd(';').TrimEnd();
                 }
 
-                var match = Regex.Match(mainCall, @"^(\w+)\((.*)?)\)\s*;?\s*$");
+                var match = Regex.Match(mainCall, @"^(\w+)\((.*?)\)\s*;?\s*$");
                 if (match.Success)
                 {
                     string funcName = match.Groups[1].Value;

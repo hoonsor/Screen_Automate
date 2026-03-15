@@ -28,5 +28,20 @@ namespace AutoWizard.Core.Actions.Control
 
         /// <summary>色彩容差值 0~255（ColorMatch 模式）</summary>
         public int Tolerance { get; set; } = 0;
+
+        /// <summary>畫面座標 X（OcrMatches 模式）</summary>
+        public string OcrRegionX { get; set; } = string.Empty;
+
+        /// <summary>畫面座標 Y（OcrMatches 模式）</summary>
+        public string OcrRegionY { get; set; } = string.Empty;
+
+        /// <summary>畫面寬度（OcrMatches 模式）</summary>
+        public string OcrRegionWidth { get; set; } = string.Empty;
+
+        /// <summary>畫面高度（OcrMatches 模式）</summary>
+        public string OcrRegionHeight { get; set; } = string.Empty;
+
+        /// <summary>辨識語言（OcrMatches 模式）</summary>
+        public string Language { get; set; } = "chi_tra";
     }
 }

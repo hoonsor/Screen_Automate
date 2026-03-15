@@ -257,7 +257,12 @@ namespace AutoWizard.Core.Scripting
                     $"\"{EscapeString(cond.ColorXExpression)}\"",
                     $"\"{EscapeString(cond.ColorYExpression)}\"",
                     $"\"{EscapeString(cond.TargetColor)}\"",
-                    cond.Tolerance.ToString()
+                    cond.Tolerance.ToString(),
+                    $"\"{EscapeString(cond.OcrRegionX)}\"",
+                    $"\"{EscapeString(cond.OcrRegionY)}\"",
+                    $"\"{EscapeString(cond.OcrRegionWidth)}\"",
+                    $"\"{EscapeString(cond.OcrRegionHeight)}\"",
+                    $"\"{EscapeString(cond.Language)}\""
                 };
                 sb.AppendLine($"{indent}  .Cond({string.Join(", ", condArgs)})");
             }

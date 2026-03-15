@@ -86,6 +86,8 @@ namespace AutoWizard.UI.ViewModels
         public EditorViewModel EditorViewModel { get; }
         public PropertiesViewModel PropertiesViewModel { get; }
         public VariablesViewModel VariablesViewModel { get; }
+        public ColorHistoryViewModel ColorHistoryViewModel { get; }
+        public ScreenshotHistoryViewModel ScreenshotHistoryViewModel { get; }
 
         // 執行引擎
         private readonly ScriptExecutor _executor;
@@ -124,8 +126,18 @@ namespace AutoWizard.UI.ViewModels
             EditorViewModel = new EditorViewModel();
             PropertiesViewModel = new PropertiesViewModel();
             VariablesViewModel = new VariablesViewModel();
+            ColorHistoryViewModel = new ColorHistoryViewModel();
+            ScreenshotHistoryViewModel = new ScreenshotHistoryViewModel();
 
             VariablesViewModel.PickColorAction = PickColorInternal;
+            VariablesViewModel.GetCurrentScriptActions = () => EditorViewModel.Actions;
+
+            // Flash coordinates cross-VM actions
+            ColorHistoryViewModel.FlashCoordinatesAction = FlashLocationOnScreen;
+            ScreenshotHistoryViewModel.FlashRectAction = FlashRectOnScreen;
+
+            PropertiesViewModel.RequestRegionSelectionAction = OnRequestRegionSelection;
+            PropertiesViewModel.TestOcrResultAction = OnTestOcrResult;
 
             // 選取連動 → 屬性面板
             EditorViewModel.SelectedActionChanged += (_, action) =>
@@ -146,8 +158,8 @@ namespace AutoWizard.UI.ViewModels
                 ((DelegateCommand)ExportExeCommand).RaiseCanExecuteChanged();
             };
 
-            // 確保啟動時就建立內置變數
-            VariablesViewModel.EnsureBuiltInColorVariables();
+            // Ensure Built-in variables
+            VariablesViewModel.EnsureBuiltInVariables();
         }
 
         #region Add Action Factory
@@ -283,7 +295,8 @@ namespace AutoWizard.UI.ViewModels
             Title = "AutoWizard Desktop"; 
             StatusMessage = "已建立新腳本";
 
-            VariablesViewModel.EnsureBuiltInColorVariables();
+            VariablesViewModel.EnsureBuiltInVariables();
+            VariablesViewModel.RefreshCustomVariablesCommand.Execute();
         }
 
         private void OnOpenScript()
@@ -307,17 +320,20 @@ namespace AutoWizard.UI.ViewModels
                     EditorViewModel.ScriptName = package.ScriptName;
                     _currentFilePath = dialog.FileName;
                     
-                    // 載入變數
-                    VariablesViewModel.Variables.Clear();
-                    foreach (var v in package.Variables)
-                    {
-                        VariablesViewModel.Variables.Add(v);
-                    }
+                    // 載入變數，如果腳本有存的話
+                    VariablesViewModel.BuiltInVariables.Clear();
+                    VariablesViewModel.CustomVariables.Clear();
+                    
+                    // We just use EnsureBuiltInVariables to restore ColorCheck and FindPic
+                    VariablesViewModel.EnsureBuiltInVariables();
+                    // Custom variables should be obtained by traversing script logic 
+                    VariablesViewModel.RefreshCustomVariablesCommand.Execute();
 
                     // 重置 Dirty 狀態 (因為剛載入)
                     EditorViewModel.IsDirty = false;
                     
-                    VariablesViewModel.EnsureBuiltInColorVariables();
+                    // Refresh built-in variables state
+                    VariablesViewModel.EnsureBuiltInVariables();
 
                     // 更新視窗標題
                     Title = $"{package.ScriptName} - AutoWizard Desktop";
@@ -388,6 +404,93 @@ namespace AutoWizard.UI.ViewModels
             }
         }
 
+        private void OnRequestRegionSelection(object target)
+        {
+            try
+            {
+                var wnd = Application.Current.MainWindow;
+                if (wnd != null) wnd.WindowState = WindowState.Minimized;
+                Thread.Sleep(200);
+
+                using var screenshot = AutoWizard.CV.Capture.ScreenCapture.CaptureScreen();
+                
+                if (wnd != null) wnd.WindowState = WindowState.Normal;
+
+                var overlay = new Views.SmartCaptureOverlay(screenshot);
+                overlay.IsRegionSelectionMode = true;
+
+                if (overlay.ShowDialog() == true || overlay.IsConfirmed)
+                {
+                    if (target is OCRAction ocrAction)
+                    {
+                        ocrAction.RegionX = overlay.SelectedRectPhysical.X;
+                        ocrAction.RegionY = overlay.SelectedRectPhysical.Y;
+                        ocrAction.RegionWidth = overlay.SelectedRectPhysical.Width;
+                        ocrAction.RegionHeight = overlay.SelectedRectPhysical.Height;
+                    }
+                    else if (target is ConditionItem cond)
+                    {
+                        cond.OcrRegionX = overlay.SelectedRectPhysical.X.ToString();
+                        cond.OcrRegionY = overlay.SelectedRectPhysical.Y.ToString();
+                        cond.OcrRegionWidth = overlay.SelectedRectPhysical.Width.ToString();
+                        cond.OcrRegionHeight = overlay.SelectedRectPhysical.Height.ToString();
+                    }
+                    
+                    // Force refresh of properties panel to show updated values
+                    PropertiesViewModel.Refresh();
+                }
+            }
+            catch (Exception ex)
+            {
+                var wnd = Application.Current.MainWindow;
+                if (wnd != null) wnd.WindowState = WindowState.Normal;
+                MessageBox.Show($"選取區域發生錯誤: {ex.Message}", "錯誤", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void OnTestOcrResult(object target)
+        {
+            if (target is OCRAction ocrAction)
+            {
+                try
+                {
+                    var wnd = Application.Current.MainWindow;
+                    if (wnd != null) wnd.WindowState = WindowState.Minimized;
+                    Thread.Sleep(200);
+
+                    using var screenshot = AutoWizard.CV.Capture.ScreenCapture.CaptureScreen();
+                    
+                    if (wnd != null) wnd.WindowState = WindowState.Normal;
+
+                    var overlay = new Views.SmartCaptureOverlay(screenshot);
+                    overlay.IsRegionSelectionMode = true;
+
+                    if (overlay.ShowDialog() == true || overlay.IsConfirmed)
+                    {
+                        var rect = overlay.SelectedRectPhysical;
+                        using var ocrEngine = new AutoWizard.CV.OCR.OCREngine(null, string.IsNullOrEmpty(ocrAction.Language) ? "chi_tra" : ocrAction.Language);
+                        var result = ocrEngine.RecognizeText(screenshot, rect);
+
+                        if (result.Success)
+                        {
+                            try { System.Windows.Clipboard.SetText(result.Text); } catch { /* Ignore clipboard lock */ }
+                            MessageBox.Show($"OCR 辨識成功，結果已複製到剪貼簿：\n\n{result.Text}", "OCR 測試結果", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show($"OCR 辨識失敗或無文字：\n{result.Text}", "OCR 測試結果", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var wnd = Application.Current.MainWindow;
+                    if (wnd != null) wnd.WindowState = WindowState.Normal;
+                    MessageBox.Show($"測試 OCR 發生錯誤:\n{ex.Message}", "錯誤", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
         private void OnSaveScript()
         {
             if (string.IsNullOrEmpty(_currentFilePath))
@@ -428,7 +531,7 @@ namespace AutoWizard.UI.ViewModels
                 {
                     ScriptName = EditorViewModel.ScriptName,
                     Actions = EditorViewModel.Actions.ToList(),
-                    Variables = VariablesViewModel.Variables.ToList()
+                    Variables = new System.Collections.Generic.List<VariableDefinition>() // V2 saves them dynamically or we keep it empty as we read from script Actions now
                 };
                 package.Save(filePath);
                 
@@ -488,7 +591,7 @@ namespace AutoWizard.UI.ViewModels
                 {
                     ScriptName = EditorViewModel.ScriptName,
                     Actions = EditorViewModel.Actions.ToList(),
-                    Variables = VariablesViewModel.Variables.ToList()
+                    Variables = new System.Collections.Generic.List<VariableDefinition>() 
                 };
                 
                 // 將目前專案的 Images 目錄內所有圖片讀進 AwsPackage，以便封裝在單一執行檔中
@@ -546,7 +649,11 @@ namespace AutoWizard.UI.ViewModels
         private Dictionary<string, object> BuildInitialVariables()
         {
             var dict = new Dictionary<string, object>();
-            foreach (var v in VariablesViewModel.Variables)
+            foreach (var v in VariablesViewModel.BuiltInVariables)
+            {
+                dict[v.Name] = v.GetTypedDefaultValue() ?? "";
+            }
+            foreach (var v in VariablesViewModel.CustomVariables)
             {
                 dict[v.Name] = v.GetTypedDefaultValue() ?? "";
             }
@@ -925,15 +1032,17 @@ namespace AutoWizard.UI.ViewModels
                     var fileName = baseName.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ? baseName : baseName + ".png";
                     var filePath = System.IO.Path.Combine(imagesDir, fileName);
                     
-                    if (rect.Width > 0 && rect.Height > 0)
-                    {
-                        var target = new System.Drawing.Bitmap(rect.Width, rect.Height);
-                        using (var g = System.Drawing.Graphics.FromImage(target))
+                        if (rect.Width > 0 && rect.Height > 0)
                         {
-                            g.DrawImage(screenshot, new System.Drawing.Rectangle(0, 0, target.Width, target.Height),
-                                        rect, System.Drawing.GraphicsUnit.Pixel);
-                        }
-                        target.Save(filePath, System.Drawing.Imaging.ImageFormat.Png);
+                            var target = new System.Drawing.Bitmap(rect.Width, rect.Height);
+                            using (var g = System.Drawing.Graphics.FromImage(target))
+                            {
+                                g.DrawImage(screenshot, new System.Drawing.Rectangle(0, 0, target.Width, target.Height),
+                                            rect, System.Drawing.GraphicsUnit.Pixel);
+                            }
+                            target.Save(filePath, System.Drawing.Imaging.ImageFormat.Png);
+
+                            ScreenshotHistoryViewModel.AddHistory(rect.X, rect.Y, rect.Width, rect.Height, filePath);
 
                         var varName = $"img_{DateTime.Now:HHmmss}";
                         var findAction = new FindImageAction
@@ -1027,16 +1136,17 @@ namespace AutoWizard.UI.ViewModels
                     var fileName = baseName.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ? baseName : baseName + ".png";
                     var filePath = System.IO.Path.Combine(imagesDir, fileName);
 
-                    // 安全檢查
-                    if (rect.Width > 0 && rect.Height > 0)
-                    {
-                        var target = new Bitmap(rect.Width, rect.Height);
-                        using (var g = Graphics.FromImage(target))
+                        if (rect.Width > 0 && rect.Height > 0)
                         {
-                            g.DrawImage(screenshot, new Rectangle(0, 0, target.Width, target.Height),
-                                        rect, GraphicsUnit.Pixel);
-                        }
-                        target.Save(filePath, System.Drawing.Imaging.ImageFormat.Png);
+                            var target = new Bitmap(rect.Width, rect.Height);
+                            using (var g = Graphics.FromImage(target))
+                            {
+                                g.DrawImage(screenshot, new Rectangle(0, 0, target.Width, target.Height),
+                                            rect, GraphicsUnit.Pixel);
+                            }
+                            target.Save(filePath, System.Drawing.Imaging.ImageFormat.Png);
+
+                            ScreenshotHistoryViewModel.AddHistory(rect.X, rect.Y, rect.Width, rect.Height, filePath);
 
                         var varName = $"img_{DateTime.Now:HHmmss}";
                         var findAction = new AutoWizard.Core.Actions.Vision.FindImageAction
@@ -1075,8 +1185,6 @@ namespace AutoWizard.UI.ViewModels
             }
         }
 
-        private int _nextColorVariableIndex = 1;
-
         private async void OnPickColor()
         {
             var result = await PickColorInternal();
@@ -1085,22 +1193,7 @@ namespace AutoWizard.UI.ViewModels
                 var hex = result.Value.Hex;
                 Clipboard.SetText(hex);
 
-                // 自動填入變數 color_check_1 ~ color_check_10
-                string varName = $"color_check_{_nextColorVariableIndex}";
-                var targetVar = VariablesViewModel.Variables.FirstOrDefault(v => v.Name == varName);
-                if (targetVar != null)
-                {
-                    targetVar.DefaultValue = $"{result.Value.X},{result.Value.Y},{hex},0";
-                }
-
-                StatusMessage = $"顏色已複製並自動填入 {varName}: {hex} at ({result.Value.X},{result.Value.Y})";
-
-                // 循環索引
-                _nextColorVariableIndex++;
-                if (_nextColorVariableIndex > 10)
-                {
-                    _nextColorVariableIndex = 1;
-                }
+                StatusMessage = $"顏色已複製到剪貼簿: {hex} 於 ({result.Value.X},{result.Value.Y})";
             }
         }
 
@@ -1125,7 +1218,10 @@ namespace AutoWizard.UI.ViewModels
                 {
                     var c = overlay.PickedColor;
                     var hex = $"#{c.R:X2}{c.G:X2}{c.B:X2}";
-                    return (hex, (int)overlay.PickedPoint.X, (int)overlay.PickedPoint.Y);
+                    int x = (int)overlay.PickedPoint.X;
+                    int y = (int)overlay.PickedPoint.Y;
+                    ColorHistoryViewModel.AddHistory(x, y, hex);
+                    return (hex, x, y);
                 }
             }
             catch (Exception ex)
@@ -1142,6 +1238,26 @@ namespace AutoWizard.UI.ViewModels
         }
 
         #endregion
+
+        private void FlashLocationOnScreen(int x, int y)
+        {
+            var overlay = new Views.SmartCaptureOverlay(null)
+            {
+                IsFlashMode = true,
+                FlashPoint = new System.Windows.Point(x, y)
+            };
+            overlay.ShowDialog();
+        }
+
+        private void FlashRectOnScreen(int x, int y, int width, int height)
+        {
+            var overlay = new Views.SmartCaptureOverlay(null)
+            {
+                IsFlashMode = true,
+                FlashRect = new System.Windows.Int32Rect(x, y, width, height)
+            };
+            overlay.ShowDialog();
+        }
 
         #endregion
 

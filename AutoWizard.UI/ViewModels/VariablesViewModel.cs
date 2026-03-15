@@ -10,56 +10,60 @@ namespace AutoWizard.UI.ViewModels
 {
     public class VariablesViewModel : BindableBase
     {
-        public ObservableCollection<VariableDefinition> Variables { get; } = new();
+        public ObservableCollection<VariableDefinition> BuiltInVariables { get; } = new();
+        public ObservableCollection<VariableDefinition> CustomVariables { get; } = new();
 
-        private VariableDefinition? _selectedVariable;
-        public VariableDefinition? SelectedVariable
+        private VariableDefinition? _selectedBuiltInVariable;
+        public VariableDefinition? SelectedBuiltInVariable
         {
-            get => _selectedVariable;
-            set
-            {
-                if (SetProperty(ref _selectedVariable, value))
-                {
-                    // 通知依賴於 SelectedVariable 的命令重新評估 CanExecute
-                    DeleteVariableCommand.RaiseCanExecuteChanged();
-                    DuplicateVariableCommand.RaiseCanExecuteChanged();
-                }
-            }
+            get => _selectedBuiltInVariable;
+            set => SetProperty(ref _selectedBuiltInVariable, value);
+        }
+
+        private VariableDefinition? _selectedCustomVariable;
+        public VariableDefinition? SelectedCustomVariable
+        {
+            get => _selectedCustomVariable;
+            set => SetProperty(ref _selectedCustomVariable, value);
         }
 
         // Action delegate to be injected by MainWindowViewModel
         public Func<Task<(string Hex, int X, int Y)?>>? PickColorAction { get; set; }
 
-        // Commands
-        public DelegateCommand AddVariableCommand { get; }
-        public DelegateCommand DeleteVariableCommand { get; }
-        public DelegateCommand DuplicateVariableCommand { get; }
-        public DelegateCommand<VariableDefinition> PickSpecificColorCommand { get; }
+        public DelegateCommand RefreshCustomVariablesCommand { get; }
+
+        // Needs to be hooked up to MainWindowViewModel or EditorViewModel
+        public Func<System.Collections.Generic.IEnumerable<AutoWizard.Core.Models.BaseAction>>? GetCurrentScriptActions { get; set; }
 
         public VariablesViewModel()
         {
-            AddVariableCommand = new DelegateCommand(OnAddVariable);
-            DeleteVariableCommand = new DelegateCommand(OnDeleteVariable, () => SelectedVariable != null);
-            DuplicateVariableCommand = new DelegateCommand(OnDuplicateVariable, () => SelectedVariable != null);
-            PickSpecificColorCommand = new DelegateCommand<VariableDefinition>(OnPickSpecificColor);
+            RefreshCustomVariablesCommand = new DelegateCommand(OnRefreshCustomVariables);
         }
 
-        public void EnsureBuiltInColorVariables()
+        public void EnsureBuiltInVariables()
         {
-            for (int i = 1; i <= 10; i++)
+            if (BuiltInVariables.Count == 0)
             {
-                string name = $"color_check_{i}";
-                var existing = Variables.FirstOrDefault(v => v.Name == name);
-                if (existing == null)
+                BuiltInVariables.Add(new VariableDefinition
                 {
-                    Variables.Add(new VariableDefinition
-                    {
-                        Name = name,
-                        Type = VariableType.String,
-                        DefaultValue = "0,0,#FFFFFF,0",
-                        Description = $"內置色彩動態檢查變數 {i}"
-                    });
-                }
+                    Name = "ColorCheck",
+                    Type = VariableType.Boolean,
+                    DefaultValue = "",
+                    Description = "全域內置變數：判斷特定顏色是否符合條件"
+                });
+
+                BuiltInVariables.Add(new VariableDefinition
+                {
+                    Name = "FindPic",
+                    Type = VariableType.Boolean,
+                    DefaultValue = "",
+                    Description = "全域內置變數：判斷特定圖片是否尋找到"
+                });
+            }
+            
+            if (SelectedBuiltInVariable == null) 
+            {
+                SelectedBuiltInVariable = BuiltInVariables.FirstOrDefault();
             }
         }
 
@@ -75,60 +79,55 @@ namespace AutoWizard.UI.ViewModels
             }
         }
 
-        private void OnAddVariable()
+        private void OnRefreshCustomVariables()
         {
-            // 產生唯一名稱
-            int count = Variables.Count + 1;
-            string name;
-            do
+            CustomVariables.Clear();
+
+            if (GetCurrentScriptActions == null) return;
+
+            var actions = GetCurrentScriptActions();
+            var uniqueVarNames = new System.Collections.Generic.HashSet<string>();
+
+            // Traverse recursively to find SetVariableAction
+            void Traverse(System.Collections.Generic.IEnumerable<AutoWizard.Core.Models.BaseAction> list)
             {
-                name = $"var{count}";
-                count++;
-            } while (Variables.Any(v => v.Name == name));
+                foreach (var action in list)
+                {
+                    if (action is AutoWizard.Core.Actions.Control.SetVariableAction setVar)
+                    {
+                        if (!string.IsNullOrWhiteSpace(setVar.VariableName) && !uniqueVarNames.Contains(setVar.VariableName))
+                        {
+                            uniqueVarNames.Add(setVar.VariableName);
+                            CustomVariables.Add(new VariableDefinition
+                            {
+                                Name = setVar.VariableName,
+                                Type = setVar.VariableType,
+                                DefaultValue = setVar.ValueExpression, 
+                                Description = "自訂變數 (取自腳本)"
+                            });
+                        }
+                    }
 
-            var variable = new VariableDefinition
-            {
-                Name = name,
-                Type = VariableType.String,
-                DefaultValue = "",
-                Description = ""
-            };
-
-            Variables.Add(variable);
-            SelectedVariable = variable;
-        }
-
-        private void OnDeleteVariable()
-        {
-            if (SelectedVariable == null) return;
-            Variables.Remove(SelectedVariable);
-            SelectedVariable = Variables.LastOrDefault();
-        }
-
-        private void OnDuplicateVariable()
-        {
-            if (SelectedVariable == null) return;
-
-            // 產生唯一名稱
-            string baseName = SelectedVariable.Name + "_copy";
-            string name = baseName;
-            int suffix = 1;
-            while (Variables.Any(v => v.Name == name))
-            {
-                name = $"{baseName}{suffix}";
-                suffix++;
+                    if (action is AutoWizard.Core.Models.ContainerAction container)
+                    {
+                        if (container.Children != null) Traverse(container.Children);
+                        
+                        // Special handling for IfAction
+                        if (action is AutoWizard.Core.Actions.Control.IfAction ifAction) 
+                        {
+                            if (ifAction.ThenActions != null) Traverse(ifAction.ThenActions);
+                            if (ifAction.ElseActions != null) Traverse(ifAction.ElseActions);
+                        }
+                    }
+                }
             }
 
-            var copy = new VariableDefinition
+            Traverse(actions);
+            
+            if (SelectedCustomVariable == null)
             {
-                Name = name,
-                Type = SelectedVariable.Type,
-                DefaultValue = SelectedVariable.DefaultValue,
-                Description = SelectedVariable.Description
-            };
-
-            Variables.Add(copy);
-            SelectedVariable = copy;
+                SelectedCustomVariable = CustomVariables.FirstOrDefault();
+            }
         }
 
         /// <summary>
@@ -136,7 +135,9 @@ namespace AutoWizard.UI.ViewModels
         /// </summary>
         public string[] GetVariableNames()
         {
-            return Variables.Select(v => v.Name).ToArray();
+            var builtIn = BuiltInVariables.Select(v => v.Name);
+            var custom = CustomVariables.Select(v => v.Name);
+            return builtIn.Concat(custom).ToArray();
         }
 
         /// <summary>
@@ -144,7 +145,11 @@ namespace AutoWizard.UI.ViewModels
         /// </summary>
         public void PopulateContext(Core.Models.ExecutionContext context)
         {
-            foreach (var v in Variables)
+            foreach (var v in BuiltInVariables)
+            {
+                context.Variables[v.Name] = v.GetTypedDefaultValue() ?? "";
+            }
+            foreach (var v in CustomVariables)
             {
                 context.Variables[v.Name] = v.GetTypedDefaultValue() ?? "";
             }

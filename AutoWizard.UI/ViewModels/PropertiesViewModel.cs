@@ -5,7 +5,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using AutoWizard.Core.Models;
+using AutoWizard.Core.Actions.Input;
 using AutoWizard.Core.Actions.Control;
+using AutoWizard.Core.Actions.Vision;
+using System.Reflection;
 
 namespace AutoWizard.UI.ViewModels
 {
@@ -37,11 +40,19 @@ namespace AutoWizard.UI.ViewModels
 
         public ObservableCollection<PropertyEntry> Properties { get; } = new();
 
+        public System.Action<object>? RequestRegionSelectionAction { get; set; }
+        public System.Action<object>? TestOcrResultAction { get; set; }
+
         private string _itemType = "未選擇";
         public string ItemType
         {
             get => _itemType;
             set => SetProperty(ref _itemType, value);
+        }
+
+        public void Refresh()
+        {
+            UpdateProperties();
         }
 
         private void UpdateProperties()
@@ -74,6 +85,12 @@ namespace AutoWizard.UI.ViewModels
                 bool isEnum = prop.PropertyType.IsEnum;
                 IEnumerable<string>? enumValues = isEnum ? System.Enum.GetNames(prop.PropertyType) : null;
 
+                if (prop.Name == "Language")
+                {
+                    isEnum = true;
+                    enumValues = new[] { "chi_tra", "eng", "chi_sim" };
+                }
+
                 Properties.Add(new PropertyEntry
                 {
                     Key = GetFriendlyPropertyName(prop.Name),
@@ -83,6 +100,29 @@ namespace AutoWizard.UI.ViewModels
                     PropertyType = prop.PropertyType,
                     IsEnum = isEnum,
                     EnumValues = enumValues
+                });
+            }
+
+            // OCR 分區選取按鈕支援
+            if (SelectedItem is OCRAction ocrAction)
+            {
+                var insertIndex = Properties.ToList().FindIndex(p => p.PropertyName == "RegionX");
+                var btn = new PropertyEntry
+                {
+                    Key = "✂️ 選取辨識區域",
+                    IsButton = true,
+                    ButtonAction = () => RequestRegionSelectionAction?.Invoke(ocrAction)
+                };
+                if (insertIndex >= 0)
+                    Properties.Insert(insertIndex, btn);
+                else
+                    Properties.Add(btn);
+
+                Properties.Add(new PropertyEntry
+                {
+                    Key = "🛠️ 測試 OCR 結果",
+                    IsButton = true,
+                    ButtonAction = () => TestOcrResultAction?.Invoke(ocrAction)
                 });
             }
 
@@ -253,6 +293,40 @@ namespace AutoWizard.UI.ViewModels
                         PropertyType = typeof(int)
                     });
                     break;
+
+                case ConditionType.OcrMatches:
+                    Properties.Add(CreateConditionEntry("搜尋文字", "LeftOperand", cond));
+                    Properties.Add(new PropertyEntry
+                    {
+                        Key = "使用正規表達式 (true/false)",
+                        Value = string.IsNullOrEmpty(cond.RightOperand) ? "false" : cond.RightOperand,
+                        PropertyName = "RightOperand",
+                        Target = cond,
+                        PropertyType = typeof(string),
+                        IsEnum = true,
+                        EnumValues = new[] { "false", "true" }
+                    });
+                    Properties.Add(new PropertyEntry
+                    {
+                        Key = "辨識語言",
+                        Value = cond.Language,
+                        PropertyName = "Language",
+                        Target = cond,
+                        PropertyType = typeof(string),
+                        IsEnum = true,
+                        EnumValues = new[] { "chi_tra", "eng", "chi_sim" }
+                    });
+                    Properties.Add(new PropertyEntry
+                    {
+                        Key = "✂️ 選取辨識區域",
+                        IsButton = true,
+                        ButtonAction = () => RequestRegionSelectionAction?.Invoke(cond)
+                    });
+                    Properties.Add(CreateConditionEntry("區域 X", "OcrRegionX", cond));
+                    Properties.Add(CreateConditionEntry("區域 Y", "OcrRegionY", cond));
+                    Properties.Add(CreateConditionEntry("區域寬度", "OcrRegionWidth", cond));
+                    Properties.Add(CreateConditionEntry("區域高度", "OcrRegionHeight", cond));
+                    break;
             }
         }
 
@@ -355,6 +429,7 @@ namespace AutoWizard.UI.ViewModels
                 "ColorYExpression" => "目標 Y (可用變數)",
                 "TargetColor" => "預期顏色 (#HEX 或 {var})",
                 "Tolerance" => "顏色容差 (0-255)",
+                "VariableType" => "類型",
                 _ => name
             };
         }

@@ -20,6 +20,7 @@ namespace AutoWizard.UI.Views
         public Point PickedPoint { get; private set; } = new Point(-1, -1);
         public bool IsConfirmed { get; private set; } = false;
         public bool IsColorPickerMode { get; set; } = false;
+        public bool IsRegionSelectionMode { get; set; } = false;
         
         // Measure Tool properties
         public bool IsMeasureMode { get; set; } = false;
@@ -27,15 +28,23 @@ namespace AutoWizard.UI.Views
         public Point MeasureStartPoint { get; private set; }
         public Point MeasureEndPoint { get; private set; }
 
-        public SmartCaptureOverlay(System.Drawing.Bitmap bitmap)
+        // Flash properties
+        public bool IsFlashMode { get; set; } = false;
+        public Point? FlashPoint { get; set; }
+        public Int32Rect? FlashRect { get; set; }
+
+        public SmartCaptureOverlay(System.Drawing.Bitmap? bitmap)
         {
             InitializeComponent();
             _originalBitmap = bitmap;
-            BackgroundImage.Source = Imaging.CreateBitmapSourceFromHBitmap(
-                bitmap.GetHbitmap(),
-                IntPtr.Zero,
-                Int32Rect.Empty,
-                BitmapSizeOptions.FromEmptyOptions());
+            if (bitmap != null)
+            {
+                BackgroundImage.Source = Imaging.CreateBitmapSourceFromHBitmap(
+                    bitmap.GetHbitmap(),
+                    IntPtr.Zero,
+                    Int32Rect.Empty,
+                    BitmapSizeOptions.FromEmptyOptions());
+            }
             
             Loaded += (s, e) =>
             {
@@ -51,6 +60,17 @@ namespace AutoWizard.UI.Views
                 {
                     HintText.Text = "點擊第一點開始量測，點擊第二點完成 (按 Esc 取消)";
                     DimmingLayer.Fill = new SolidColorBrush(Color.FromArgb(0x40, 0, 0, 0));
+                }
+                else if (IsRegionSelectionMode)
+                {
+                    HintText.Text = "框選辨識區域 (按 Esc 取消)";
+                    DimmingLayer.Fill = new SolidColorBrush(Color.FromArgb(0x40, 0, 0, 0));
+                }
+                else if (IsFlashMode)
+                {
+                    HintText.Visibility = Visibility.Collapsed;
+                    DimmingLayer.Fill = new SolidColorBrush(Color.FromArgb(0x40, 0, 0, 0));
+                    StartFlashingAnimation();
                 }
             };
             
@@ -69,6 +89,58 @@ namespace AutoWizard.UI.Views
         public void SetColorPickerMode()
         {
             IsColorPickerMode = true;
+        }
+
+        private async void StartFlashingAnimation()
+        {
+            // Create the flash visual
+            var flashShape = new System.Windows.Shapes.Rectangle
+            {
+                Stroke = Brushes.Red,
+                StrokeThickness = 3,
+                Fill = new SolidColorBrush(Color.FromArgb(0x40, 255, 0, 0)),
+                IsHitTestVisible = false
+            };
+
+            // Map physical to logical
+            if (FlashPoint.HasValue)
+            {
+                double px = FlashPoint.Value.X / _dpiScaleX;
+                double py = FlashPoint.Value.Y / _dpiScaleY;
+                
+                flashShape.Width = 20;
+                flashShape.Height = 20;
+                flashShape.RadiusX = 10;
+                flashShape.RadiusY = 10;
+                Canvas.SetLeft(flashShape, px - 10);
+                Canvas.SetTop(flashShape, py - 10);
+            }
+            else if (FlashRect.HasValue)
+            {
+                var r = FlashRect.Value;
+                double x = r.X / _dpiScaleX;
+                double y = r.Y / _dpiScaleY;
+                double w = r.Width / _dpiScaleX;
+                double h = r.Height / _dpiScaleY;
+                
+                flashShape.Width = w;
+                flashShape.Height = h;
+                Canvas.SetLeft(flashShape, x);
+                Canvas.SetTop(flashShape, y);
+            }
+
+            SelectionCanvas.Children.Add(flashShape);
+
+            // Animate 3 blinks
+            for (int i = 0; i < 3; i++)
+            {
+                flashShape.Visibility = Visibility.Visible;
+                await System.Threading.Tasks.Task.Delay(200);
+                flashShape.Visibility = Visibility.Hidden;
+                await System.Threading.Tasks.Task.Delay(200);
+            }
+
+            Close();
         }
 
         private void UpdateDimmingMask(Rect selection)
@@ -94,6 +166,8 @@ namespace AutoWizard.UI.Views
 
         private void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (IsFlashMode) return; // Prevent clicks while flashing
+
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 _startPoint = e.GetPosition(SelectionCanvas);

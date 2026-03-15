@@ -6,6 +6,7 @@ namespace AutoWizard.Core.Actions.Control
     {
         public string VariableName { get; set; } = string.Empty;
         public string ValueExpression { get; set; } = string.Empty;
+        public AutoWizard.Core.Models.VariableType VariableType { get; set; } = AutoWizard.Core.Models.VariableType.String;
 
         public override AutoWizard.Core.Models.ActionResult Execute(AutoWizard.Core.Models.ExecutionContext context)
         {
@@ -39,6 +40,27 @@ namespace AutoWizard.Core.Actions.Control
                 else
                 {
                     value = resolved;
+                }
+                
+                // 根據使用者指定的類型轉換
+                try 
+                {
+                    value = VariableType switch
+                    {
+                        AutoWizard.Core.Models.VariableType.String => value.ToString() ?? "",
+                        AutoWizard.Core.Models.VariableType.Integer => Convert.ToInt32(value),
+                        AutoWizard.Core.Models.VariableType.Double => Convert.ToDouble(value),
+                        AutoWizard.Core.Models.VariableType.Boolean => Convert.ToBoolean(value),
+                        _ => value
+                    };
+                }
+                catch (Exception ex)
+                {
+                    return new AutoWizard.Core.Models.ActionResult
+                    {
+                        Success = false,
+                        Message = $"Failed to convert value '{value}' to type {VariableType}: {ex.Message}"
+                    };
                 }
 
                 context.Variables[VariableName] = value;

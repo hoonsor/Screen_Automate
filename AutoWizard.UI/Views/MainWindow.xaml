@@ -151,6 +151,9 @@
             <Button Command="{Binding SaveScriptAsCommand}" ToolTip="另存新檔 (F12)">
                 <TextBlock Text="💾+" FontSize="14" FontWeight="Bold"/>
             </Button>
+            <Button Command="{Binding ExportExeCommand}" ToolTip="匯出為獨立執行檔 (📦)">
+                <TextBlock Text="📦" FontSize="16"/>
+            </Button>
             <Separator/>
             <Button Command="{Binding RunScriptCommand}" ToolTip="執行腳本">
                 <TextBlock Text="▶️" FontSize="16"/>
@@ -166,17 +169,20 @@
             <Button Command="{Binding SmartCaptureCommand}" ToolTip="智慧截圖 (ScrollLock)">
                 <TextBlock Text="📸" FontSize="16"/>
             </Button>
+            <Button Command="{Binding PickColorCommand}" ToolTip="色彩選擇器">
+                <TextBlock Text="🎨" FontSize="16"/>
+            </Button>
             <Button Command="{Binding MeasureToolCommand}" ToolTip="量測距離">
                 <TextBlock Text="📏" FontSize="16"/>
             </Button>
             <Separator/>
-            <Button Command="{Binding ExportExeCommand}" ToolTip="匯出為獨立執行檔 (📦)">
-                <TextBlock Text="📦" FontSize="16"/>
-            </Button>
-            <Separator/>
             
-            <!-- Status Indicator -->
-            <Border Width="16" Height="16" CornerRadius="8" Margin="4,0" BorderBrush="#999" BorderThickness="1"
+            <!-- Push the status indicator to the far right by exploiting Toolbar logic or setting a spacer -->
+            <!-- We will use a spacer border that takes up remaining space if placed inside a DockPanel, 
+                 but in a ToolBar horizontal alignment works best with a large margin or a custom DockPanel template. 
+                 Since ToolBar manages its own layout, using a separator to visual distinguish it is best. -->
+                 
+            <Border Width="16" Height="16" CornerRadius="8" Margin="4,0" BorderBrush="#999" BorderThickness="1" HorizontalAlignment="Right"
                     ToolTip="{Binding EditorViewModel.IsDirty, Converter={StaticResource BoolToStatusTextConverter}}">
                 <Border.Style>
                     <Style TargetType="Border">
@@ -189,9 +195,6 @@
                     </Style>
                 </Border.Style>
             </Border>
-            <Button Command="{Binding PickColorCommand}" ToolTip="色彩選擇器">
-                <TextBlock Text="🎨" FontSize="16"/>
-            </Button>
         </ToolBar>
 
         <!-- Main Content Area -->
@@ -601,6 +604,18 @@
                             <TextBlock Text="📦 變數" FontSize="12"/>
                         </TabItem.Header>
                         <local:VariablesPanel DataContext="{Binding VariablesViewModel}"/>
+                    </TabItem>
+                    <TabItem>
+                        <TabItem.Header>
+                            <TextBlock Text="🎨 取色" FontSize="12"/>
+                        </TabItem.Header>
+                        <local:ColorHistoryPanel DataContext="{Binding ColorHistoryViewModel}"/>
+                    </TabItem>
+                    <TabItem>
+                        <TabItem.Header>
+                            <TextBlock Text="📷 截圖" FontSize="12"/>
+                        </TabItem.Header>
+                        <local:ScreenshotHistoryPanel DataContext="{Binding ScreenshotHistoryViewModel}"/>
                     </TabItem>
                     <TabItem Visibility="Collapsed">
                         <TabItem.Header>

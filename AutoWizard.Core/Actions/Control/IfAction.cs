@@ -21,7 +21,8 @@ namespace AutoWizard.Core.Actions.Control
         ImageExists,
         FileExists,
         Expression,    // 使用 ExpressionParser 計算自由格式條件
-        ColorMatch     // 比對畫面特定座標的顏色
+        ColorMatch,    // 比對畫面特定座標的顏色
+        OcrMatches     // 辨識特定區域內的文字
     }
 
     /// <summary>
@@ -194,6 +195,12 @@ namespace AutoWizard.Core.Actions.Control
                 return EvaluateImageExists(condition, context);
             }
 
+            // OcrMatches 模式
+            if (condition.ConditionType == ConditionType.OcrMatches)
+            {
+                return EvaluateOcrMatches(condition, context);
+            }
+
             // 傳統模式：解析左右運算元
             string left = context.ResolveExpression(condition.LeftOperand);
             string right = context.ResolveExpression(condition.RightOperand);
@@ -301,6 +308,55 @@ namespace AutoWizard.Core.Actions.Control
             catch (Exception ex)
             {
                 context.Log($"ImageExists evaluation error: {ex.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 評估 OCR 文字辨識是否匹配
+        /// </summary>
+        private bool EvaluateOcrMatches(ConditionItem condition, Models.ExecutionContext context)
+        {
+            try
+            {
+                string textToSearch = context.ResolveExpression(condition.LeftOperand);
+                bool useRegex = false;
+                if (!string.IsNullOrEmpty(condition.RightOperand))
+                {
+                    bool.TryParse(context.ResolveExpression(condition.RightOperand), out useRegex);
+                }
+
+                int? rx = null, ry = null, rw = null, rh = null;
+                if (!string.IsNullOrEmpty(condition.OcrRegionX) && int.TryParse(context.ResolveExpression(condition.OcrRegionX), out int x)) rx = x;
+                if (!string.IsNullOrEmpty(condition.OcrRegionY) && int.TryParse(context.ResolveExpression(condition.OcrRegionY), out int y)) ry = y;
+                if (!string.IsNullOrEmpty(condition.OcrRegionWidth) && int.TryParse(context.ResolveExpression(condition.OcrRegionWidth), out int w)) rw = w;
+                if (!string.IsNullOrEmpty(condition.OcrRegionHeight) && int.TryParse(context.ResolveExpression(condition.OcrRegionHeight), out int h)) rh = h;
+
+                using var screenshot = ScreenCapture.CaptureScreen();
+                string lang = string.IsNullOrEmpty(condition.Language) ? "chi_tra" : context.ResolveExpression(condition.Language);
+                using var ocrEngine = new CV.OCR.OCREngine(language: lang);
+                ocrEngine.Initialize();
+
+                Rectangle? region = null;
+                if (rx.HasValue && ry.HasValue && rw.HasValue && rh.HasValue)
+                {
+                    region = new Rectangle(rx.Value, ry.Value, rw.Value, rh.Value);
+                }
+
+                var result = ocrEngine.FindText(screenshot, textToSearch, useRegex);
+
+                context.Log($"OcrMatches check: Text='{textToSearch}', Regex={useRegex}, Found={result.Success}, Confidence={result.Confidence:P0}");
+                if (result.Success)
+                {
+                    context.Variables["OcrMatches_Text"] = result.Text;
+                    context.Variables["OcrMatches_Confidence"] = result.Confidence;
+                }
+
+                return result.Success;
+            }
+            catch (Exception ex)
+            {
+                context.Log($"OcrMatches evaluation error: {ex.Message}");
                 return false;
             }
         }
