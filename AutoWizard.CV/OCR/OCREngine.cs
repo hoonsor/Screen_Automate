@@ -120,10 +120,17 @@ namespace AutoWizard.CV.OCR
                     {
                         var ocrResult = await _engine!.RecognizeAsync(softwareBitmap);
                         
+                        string processedText = string.IsNullOrWhiteSpace(ocrResult.Text) ? string.Empty : ocrResult.Text.Trim();
+                        // 將中文字與中文字之間的空白移除
+                        if (!string.IsNullOrEmpty(processedText))
+                        {
+                            processedText = Regex.Replace(processedText, @"(?<=[\u4e00-\u9fa5])\s+(?=[\u4e00-\u9fa5])", "");
+                        }
+
                         return new OCRResult
                         {
-                            Success = !string.IsNullOrWhiteSpace(ocrResult.Text),
-                            Text = ocrResult.Text.Trim(),
+                            Success = !string.IsNullOrWhiteSpace(processedText),
+                            Text = processedText,
                             Confidence = 1.0f, // Windows OCR 不提供直接的整體信心指數，若辨識成功視為 1.0
                             Region = region
                         };
