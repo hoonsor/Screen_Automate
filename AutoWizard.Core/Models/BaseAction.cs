@@ -107,6 +107,7 @@ namespace AutoWizard.Core.Models
     [JsonDerivedType(typeof(WaitAction), "Wait")]
     [JsonDerivedType(typeof(SetVariableAction), "SetVariable")]
     [JsonDerivedType(typeof(ScreenshotAction), "Screenshot")]
+    [JsonDerivedType(typeof(CallModuleAction), "CallModule")]
 
     public abstract class BaseAction : System.ComponentModel.INotifyPropertyChanged
     {

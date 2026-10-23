@@ -115,6 +115,13 @@ namespace AutoWizard.UI.ViewModels
                 Color = "#9C27B0",
                 Description = "擷取螢幕或指定區域"
             });
+            UtilityActions.Add(new ToolboxItem
+            {
+                ActionType = "InsertModule",
+                Title = "插入模組",
+                Color = "#9C27B0",
+                Description = "載入外部腳本作為自訂模組函數"
+            });
         }
     }
 

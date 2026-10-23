@@ -10,6 +10,12 @@ namespace AutoWizard.Core.Scripting
 {
     public class DslParser
     {
+        private class KnownModule
+        {
+            public string SourceFilePath { get; set; } = string.Empty;
+            public List<ModuleParameter> Parameters { get; set; } = new();
+        }
+
         public List<BaseAction> Parse(string script)
         {
             var actions = new List<BaseAction>();
@@ -17,6 +23,8 @@ namespace AutoWizard.Core.Scripting
             
             Stack<List<BaseAction>> hierarchyStack = new Stack<List<BaseAction>>();
             hierarchyStack.Push(actions);
+
+            var knownModules = new Dictionary<string, KnownModule>();
 
             string lastComment = string.Empty;
             IfAction? pendingIfAction = null; // 用於收集 .Cond() 鏈式呼叫
@@ -29,6 +37,40 @@ namespace AutoWizard.Core.Scripting
                 if (trimmed.StartsWith("//"))
                 {
                     lastComment = trimmed.Substring(2).Trim();
+                    continue;
+                }
+
+                if (trimmed.StartsWith("#Import"))
+                {
+                    // #Import "filepath" As ModuleName
+                    var importMatch = Regex.Match(trimmed, @"^#Import\s+""([^""]+)""\s+As\s+(\w+)$");
+                    if (importMatch.Success)
+                    {
+                        var path = importMatch.Groups[1].Value;
+                        var modName = importMatch.Groups[2].Value;
+                        knownModules[modName] = new KnownModule { SourceFilePath = path };
+                    }
+                    continue;
+                }
+                
+                if (trimmed.StartsWith("#Param"))
+                {
+                    // #Param ModuleName "ParameterName" "OriginalActionId" "PropertyName" "Description"
+                    var paramMatch = Regex.Match(trimmed, @"^#Param\s+(\w+)\s+""([^""]+)""\s+""([^""]+)""\s+""([^""]+)""\s+""([^""]*)""$");
+                    if (paramMatch.Success)
+                    {
+                        var modName = paramMatch.Groups[1].Value;
+                        if (knownModules.TryGetValue(modName, out var km))
+                        {
+                            km.Parameters.Add(new ModuleParameter
+                            {
+                                ParameterName = paramMatch.Groups[2].Value,
+                                OriginalActionId = paramMatch.Groups[3].Value,
+                                PropertyName = paramMatch.Groups[4].Value,
+                                Description = paramMatch.Groups[5].Value
+                            });
+                        }
+                    }
                     continue;
                 }
 
@@ -124,7 +166,7 @@ namespace AutoWizard.Core.Scripting
                         continue;
                     }
 
-                    BaseAction? action = CreateAction(funcName, args);
+                    BaseAction? action = CreateAction(funcName, args, knownModules);
                     if (action != null)
                     {
                         if (!string.IsNullOrEmpty(errorPolicyStr))
@@ -220,7 +262,7 @@ namespace AutoWizard.Core.Scripting
             return input;
         }
 
-        private BaseAction? CreateAction(string name, List<string> args)
+        private BaseAction? CreateAction(string name, List<string> args, Dictionary<string, KnownModule> knownModules)
         {
             try
             {
@@ -236,7 +278,31 @@ namespace AutoWizard.Core.Scripting
                     case "OCR": return ParseOCR(args);
                     case "Loop": return ParseLoop(args);
                     case "If": return ParseIf(args);
-                    default: return null;
+                    default: 
+                        if (knownModules.TryGetValue(name, out var km))
+                        {
+                            var moduleAction = new CallModuleAction
+                            {
+                                ModuleName = name,
+                                SourceFilePath = km.SourceFilePath
+                            };
+                            
+                            for (int i = 0; i < km.Parameters.Count; i++)
+                            {
+                                var paramDef = km.Parameters[i];
+                                var newParam = new ModuleParameter
+                                {
+                                    OriginalActionId = paramDef.OriginalActionId,
+                                    PropertyName = paramDef.PropertyName,
+                                    ParameterName = paramDef.ParameterName,
+                                    Description = paramDef.Description,
+                                    ValueExpression = ParseString(args, i)
+                                };
+                                moduleAction.Parameters.Add(newParam);
+                            }
+                            return moduleAction;
+                        }
+                        return null;
                 }
             }
             catch

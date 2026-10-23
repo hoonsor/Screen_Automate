@@ -22,7 +22,8 @@ namespace AutoWizard.UI.ViewModels
             // 向下相容代理屬性（由多條件機制取代）
             "ConditionType", "LeftOperand", "RightOperand",
             "ConditionExpression", "ColorXExpression", "ColorYExpression",
-            "TargetColor", "Tolerance"
+            "TargetColor", "Tolerance",
+            "Parameters", "SourceFilePath", "ModuleName"
         };
 
         private object? _selectedItem;
@@ -42,6 +43,10 @@ namespace AutoWizard.UI.ViewModels
 
         public System.Action<object>? RequestRegionSelectionAction { get; set; }
         public System.Action<object>? TestOcrResultAction { get; set; }
+        
+        // 供條件判斷匯入最近紀錄使用
+        public System.Func<System.Collections.Generic.IEnumerable<ScreenshotHistoryItem>>? GetRecentScreenshotsAction { get; set; }
+        public System.Func<System.Collections.Generic.IEnumerable<ColorHistoryItem>>? GetRecentColorsAction { get; set; }
 
         private string _itemType = "未選擇";
         public string ItemType
@@ -160,6 +165,30 @@ namespace AutoWizard.UI.ViewModels
                     PropertyType = typeof(bool)
                 });
             }
+
+            // CallModuleAction 參數與模組屬性
+            if (SelectedItem is AutoWizard.Core.Actions.Control.CallModuleAction callModule)
+            {
+                Properties.Add(new PropertyEntry { Key = "━━ 模組資訊 ━━", IsSeparator = true });
+                Properties.Add(new PropertyEntry { Key = "模組名稱", Value = callModule.ModuleName, IsReadOnly = true });
+                Properties.Add(new PropertyEntry { Key = "原始路徑", Value = callModule.SourceFilePath, IsReadOnly = true });
+
+                if (callModule.Parameters.Count > 0)
+                {
+                    Properties.Add(new PropertyEntry { Key = "━━ 輸入參數 ━━", IsSeparator = true });
+                    foreach (var param in callModule.Parameters)
+                    {
+                        Properties.Add(new PropertyEntry
+                        {
+                            Key = string.IsNullOrEmpty(param.Description) ? param.ParameterName : $"{param.ParameterName} ({param.Description})",
+                            Value = param.ValueExpression,
+                            PropertyName = "ValueExpression",
+                            Target = param,
+                            PropertyType = typeof(string)
+                        });
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -268,6 +297,12 @@ namespace AutoWizard.UI.ViewModels
                     break;
 
                 case ConditionType.ImageExists:
+                    Properties.Add(new PropertyEntry
+                    {
+                        Key = "🖼️ 使用最近截圖",
+                        IsButton = true,
+                        ButtonAction = () => ShowRecentScreenshotsMenu(cond)
+                    });
                     Properties.Add(CreateConditionEntry("圖片路徑", "LeftOperand", cond));
                     Properties.Add(CreateConditionEntry("相似度門檻 (0~1)", "RightOperand", cond));
                     break;
@@ -281,6 +316,12 @@ namespace AutoWizard.UI.ViewModels
                     break;
 
                 case ConditionType.ColorMatch:
+                    Properties.Add(new PropertyEntry
+                    {
+                        Key = "🎨 使用最近取色",
+                        IsButton = true,
+                        ButtonAction = () => ShowRecentColorsMenu(cond)
+                    });
                     Properties.Add(CreateConditionEntry("目標 X (可用變數)", "ColorXExpression", cond));
                     Properties.Add(CreateConditionEntry("目標 Y (可用變數)", "ColorYExpression", cond));
                     Properties.Add(CreateConditionEntry("預期顏色 (#HEX 或 {var})", "TargetColor", cond));
@@ -433,6 +474,63 @@ namespace AutoWizard.UI.ViewModels
                 _ => name
             };
         }
+
+        private void ShowRecentScreenshotsMenu(ConditionItem cond)
+        {
+            if (GetRecentScreenshotsAction == null) return;
+            var history = GetRecentScreenshotsAction().ToList();
+            if (history.Count == 0)
+            {
+                System.Windows.MessageBox.Show("目前沒有最近的截圖紀錄。", "提示", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                return;
+            }
+
+            var menu = new System.Windows.Controls.ContextMenu();
+            foreach (var item in history)
+            {
+                var mi = new System.Windows.Controls.MenuItem 
+                { 
+                    Header = $"[{item.Header}] {item.RelativeImagePath}" 
+                };
+                mi.Click += (s, e) =>
+                {
+                    // 使用 RelativeImagePath 包含 Images\ 前綴，確保執行時路徑正確
+                    cond.LeftOperand = item.RelativeImagePath;
+                    UpdateProperties();
+                };
+                menu.Items.Add(mi);
+            }
+            menu.IsOpen = true;
+        }
+
+        private void ShowRecentColorsMenu(ConditionItem cond)
+        {
+            if (GetRecentColorsAction == null) return;
+            var history = GetRecentColorsAction().ToList();
+            if (history.Count == 0)
+            {
+                System.Windows.MessageBox.Show("目前沒有最近的取色紀錄。", "提示", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                return;
+            }
+
+            var menu = new System.Windows.Controls.ContextMenu();
+            foreach (var item in history)
+            {
+                var mi = new System.Windows.Controls.MenuItem 
+                { 
+                    Header = $"[{item.Header}] {item.HexColor} 於 ({item.X}, {item.Y})" 
+                };
+                mi.Click += (s, e) =>
+                {
+                    cond.ColorXExpression = item.X.ToString();
+                    cond.ColorYExpression = item.Y.ToString();
+                    cond.TargetColor = item.HexColor;
+                    UpdateProperties();
+                };
+                menu.Items.Add(mi);
+            }
+            menu.IsOpen = true;
+        }
     }
 
     /// <summary>
@@ -445,6 +543,7 @@ namespace AutoWizard.UI.ViewModels
         public object? Target { get; set; }
         public System.Type? PropertyType { get; set; }
         public bool IsEnum { get; set; }
+        public bool IsReadOnly { get; set; }
         public IEnumerable<string>? EnumValues { get; set; }
 
         /// <summary>是否為按鈕項目（新增/移除條件）</summary>

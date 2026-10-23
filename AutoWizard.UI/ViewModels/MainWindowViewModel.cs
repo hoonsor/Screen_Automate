@@ -138,6 +138,10 @@ namespace AutoWizard.UI.ViewModels
 
             PropertiesViewModel.RequestRegionSelectionAction = OnRequestRegionSelection;
             PropertiesViewModel.TestOcrResultAction = OnTestOcrResult;
+            
+            // 將歷程紀錄委派傳遞給屬性面板
+            PropertiesViewModel.GetRecentScreenshotsAction = () => ScreenshotHistoryViewModel.HistoryList;
+            PropertiesViewModel.GetRecentColorsAction = () => ColorHistoryViewModel.HistoryList;
 
             // 選取連動 → 屬性面板
             EditorViewModel.SelectedActionChanged += (_, action) =>
@@ -187,41 +191,103 @@ namespace AutoWizard.UI.ViewModels
 
         private void OnAddAction(string actionType)
         {
+            if (actionType == "InsertModule")
+            {
+                OnInsertModule();
+                return;
+            }
+
             var action = CreateAction(actionType);
             if (action != null)
             {
-                // 檢查是否有選取的容器，若有則加入該容器
-                if (EditorViewModel.SelectedNode != null && 
-                    (EditorViewModel.SelectedNode.Action is ContainerAction || EditorViewModel.SelectedNode.NodeType == NodeType.SectionHeader))
-                {
-                    // 根據選取節點決定目標清單
-                    System.Collections.Generic.IList<BaseAction>? targetList = null;
-                    
-                    if (EditorViewModel.SelectedNode.NodeType == NodeType.SectionHeader)
-                    {
-                        targetList = EditorViewModel.SelectedNode.ParentList;
-                    }
-                    else if (EditorViewModel.SelectedNode.Action is LoopAction loop)
-                    {
-                        targetList = loop.Children;
-                    }
-                    else if (EditorViewModel.SelectedNode.Action is IfAction ifAction)
-                    {
-                        targetList = ifAction.ThenActions;
-                    }
+                InsertActionToEditor(action);
+            }
+        }
 
-                    if (targetList != null)
+        private void OnInsertModule()
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "AutoWizard Script (*.aws)|*.aws",
+                Title = "選擇要插入的模組腳本"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                try
+                {
+                    var package = AutoWizard.Core.Resources.AwsPackage.Load(dialog.FileName);
+                    var parsedActions = package.Actions;
+
+                    if (parsedActions.Count == 0)
                     {
-                        EditorViewModel.AddActionToContainer(action, targetList);
-                        StatusMessage = $"已新增至容器: {action.Name}";
+                        MessageBox.Show("該腳本內沒有任何指令可供轉換。", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
                         return;
                     }
+
+                    var wnd = new Views.ModuleImportWindow(dialog.FileName, parsedActions)
+                    {
+                        Owner = Application.Current.MainWindow
+                    };
+
+                    if (wnd.ShowDialog() == true)
+                    {
+                        var callAction = new AutoWizard.Core.Actions.Control.CallModuleAction
+                        {
+                            Name = wnd.ApprovedModuleName,
+                            ModuleName = wnd.ApprovedModuleName,
+                            SourceFilePath = dialog.FileName,
+                            Description = "自訂模組函數"
+                        };
+
+                        foreach (var p in wnd.SelectedParameters)
+                        {
+                            callAction.Parameters.Add(p);
+                        }
+
+                        InsertActionToEditor(callAction);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"解析或插入模組發生錯誤: {ex.Message}", "錯誤", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void InsertActionToEditor(BaseAction action)
+        {
+            // 檢查是否有選取的容器，若有則加入該容器
+            if (EditorViewModel.SelectedNode != null && 
+                (EditorViewModel.SelectedNode.Action is ContainerAction || EditorViewModel.SelectedNode.NodeType == NodeType.SectionHeader))
+            {
+                // 根據選取節點決定目標清單
+                System.Collections.Generic.IList<BaseAction>? targetList = null;
+                
+                if (EditorViewModel.SelectedNode.NodeType == NodeType.SectionHeader)
+                {
+                    targetList = EditorViewModel.SelectedNode.ParentList;
+                }
+                else if (EditorViewModel.SelectedNode.Action is LoopAction loop)
+                {
+                    targetList = loop.Children;
+                }
+                else if (EditorViewModel.SelectedNode.Action is IfAction ifAction)
+                {
+                    targetList = ifAction.ThenActions;
                 }
 
-                // 預設行為：新增至根目錄
-                EditorViewModel.AddAction(action);
-                StatusMessage = $"已新增: {action.Name}";
+                if (targetList != null)
+                {
+                    EditorViewModel.AddActionToContainer(action, targetList);
+                    StatusMessage = $"已新增: {action.Name}";
+                    return;
+                }
             }
+
+            // 預設行為：新增至根目錄
+            EditorViewModel.AddAction(action);
+            StatusMessage = $"已新增: {action.Name}";
         }
 
         private void OnAddChildToContainer(ActionNodeWrapper node)
@@ -1049,7 +1115,7 @@ namespace AutoWizard.UI.ViewModels
                         {
                             Name = "尋找截圖影像",
                             Description = $"尋找影像 {fileName}",
-                            TemplateImagePath = $"Images\\\\{fileName}", // 使用相對路徑
+                            TemplateImagePath = $"Images\\{fileName}", // 使用相對路徑
                             ClickWhenFound = false,
                             SaveToVariable = varName
                         };
@@ -1153,7 +1219,7 @@ namespace AutoWizard.UI.ViewModels
                         {
                             Name = "尋找截圖影像",
                             Description = $"尋找影像 {fileName}",
-                            TemplateImagePath = $"Images\\\\{fileName}",
+                            TemplateImagePath = $"Images\\{fileName}",
                             ClickWhenFound = false,
                             SaveToVariable = varName
                         };

@@ -14,11 +14,44 @@ namespace AutoWizard.Core.Scripting
         public string Generate(IEnumerable<BaseAction> actions)
         {
             var sb = new StringBuilder();
+
+            // 1. Gather module imports
+            var allModules = GetFlattenedActions(actions).OfType<CallModuleAction>()
+                .GroupBy(m => m.ModuleName)
+                .Select(g => g.First())
+                .ToList();
+
+            foreach (var mod in allModules)
+            {
+                sb.AppendLine($"#Import \"{EscapeString(mod.SourceFilePath)}\" As {mod.ModuleName}");
+                foreach(var p in mod.Parameters)
+                {
+                    sb.AppendLine($"#Param {mod.ModuleName} \"{EscapeString(p.ParameterName)}\" \"{EscapeString(p.OriginalActionId)}\" \"{EscapeString(p.PropertyName)}\" \"{EscapeString(p.Description)}\"");
+                }
+                sb.AppendLine();
+            }
+
             foreach (var action in actions)
             {
                 GenerateAction(sb, action, 0);
             }
             return sb.ToString();
+        }
+
+        private List<BaseAction> GetFlattenedActions(IEnumerable<BaseAction> actions)
+        {
+            var result = new List<BaseAction>();
+            foreach (var a in actions)
+            {
+                result.Add(a);
+                if (a is ContainerAction c) result.AddRange(GetFlattenedActions(c.Children));
+                if (a is IfAction ifA) 
+                {
+                    result.AddRange(GetFlattenedActions(ifA.ThenActions.Cast<BaseAction>()));
+                    result.AddRange(GetFlattenedActions(ifA.ElseActions.Cast<BaseAction>()));
+                }
+            }
+            return result;
         }
 
         private void GenerateAction(StringBuilder sb, BaseAction action, int indentLevel)
@@ -70,6 +103,9 @@ namespace AutoWizard.Core.Scripting
                 case IfAction ifAction:
                     GenerateIf(sb, ifAction, indent);
                     break;
+                case CallModuleAction module:
+                    GenerateCallModule(sb, module, indent);
+                    break;
                 default:
                     sb.AppendLine($"{indent}// Unsupported action: {action.GetType().Name}");
                     break;
@@ -96,6 +132,7 @@ namespace AutoWizard.Core.Scripting
                 OCRAction o => "OCR Text",
                 LoopAction l => "Loop",
                 IfAction i => "Condition",
+                CallModuleAction m => $"Call Module {m.ModuleName}",
                 _ => action.Name ?? action.GetType().Name
             };
         }
@@ -284,6 +321,12 @@ namespace AutoWizard.Core.Scripting
                 }
                 sb.AppendLine($"{indent}}}");
             }
+        }
+
+        private void GenerateCallModule(StringBuilder sb, CallModuleAction action, string indent)
+        {
+            var args = action.Parameters.Select(p => $"\"{EscapeString(p.ValueExpression)}\"");
+            sb.AppendLine($"{indent}{action.ModuleName}({string.Join(", ", args)});");
         }
 
         private string EscapeString(string input)

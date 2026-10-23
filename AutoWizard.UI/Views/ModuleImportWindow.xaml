@@ -1,0 +1,71 @@
+<Window x:Class="AutoWizard.UI.Views.ModuleImportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:AutoWizard.UI.Views"
+        Title="保留特定變數轉換為輸入參數" Height="600" Width="500"
+        WindowStartupLocation="CenterOwner"
+        Background="#F5F5F5">
+    
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        
+        <HierarchicalDataTemplate DataType="{x:Type local:ActionTreeItem}" ItemsSource="{Binding Children}">
+            <StackPanel Orientation="Horizontal" Margin="2,4">
+                <TextBlock x:Name="ActionText" Text="{Binding ActionName}" FontWeight="Bold" Foreground="#333"/>
+            </StackPanel>
+            <HierarchicalDataTemplate.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
+                    <Setter TargetName="ActionText" Property="Foreground" Value="White"/>
+                </DataTrigger>
+            </HierarchicalDataTemplate.Triggers>
+        </HierarchicalDataTemplate>
+        
+        <DataTemplate DataType="{x:Type local:PropertyTreeItem}">
+            <StackPanel Orientation="Horizontal" Margin="2,2,0,2">
+                <CheckBox IsChecked="{Binding IsSelected}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <TextBlock x:Name="PropText" Text="{Binding DisplayName}" VerticalAlignment="Center" Width="100" Foreground="#333"/>
+                <TextBlock x:Name="ValText" Text="{Binding OriginalValue, StringFormat='(原始值: {0})'}" Foreground="#777" VerticalAlignment="Center"/>
+            </StackPanel>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
+                    <Setter TargetName="PropText" Property="Foreground" Value="White"/>
+                    <Setter TargetName="ValText" Property="Foreground" Value="White"/>
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="模組函數名稱:" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBox x:Name="TxtModuleName" Width="250" VerticalAlignment="Center" Padding="4"/>
+            <TextBlock Text="(必須符合英文變數命名規則)" Foreground="#999" VerticalAlignment="Center" Margin="10,0,0,0"/>
+        </StackPanel>
+
+        <TextBlock Grid.Row="1" Text="請展開下方指令，並勾選想要轉換為模組輸入參數的屬性。" FontWeight="Bold" FontSize="13" Margin="0,0,0,6"/>
+        <TextBlock Grid.Row="2" Text="未勾選的屬性將作為模組內部固定值，外部無法更改。" Foreground="#666" Margin="0,0,0,10"/>
+        
+        <Border Grid.Row="3" Background="White" BorderBrush="#DDDDDD" BorderThickness="1" Padding="5">
+            <TreeView x:Name="ActionsTreeView" BorderThickness="0">
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="IsExpanded" Value="True"/>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+            </TreeView>
+        </Border>
+        
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
+            <Button Content="確定" Width="80" Height="28" Margin="0,0,10,0" Click="BtnOk_Click" Background="#4CAF50" Foreground="White" BorderThickness="0" Cursor="Hand"/>
+            <Button Content="取消" Width="80" Height="28" Click="BtnCancel_Click" Background="#E0E0E0" BorderThickness="0" Cursor="Hand"/>
+        </StackPanel>
+    </Grid>
+</Window>

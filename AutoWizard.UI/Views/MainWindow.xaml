@@ -342,6 +342,13 @@
                                         <TextBlock Text="螢幕截圖"/>
                                     </StackPanel>
                                 </Button>
+                                <Button Style="{StaticResource ToolboxButton}"
+                                        Command="{Binding AddActionCommand}" CommandParameter="InsertModule">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="🧩" Margin="0,0,6,0"/>
+                                        <TextBlock Text="插入模組"/>
+                                    </StackPanel>
+                                </Button>
                             </StackPanel>
                         </Expander>
                     </StackPanel>
