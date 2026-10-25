@@ -40,6 +40,9 @@ namespace AutoWizard.Core.Engine
         /// </summary>
         public string? TargetWindowTitle { get; set; }
 
+        /// <summary>送出輸入的實作；null 時使用 <see cref="AutoWizard.Core.Input.InputSimulator.Default"/>。</summary>
+        public AutoWizard.Core.Input.IInputSimulator? Input { get; set; }
+
         #region Win32 API
 
         [DllImport("user32.dll", SetLastError = true)]
@@ -110,7 +113,8 @@ namespace AutoWizard.Core.Engine
                 IsCancellationRequested = false,
                 ForceHumanLikeBehavior = this.ForceHumanLikeBehavior,
                 LogAction = OnLog,
-                ScreenshotAction = OnScreenshot
+                ScreenshotAction = OnScreenshot,
+                Input = Input ?? AutoWizard.Core.Input.InputSimulator.Default
             };
 
             // 註冊取消回調，確保取消指令能即時傳播到正在執行的 Action

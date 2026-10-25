@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Text.Json.Serialization;
 using System.Threading;
+using AutoWizard.Core.Input;
 
 namespace AutoWizard.Core.Actions.Input
 {
@@ -30,66 +30,6 @@ namespace AutoWizard.Core.Actions.Input
         /// </summary>
         public bool IsKeyDown { get; set; } = false;
 
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
-
-        [DllImport("user32.dll")]
-        private static extern uint MapVirtualKey(uint uCode, uint uMapType);
-
-        private const uint INPUT_KEYBOARD = 1;
-        private const uint KEYEVENTF_EXTENDEDKEY = 0x0001;
-        private const uint KEYEVENTF_KEYUP = 0x0002;
-        private const uint KEYEVENTF_SCANCODE = 0x0008;
-        private const uint MAPVK_VK_TO_VSC = 0;
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct INPUT
-        {
-            public uint type;
-            public INPUTUNION union;
-        }
-
-        [StructLayout(LayoutKind.Explicit)]
-        private struct INPUTUNION
-        {
-            [FieldOffset(0)]
-            public MOUSEINPUT mi;
-            [FieldOffset(0)]
-            public KEYBDINPUT ki;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct MOUSEINPUT
-        {
-            public int dx;
-            public int dy;
-            public uint mouseData;
-            public uint dwFlags;
-            public uint time;
-            public IntPtr dwExtraInfo;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct KEYBDINPUT
-        {
-            public ushort wVk;
-            public ushort wScan;
-            public uint dwFlags;
-            public uint time;
-            public IntPtr dwExtraInfo;
-        }
-
-        // 需要 EXTENDEDKEY 旗標的按鍵
-        [JsonIgnore]
-        private static readonly HashSet<byte> ExtendedKeys = new()
-        {
-            0x21, 0x22, 0x23, 0x24, // PageUp, PageDown, End, Home
-            0x25, 0x26, 0x27, 0x28, // Arrow keys
-            0x2D, 0x2E,             // Insert, Delete
-            0x5B, 0x5C,             // Left/Right Win
-            0xA4, 0xA5              // Left/Right Alt (extended)
-        };
-
         public override AutoWizard.Core.Models.ActionResult Execute(AutoWizard.Core.Models.ExecutionContext context)
         {
             try
@@ -113,61 +53,30 @@ namespace AutoWizard.Core.Actions.Input
                     };
                 }
 
-                var inputList = new List<INPUT>();
-
+                var input = context.Input;
                 if (IsKeyUp)
                 {
                     // 只送 KeyUp（修飾鍵放開模式）
-                    inputList.Add(MakeKeyInput(vkCode, true));
-                    if (Modifiers.HasFlag(KeyModifiers.Win)) inputList.Add(MakeKeyInput(0x5B, true));
-                    if (Modifiers.HasFlag(KeyModifiers.Alt)) inputList.Add(MakeKeyInput(0xA4, true));
-                    if (Modifiers.HasFlag(KeyModifiers.Shift)) inputList.Add(MakeKeyInput(0xA0, true));
-                    if (Modifiers.HasFlag(KeyModifiers.Ctrl)) inputList.Add(MakeKeyInput(0xA2, true));
-                    SendInput((uint)inputList.Count, inputList.ToArray(), Marshal.SizeOf(typeof(INPUT)));
+                    input.SendKeys(ReleaseOrder(vkCode));
                     context.Log($"KeyUp: {Key}");
                 }
                 else if (IsKeyDown)
                 {
                     // 只送 KeyDown（修飾鍵按下不放開模式）
-                    if (Modifiers.HasFlag(KeyModifiers.Ctrl)) inputList.Add(MakeKeyInput(0xA2, false));
-                    if (Modifiers.HasFlag(KeyModifiers.Shift)) inputList.Add(MakeKeyInput(0xA0, false));
-                    if (Modifiers.HasFlag(KeyModifiers.Alt)) inputList.Add(MakeKeyInput(0xA4, false));
-                    if (Modifiers.HasFlag(KeyModifiers.Win)) inputList.Add(MakeKeyInput(0x5B, false));
-                    inputList.Add(MakeKeyInput(vkCode, false));
-                    
-                    SendInput((uint)inputList.Count, inputList.ToArray(), Marshal.SizeOf(typeof(INPUT)));
+                    input.SendKeys(PressOrder(vkCode));
                     context.Log($"KeyDown: {Key}");
                 }
                 else
                 {
-                    // 標準模式: 按下修飾鍵 + 主鍵 Down，然後全部 Up
-                    if (Modifiers.HasFlag(KeyModifiers.Ctrl)) inputList.Add(MakeKeyInput(0xA2, false));
-                    if (Modifiers.HasFlag(KeyModifiers.Shift)) inputList.Add(MakeKeyInput(0xA0, false));
-                    if (Modifiers.HasFlag(KeyModifiers.Alt)) inputList.Add(MakeKeyInput(0xA4, false));
-                    if (Modifiers.HasFlag(KeyModifiers.Win)) inputList.Add(MakeKeyInput(0x5B, false));
-
-                    // 按下主鍵
-                    inputList.Add(MakeKeyInput(vkCode, false));
-
-                    // 先發送按下事件
-                    var downInputs = inputList.ToArray();
-                    SendInput((uint)downInputs.Length, downInputs, Marshal.SizeOf(typeof(INPUT)));
+                    // 標準模式: 按下修飾鍵 + 主鍵 Down，然後全部 Up（反向順序）
+                    input.SendKeys(PressOrder(vkCode));
 
                     if (HoldDurationMs > 0)
                     {
                         Thread.Sleep(HoldDurationMs);
                     }
 
-                    // 放開事件（反向順序）
-                    var upList = new List<INPUT>();
-                    upList.Add(MakeKeyInput(vkCode, true));
-                    if (Modifiers.HasFlag(KeyModifiers.Win)) upList.Add(MakeKeyInput(0x5B, true));
-                    if (Modifiers.HasFlag(KeyModifiers.Alt)) upList.Add(MakeKeyInput(0xA4, true));
-                    if (Modifiers.HasFlag(KeyModifiers.Shift)) upList.Add(MakeKeyInput(0xA0, true));
-                    if (Modifiers.HasFlag(KeyModifiers.Ctrl)) upList.Add(MakeKeyInput(0xA2, true));
-
-                    var upInputs = upList.ToArray();
-                    SendInput((uint)upInputs.Length, upInputs, Marshal.SizeOf(typeof(INPUT)));
+                    input.SendKeys(ReleaseOrder(vkCode));
                     context.Log($"Pressed keys: {Modifiers} + {Key}");
                 }
 
@@ -188,28 +97,27 @@ namespace AutoWizard.Core.Actions.Input
             }
         }
 
-        private INPUT MakeKeyInput(byte vkCode, bool isKeyUp)
+        /// <summary>按下順序：Ctrl → Shift → Alt → Win → 主鍵。</summary>
+        private List<KeyStroke> PressOrder(byte vkCode)
         {
-            uint scanCode = MapVirtualKey(vkCode, MAPVK_VK_TO_VSC);
-            uint flags = 0;
-            if (ExtendedKeys.Contains(vkCode)) flags |= KEYEVENTF_EXTENDEDKEY;
-            if (isKeyUp) flags |= KEYEVENTF_KEYUP;
+            var list = new List<KeyStroke>();
+            if (Modifiers.HasFlag(KeyModifiers.Ctrl)) list.Add(new KeyStroke(0xA2, false));
+            if (Modifiers.HasFlag(KeyModifiers.Shift)) list.Add(new KeyStroke(0xA0, false));
+            if (Modifiers.HasFlag(KeyModifiers.Alt)) list.Add(new KeyStroke(0xA4, false));
+            if (Modifiers.HasFlag(KeyModifiers.Win)) list.Add(new KeyStroke(0x5B, false));
+            list.Add(new KeyStroke(vkCode, false));
+            return list;
+        }
 
-            return new INPUT
-            {
-                type = INPUT_KEYBOARD,
-                union = new INPUTUNION
-                {
-                    ki = new KEYBDINPUT
-                    {
-                        wVk = vkCode,
-                        wScan = (ushort)scanCode,
-                        dwFlags = flags,
-                        time = 0,
-                        dwExtraInfo = IntPtr.Zero
-                    }
-                }
-            };
+        /// <summary>放開順序：主鍵 → Win → Alt → Shift → Ctrl。</summary>
+        private List<KeyStroke> ReleaseOrder(byte vkCode)
+        {
+            var list = new List<KeyStroke> { new(vkCode, true) };
+            if (Modifiers.HasFlag(KeyModifiers.Win)) list.Add(new KeyStroke(0x5B, true));
+            if (Modifiers.HasFlag(KeyModifiers.Alt)) list.Add(new KeyStroke(0xA4, true));
+            if (Modifiers.HasFlag(KeyModifiers.Shift)) list.Add(new KeyStroke(0xA0, true));
+            if (Modifiers.HasFlag(KeyModifiers.Ctrl)) list.Add(new KeyStroke(0xA2, true));
+            return list;
         }
 
         [JsonIgnore]
@@ -244,4 +152,3 @@ namespace AutoWizard.Core.Actions.Input
         };
     }
 }
-

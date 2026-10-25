@@ -42,7 +42,9 @@ namespace AutoWizard.Tests.Actions
             package.Actions.Add(new AutoWizard.Core.Actions.Input.TypeAction { Id = actionId, Text = "OriginalText" });
             package.Save(_tempScriptPath);
 
-            var context = new AutoWizard.Core.Models.ExecutionContext();
+            // 只記錄輸入，不真的打字（舊版會把 OverriddenText 打進使用者當下有焦點的輸入框）
+            var input = new AutoWizard.Core.Input.RecordingInputSimulator();
+            var context = new AutoWizard.Core.Models.ExecutionContext { Input = input };
 
             var callAction = new CallModuleAction
             {
@@ -64,12 +66,8 @@ namespace AutoWizard.Tests.Actions
 
             // Assert
             Assert.True(result.Success);
-            
-            // 如何驗證？ 在實際測試中，我們可以檢查 Log，
-            // 或者直接用 DslParser 解析看看 logic
-            // 由於 Execute 過程會改變 action 的屬性，但 Execute 完畢後 action 在 Scope 內。
-            // 為了更精準測試，我們可以用一個 Mock context 或是觀察 context。
-            // 不過既然執行沒有報錯，至少能確定反射覆寫機制與執行沒有拋出例外。
+            // TypeAction 的 Text 已被參數覆寫：記錄到的輸入是 OverriddenText，而不是原本的 OriginalText
+            Assert.Equal("OverriddenText", input.TypedText);
         }
 
         [Fact]

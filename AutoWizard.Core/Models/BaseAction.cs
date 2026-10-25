@@ -54,6 +54,12 @@ namespace AutoWizard.Core.Models
         /// 指令執行的目標視窗標題
         /// </summary>
         public string TargetWindowTitle { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 送出鍵盤滑鼠輸入的實作。動作一律透過這裡送出，不直接呼叫 SendInput；
+        /// 預設為 <see cref="Input.InputSimulator.Default"/>（程式執行時是真的輸入，測試時是只記錄的假實作）。
+        /// </summary>
+        public AutoWizard.Core.Input.IInputSimulator Input { get; set; } = AutoWizard.Core.Input.InputSimulator.Default;
         
         public void Log(string message)
         {
