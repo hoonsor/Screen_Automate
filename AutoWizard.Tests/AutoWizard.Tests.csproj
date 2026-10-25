@@ -7,6 +7,8 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <!-- 預設排除會送出真實鍵盤滑鼠輸入的測試；要跑時用 dotnet test - -filter "Category=Interactive" 覆蓋 -->
+    <VSTestTestCaseFilter Condition="'$(VSTestTestCaseFilter)' == ''">Category!=Interactive</VSTestTestCaseFilter>
   </PropertyGroup>
 
   <ItemGroup>

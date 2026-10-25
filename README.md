@@ -41,6 +41,14 @@ git clone https://github.com/hoonsor/Screen_Automate.git
 設定 AutoWizard.UI 為啟動專案，按下 F5 開始執行
 ```
 
+### 執行測試（不會送出真實輸入）
+```powershell
+& "C:\Program Files\dotnet\dotnet.exe" test AutoWizard.Tests\AutoWizard.Tests.csproj --filter "Category!=Interactive"
+```
+- 動作送出鍵盤滑鼠輸入一律透過 `ExecutionContext.Input`（`IInputSimulator`）；測試組件啟動時（`AutoWizard.Tests/TestSetup.cs`）換成只記錄內容的 `RecordingInputSimulator`，不會打字或點擊到你的桌面。
+- 真的會送出輸入的測試標記 `Category=Interactive`，測試專案預設排除；要跑時先確認沒有會被誤打字的視窗，再用 `--filter "Category=Interactive"`。
+- 背景：2026-10 `CallModuleActionTests` 曾用真的 SendInput 把「OverriddenText」打進使用者當下有焦點的輸入框。
+
 ## 📁 專案結構 (Project Structure)
 ```text
 AutoWizard/
