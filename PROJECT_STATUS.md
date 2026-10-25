@@ -16,6 +16,7 @@ First, run the development server:
 
 | 版本 | 日期 | 類型 | 變更說明 |
 |------|------|------|----------|
+| v0.1.1 | 2026-10-25 | fix | 測試不再送出真實鍵盤滑鼠輸入（IInputSimulator＋測試預設只記錄＋Interactive 預設排除）；起因：CallModuleActionTests 把 OverriddenText 打進使用者輸入框。程式主線已移到 51-GestureWizard，本專案僅做此安全修正；另有 4 個 SetVariable 型別測試失敗未修（51 號 v0.1.0 已修） |
 | v0.1.0 | 2026-03-16 | feat | remove spaces between Chinese characters for better matching accuracy |
 | v0.1.0 | 2026-03-15 | chore | Docs: Add session memory for March 15 and initialize Issues Log with RCA. |
 | v0.1.0 | 2026-03-15 | chore | Major Refactor: Replace Tesseract with Windows.Media.Ocr & UI Enhancements suite. Fixed UI deadlock, added variable/history panels, and upgraded project target frameworks. |
